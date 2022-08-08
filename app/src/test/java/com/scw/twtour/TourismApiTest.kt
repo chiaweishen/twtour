@@ -21,7 +21,7 @@ class TourismApiTest : ApiTest() {
 
     @Test
     fun `test get scenic spot`() = runTest {
-        api.scenicSpot(ODataParams.Companion.Builder(500).build())
+        api.scenicSpot(ODataParams.Companion.Builder(50).skip(1234).build())
             .catch { e -> Assert.fail(e.message) }
             .collect { scenicSpots -> assert(scenicSpots) }
     }
@@ -30,6 +30,7 @@ class TourismApiTest : ApiTest() {
     fun `test get scenic spot by city`() = runTest {
         api.scenicSpot(
             ODataParams.Companion.Builder(1000)
+                .filter(ODataFilter.ScenicSpot.byCity(City.TAIPEI))
                 .select(
                     ODataSelect.ScenicSpot.Builder()
                         .add(ScenicSpotColumn.SCENIC_SPOT_ID)
@@ -40,7 +41,6 @@ class TourismApiTest : ApiTest() {
                         .add(ScenicSpotColumn.PICTURE)
                         .build()
                 )
-                .filter(ODataFilter.ScenicSpot.byCity(City.TAIPEI))
                 .build()
         )
             .catch { e -> Assert.fail(e.message) }
@@ -52,6 +52,17 @@ class TourismApiTest : ApiTest() {
         api.scenicSpot(
             ODataParams.Companion.Builder(1)
                 .filter(ODataFilter.ScenicSpot.byId("C1_379000000A_000425"))
+                .build()
+        )
+            .catch { e -> Assert.fail(e.message) }
+            .collect { scenicSpots -> assert(scenicSpots) }
+    }
+
+    @Test
+    fun `test get outlyingIslands of scenic spot`() = runTest {
+        api.scenicSpot(
+            ODataParams.Companion.Builder(30)
+                .filter(ODataFilter.ScenicSpot.outlyingIslands())
                 .build()
         )
             .catch { e -> Assert.fail(e.message) }
