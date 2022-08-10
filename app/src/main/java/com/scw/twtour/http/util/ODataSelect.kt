@@ -7,7 +7,7 @@ object ODataSelect {
     object ScenicSpot {
 
         class Builder {
-            val selectors = mutableListOf<ScenicSpotColumn>()
+            private val selectors = mutableListOf<ScenicSpotColumn>()
 
             fun add(column: ScenicSpotColumn): Builder {
                 selectors.add(column)

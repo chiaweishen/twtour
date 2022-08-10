@@ -1,6 +1,7 @@
 package com.scw.twtour
 
 import com.scw.twtour.di.module.apiModule
+import com.scw.twtour.di.module.dbTestModule
 import com.scw.twtour.http.BasicApiService
 import com.scw.twtour.http.api.AuthApi
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,11 +19,7 @@ open class ApiTest : KoinTest {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
-        modules(
-            listOf(
-                apiModule
-            )
-        )
+        modules(listOf(apiModule, dbTestModule))
     }
 
     companion object {
