@@ -9,103 +9,103 @@ class ScenicSpotEntity : ArrayList<ScenicSpotEntityItem>()
 @Entity(tableName = "scenic_spot_table")
 data class ScenicSpotEntityItem(
     @SerializedName("ScenicSpotID")
+    @ColumnInfo(name = "scenic_spot_id")
     @PrimaryKey
-    @ColumnInfo(name = "id")
-    val scenicSpotID: String = "",
+    var scenicSpotID: String = "",
 
     @SerializedName("ScenicSpotName")
-    @ColumnInfo(name = "name")
-    val scenicSpotName: String = "",
+    @ColumnInfo(name = "scenic_spot_name")
+    var scenicSpotName: String = "",
 
     @SerializedName("DescriptionDetail")
     @Ignore
-    val descriptionDetail: String? = null,
+    var descriptionDetail: String? = null,
 
     @SerializedName("Description")
     @Ignore
-    val description: String? = null,
+    var description: String? = null,
 
     @SerializedName("Phone")
     @Ignore
-    val phone: String? = null,
+    var phone: String? = null,
 
     @SerializedName("Address")
     @Ignore
-    val address: String? = null,
+    var address: String? = null,
 
     @SerializedName("ZipCode")
     @ColumnInfo(name = "zip_code")
-    val zipCode: Int? = null,
+    var zipCode: Int? = null,
 
     @SerializedName("TravelInfo")
     @Ignore
-    val travelInfo: String? = null,
+    var travelInfo: String? = null,
 
     @SerializedName("OpenTime")
     @Ignore
-    val openTime: String? = null,
+    var openTime: String? = null,
 
     @SerializedName("Picture")
     @Ignore
-    val picture: Picture? = null,
+    var picture: Picture? = null,
 
     @SerializedName("WebsiteUrl")
     @Ignore
-    val websiteUrl: String? = null,
+    var websiteUrl: String? = null,
 
     @SerializedName("Position")
     @Embedded
-    val position: Position? = null,
+    var position: Position? = null,
 
     @SerializedName("ParkingInfo")
     @Ignore
-    val parkingInfo: String? = null,
+    var parkingInfo: String? = null,
 
     @SerializedName("ParkingPosition")
     @Ignore
-    val parkingPosition: Position? = null,
+    var parkingPosition: Position? = null,
 
     @SerializedName("TicketInfo")
     @Ignore
-    val ticketInfo: String? = null,
+    var ticketInfo: String? = null,
 
     @SerializedName("Remarks")
     @Ignore
-    val remarks: String? = null,
+    var remarks: String? = null,
 
     @SerializedName("Class1")
     @Ignore
-    val class1: String? = null,
+    var class1: String? = null,
 
     @SerializedName("Class2")
     @Ignore
-    val class2: String? = null,
+    var class2: String? = null,
 
     @SerializedName("Class3")
     @Ignore
-    val class3: String? = null,
+    var class3: String? = null,
 
     @SerializedName("City")
-    val city: City? = null
+    var city: City? = null
 )
 
 data class Picture(
     @SerializedName("PictureUrl1")
-    val pictureUrl1: String? = null,
+    var pictureUrl1: String? = null,
 
     @SerializedName("PictureUrl2")
-    val pictureUrl2: String? = null,
+    var pictureUrl2: String? = null,
 
     @SerializedName("PictureUrl3")
-    val pictureUrl3: String? = null,
+    var pictureUrl3: String? = null,
 )
 
 data class Position(
     @SerializedName("PositionLon")
     @ColumnInfo(name = "position_lon")
-    val positionLon: Double? = null,
+    var positionLon: Double? = null,
 
     @SerializedName("PositionLat")
     @ColumnInfo(name = "position_lat")
-    val positionLat: Double? = null
+    var positionLat: Double? = null
 )
