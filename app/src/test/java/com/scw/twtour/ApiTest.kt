@@ -1,9 +1,8 @@
 package com.scw.twtour
 
-import com.scw.twtour.di.module.apiModule
-import com.scw.twtour.di.module.dbTestModule
-import com.scw.twtour.http.BasicApiService
-import com.scw.twtour.http.api.AuthApi
+import com.scw.twtour.di.module.*
+import com.scw.twtour.network.api.AuthApi
+import com.scw.twtour.network.util.HeadersProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.test.runTest
@@ -19,7 +18,16 @@ open class ApiTest : KoinTest {
 
     @get:Rule
     val koinTestRule = KoinTestRule.create {
-        modules(listOf(apiModule, dbTestModule))
+        modules(
+            listOf(
+                apiModule,
+                dbTestModule,
+                viewModule,
+                repositoryModule,
+                useCaseModule,
+                dataSourceModule
+            )
+        )
     }
 
     companion object {
@@ -29,7 +37,6 @@ open class ApiTest : KoinTest {
     }
 
     private val authApi: AuthApi by inject()
-    private val basicApiService: BasicApiService by inject()
 
     @Before
     fun setup() = runTest {
@@ -38,7 +45,7 @@ open class ApiTest : KoinTest {
                 Assert.fail(e.message)
             }
             .collect {
-                basicApiService.setAccessToken(it.accessToken)
+                HeadersProvider.setAccessToken(it.accessToken)
             }
     }
 }

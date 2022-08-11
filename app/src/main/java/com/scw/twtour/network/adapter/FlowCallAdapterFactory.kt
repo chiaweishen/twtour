@@ -1,4 +1,4 @@
-package com.scw.twtour.http.adapter
+package com.scw.twtour.network.adapter
 
 import kotlinx.coroutines.flow.Flow
 import retrofit2.CallAdapter

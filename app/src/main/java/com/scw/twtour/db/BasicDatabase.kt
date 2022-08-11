@@ -8,9 +8,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.scw.twtour.db.converter.Converters
 import com.scw.twtour.db.dao.ScenicSpotDao
-import com.scw.twtour.modole.entity.ScenicSpotEntityItem
-import timber.log.Timber
-import java.util.concurrent.Executors
+import com.scw.twtour.model.entity.ScenicSpotEntityItem
 
 
 @Database(entities = [ScenicSpotEntityItem::class], version = 1)
@@ -28,11 +26,7 @@ abstract class BasicDatabase : RoomDatabase() {
                     context.applicationContext,
                     BasicDatabase::class.java,
                     "basic_db"
-                )
-                    .setQueryCallback({ sqlQuery, bindArgs ->
-                        Timber.i("SQL: $sqlQuery, Args: $bindArgs")
-                    }, Executors.newSingleThreadExecutor())
-                    .build()
+                ).build()
                 INSTANCE = instance
                 instance
             }

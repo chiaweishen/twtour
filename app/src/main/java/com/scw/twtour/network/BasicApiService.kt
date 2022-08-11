@@ -1,8 +1,7 @@
-package com.scw.twtour.http
+package com.scw.twtour.network
 
-import com.scw.twtour.http.adapter.FlowCallAdapterFactory
-import com.scw.twtour.http.api.TourismApi
-import com.scw.twtour.http.interceptor.ApiInterceptor
+import com.scw.twtour.network.adapter.FlowCallAdapterFactory
+import com.scw.twtour.network.api.TourismApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,20 +9,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class BasicApiService {
 
-    private var accessToken: String = ""
-
     companion object {
         private const val BASE_URL = "https://tdx.transportdata.tw/api/basic/"
     }
 
-    fun setAccessToken(accessToken: String) {
-        this.accessToken = accessToken
-    }
-
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
-            .addInterceptor(ApiInterceptor(accessToken))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .build()
     }
 

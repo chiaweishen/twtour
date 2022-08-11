@@ -1,6 +1,6 @@
-package com.scw.twtour.http.api
+package com.scw.twtour.network.api
 
-import com.scw.twtour.modole.entity.AuthTokenEntity
+import com.scw.twtour.model.entity.AuthTokenEntity
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

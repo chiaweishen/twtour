@@ -1,4 +1,4 @@
-package com.scw.twtour.modole.entity
+package com.scw.twtour.model.entity
 
 import com.google.gson.annotations.SerializedName
 

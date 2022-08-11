@@ -1,12 +1,11 @@
 package com.scw.twtour
 
-import com.scw.twtour.http.api.TourismApi
-import com.scw.twtour.http.data.City
-import com.scw.twtour.http.data.ODataParams
-import com.scw.twtour.http.data.ScenicSpotColumn
-import com.scw.twtour.http.util.ODataFilter
-import com.scw.twtour.http.util.ODataSelect
-import com.scw.twtour.modole.entity.ScenicSpotEntityItem
+import com.scw.twtour.network.api.TourismApi
+import com.scw.twtour.network.data.City
+import com.scw.twtour.network.util.ODataFilter
+import com.scw.twtour.network.util.ODataParams
+import com.scw.twtour.network.util.ODataSelect
+import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.test.runTest
@@ -32,13 +31,9 @@ class TourismApiTest : ApiTest() {
             ODataParams.Companion.Builder(1000)
                 .filter(ODataFilter.ScenicSpot.byCity(City.TAIPEI))
                 .select(
-                    ODataSelect.ScenicSpot.Builder()
-                        .add(ScenicSpotColumn.SCENIC_SPOT_ID)
-                        .add(ScenicSpotColumn.SCENIC_SPOT_NAME)
-                        .add(ScenicSpotColumn.ADDRESS)
-                        .add(ScenicSpotColumn.ZIP_CODE)
-                        .add(ScenicSpotColumn.POSITION)
-                        .add(ScenicSpotColumn.PICTURE)
+                    ODataSelect.Builder()
+                        .add(ScenicSpotEntityItem::scenicSpotID.name)
+                        .add(ScenicSpotEntityItem::scenicSpotName.name)
                         .build()
                 )
                 .build()

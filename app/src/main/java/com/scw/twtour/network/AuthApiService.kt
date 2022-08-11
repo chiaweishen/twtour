@@ -1,7 +1,7 @@
-package com.scw.twtour.http
+package com.scw.twtour.network
 
-import com.scw.twtour.http.adapter.FlowCallAdapterFactory
-import com.scw.twtour.http.api.AuthApi
+import com.scw.twtour.network.adapter.FlowCallAdapterFactory
+import com.scw.twtour.network.api.AuthApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -14,7 +14,7 @@ class AuthApiService {
 
     private val okHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
             .build()
     }
 

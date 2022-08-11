@@ -1,8 +1,8 @@
-package com.scw.twtour.modole.entity
+package com.scw.twtour.model.entity
 
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
-import com.scw.twtour.http.data.City
+import com.scw.twtour.network.data.City
 
 class ScenicSpotEntity : ArrayList<ScenicSpotEntityItem>()
 
@@ -22,7 +22,6 @@ data class ScenicSpotEntityItem(
     var descriptionDetail: String? = null,
 
     @SerializedName("Description")
-    @Ignore
     var description: String? = null,
 
     @SerializedName("Phone")
@@ -46,7 +45,7 @@ data class ScenicSpotEntityItem(
     var openTime: String? = null,
 
     @SerializedName("Picture")
-    @Ignore
+    @Embedded
     var picture: Picture? = null,
 
     @SerializedName("WebsiteUrl")
@@ -91,12 +90,15 @@ data class ScenicSpotEntityItem(
 
 data class Picture(
     @SerializedName("PictureUrl1")
+    @ColumnInfo(name = "pic_url_1")
     var pictureUrl1: String? = null,
 
     @SerializedName("PictureUrl2")
+    @ColumnInfo(name = "pic_url_2")
     var pictureUrl2: String? = null,
 
     @SerializedName("PictureUrl3")
+    @ColumnInfo(name = "pic_url_3")
     var pictureUrl3: String? = null,
 )
 

@@ -2,8 +2,7 @@ package com.scw.twtour
 
 import android.app.Application
 import android.content.pm.PackageManager
-import com.scw.twtour.di.module.apiModule
-import com.scw.twtour.di.module.dbModule
+import com.scw.twtour.di.module.*
 import com.scw.twtour.util.MyDebugTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -49,7 +48,16 @@ class MyApplication : Application() {
     private fun initKoinModules() {
         startKoin {
             androidContext(this@MyApplication)
-            modules(listOf(apiModule, dbModule))
+            modules(
+                listOf(
+                    apiModule,
+                    dbModule,
+                    viewModule,
+                    repositoryModule,
+                    useCaseModule,
+                    dataSourceModule
+                )
+            )
         }
     }
 }

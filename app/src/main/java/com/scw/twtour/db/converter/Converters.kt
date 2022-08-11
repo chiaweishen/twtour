@@ -1,7 +1,7 @@
 package com.scw.twtour.db.converter
 
 import androidx.room.TypeConverter
-import com.scw.twtour.http.data.City
+import com.scw.twtour.network.data.City
 import java.util.*
 
 class Converters {
