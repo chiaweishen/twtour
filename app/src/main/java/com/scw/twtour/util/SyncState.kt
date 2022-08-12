@@ -1,7 +1,5 @@
 package com.scw.twtour.util
 
-import com.scw.twtour.network.data.City
-
 sealed class SyncState
 
 object SyncNone : SyncState()

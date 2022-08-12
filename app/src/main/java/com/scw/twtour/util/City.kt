@@ -1,4 +1,4 @@
-package com.scw.twtour.network.data
+package com.scw.twtour.util
 
 enum class City(val value: String) {
     TAIPEI("臺北市"),

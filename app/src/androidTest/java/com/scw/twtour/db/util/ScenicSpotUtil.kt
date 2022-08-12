@@ -1,6 +1,6 @@
 package com.scw.twtour.db.util
 
-import com.scw.twtour.network.data.City
+import com.scw.twtour.util.City
 import com.scw.twtour.model.entity.Position
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 

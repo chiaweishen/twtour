@@ -1,6 +1,6 @@
 package com.scw.twtour.model.repository
 
-import com.scw.twtour.network.data.City
+import com.scw.twtour.util.City
 import com.scw.twtour.network.util.ODataSelect
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.datasource.local.ScenicSpotPreferencesDataSource
