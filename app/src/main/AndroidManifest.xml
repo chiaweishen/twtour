@@ -4,6 +4,7 @@
     package="com.scw.twtour">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,6 +23,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="clientId"
+            android:value="${CLIENT_ID}" />
+
+        <meta-data
+            android:name="clientSecret"
+            android:value="${CLIENT_SECRET}" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
