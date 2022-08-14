@@ -57,6 +57,8 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion"
     implementation "androidx.paging:paging-runtime-ktx:$pagingVersion"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigationVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
 
     // retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
@@ -75,6 +77,9 @@ dependencies {
 
     // timber
     implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    //Coin
+    implementation "io.coil-kt:coil:$coinVersion"
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.insert-koin:koin-test:$koinVersion"

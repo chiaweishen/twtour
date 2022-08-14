@@ -1,6 +1,6 @@
 package com.scw.twtour.domain
 
-import com.scw.twtour.model.repository.ScenicSpotRepository
+import com.scw.twtour.model.repository.ScenicSpotSyncingRepository
 import com.scw.twtour.util.SyncState
 import kotlinx.coroutines.flow.StateFlow
 
@@ -10,23 +10,23 @@ interface SyncScenicSpotUseCase {
 }
 
 class SyncScenicSpotUseCaseImpl(
-    private val scenicSpotRepository: ScenicSpotRepository
+    private val scenicSpotSyncingRepository: ScenicSpotSyncingRepository
 ) : SyncScenicSpotUseCase {
 
     override val syncState: StateFlow<SyncState>
-        get() = scenicSpotRepository.syncState
+        get() = scenicSpotSyncingRepository.syncState
 
     override suspend fun syncScenicSpotData() {
         if (needSyncing()) {
-            scenicSpotRepository.syncScenicSpotData(null)
+            scenicSpotSyncingRepository.syncScenicSpotData(null)
         } else {
-            scenicSpotRepository.syncScenicSpotComplete()
+            scenicSpotSyncingRepository.syncScenicSpotComplete()
         }
     }
 
     private fun needSyncing(): Boolean {
-        val syncCycleTime = scenicSpotRepository.getSyncCycleDays() * 24 * 60 * 60 * 1000
-        val lastSyncTime = scenicSpotRepository.getLastSyncScenicSpotTime()
+        val syncCycleTime = scenicSpotSyncingRepository.getSyncCycleDays() * 24 * 60 * 60 * 1000
+        val lastSyncTime = scenicSpotSyncingRepository.getLastSyncScenicSpotTime()
         return lastSyncTime <= 0 || System.currentTimeMillis() - lastSyncTime >= syncCycleTime
     }
 }

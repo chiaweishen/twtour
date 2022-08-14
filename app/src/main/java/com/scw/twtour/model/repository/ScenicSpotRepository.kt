@@ -1,120 +1,191 @@
 package com.scw.twtour.model.repository
 
-import com.scw.twtour.util.City
-import com.scw.twtour.network.util.ODataSelect
+import com.scw.twtour.model.data.*
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
-import com.scw.twtour.model.datasource.local.ScenicSpotPreferencesDataSource
-import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
-import com.scw.twtour.util.*
+import com.scw.twtour.util.City
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
-import timber.log.Timber
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 
 interface ScenicSpotRepository {
-    val syncState: StateFlow<SyncState>
-    suspend fun syncScenicSpotData(key: SyncKey?)
-    suspend fun syncScenicSpotComplete()
-    fun getLastSyncScenicSpotTime(): Long
-    fun setLastSyncScenicSpotTime(t: Long)
-    fun getSyncCycleDays(): Int
+    fun fetchItems(): Flow<List<ScenicSpotListItem>>
 }
 
 class ScenicSpotRepositoryImpl(
-    private val remoteDataSource: ScenicSpotRemoteDataSource,
-    private val localDataSource: ScenicSpotLocalDataSource,
-    private val preferencesDataSource: ScenicSpotPreferencesDataSource
+    private val localDataSource: ScenicSpotLocalDataSource
 ) : ScenicSpotRepository {
 
-    private val _syncState = MutableStateFlow<SyncState>(SyncNone)
-    override val syncState = _syncState.asStateFlow()
-
-    private var syncStartTime: Long = 0
-
     companion object {
-        private const val LOAD_COUNT = 300
+        private const val SCENIC_SPOT_LIMIT = 4
     }
 
-    override suspend fun syncScenicSpotData(key: SyncKey?) {
-        val city = key?.city ?: run {
-            syncStartTime = System.currentTimeMillis()
-            _syncState.emit(SyncStart)
-            localDataSource.deleteAll()
-            City.values()[0]
-        }
-        val skip = key?.skip ?: 0
-        val cityCount = City.values().size
-        val cityIndex = City.values().indexOf(city)
-
-
-        /**
-         * 資料約 4135kb (2022/8)
-         * **/
-        remoteDataSource.getScenicSpotsByCity(
-            city, LOAD_COUNT, skip,
-            ODataSelect.Builder()
-                .add(ScenicSpotEntityItem::scenicSpotID.name)
-                .add(ScenicSpotEntityItem::scenicSpotName.name)
-                .add(ScenicSpotEntityItem::description.name)
-                .add(ScenicSpotEntityItem::zipCode.name)
-                .add(ScenicSpotEntityItem::position.name)
-                .add(ScenicSpotEntityItem::picture.name)
-                .build()
-        )
-
-            .onEach {
-                migrateScenicSpotCity(it, city)
+    override fun fetchItems(): Flow<List<ScenicSpotListItem>> {
+        return flowOf(mutableListOf<ScenicSpotListItem>())
+            .combine(flowOf(TitleItem("北台灣"))) { list, title ->
+                list.apply { add(title) }
             }
-            .flowOn(Dispatchers.IO)
-            .catch { e ->
-                _syncState.emit(SyncError(Exception(e)))
-            }
-            .collect {
-                localDataSource.cache(it)
-
-                if (it.size < LOAD_COUNT) {
-                    val isLastCity = cityIndex + 1 >= cityCount
-                    if (isLastCity) {
-                        saveLastSyncTime()
-                        syncScenicSpotComplete()
-                        Timber.i("Sync all scenic spots duration: ${System.currentTimeMillis() - syncStartTime} ms")
-                    } else {
-                        val nextCity = City.values()[cityIndex + 1]
-                        _syncState.emit(SyncProgress((cityIndex + 1) * 100f / cityCount, nextCity))
-                        syncScenicSpotData(SyncKey(nextCity, 0))
-                    }
-                } else {
-                    _syncState.emit(SyncProgress(cityIndex * 100f / cityCount, city))
-                    val nextSkip = (key?.skip ?: 0) + LOAD_COUNT
-                    syncScenicSpotData(SyncKey(city, nextSkip))
+            .combine(queryRandomScenicSpotByCity(City.KEELUNG)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.KEELUNG.value))
+                    add(mappingToScenicSpotInfo(items))
                 }
             }
+            .combine(queryRandomScenicSpotByCity(City.TAIPEI)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.TAIPEI.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.NEW_TAIPEI)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.NEW_TAIPEI.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.YILAN_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.YILAN_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.TAOYUAN)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.TAOYUAN.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.HSINCHU_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.HSINCHU_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.HSINCHU)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.HSINCHU.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(flowOf(TitleItem("中台灣"))) { list, title ->
+                list.apply { add(title) }
+            }
+            .combine(queryRandomScenicSpotByCity(City.MIAOLI_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.MIAOLI_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.TAICHUNG)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.TAICHUNG.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.CHANGHUA_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.CHANGHUA_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.NANTOU_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.NANTOU_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.YUNLIN_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.YUNLIN_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(flowOf(TitleItem("南台灣"))) { list, title ->
+                list.apply { add(title) }
+            }
+            .combine(queryRandomScenicSpotByCity(City.CHIAYI_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.CHIAYI_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.CHIAYI)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.CHIAYI.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.TAINAN)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.TAINAN.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.KAOHSIUNG)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.KAOHSIUNG.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.PINGTUNG_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.PINGTUNG_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(flowOf(TitleItem("東台灣"))) { list, title ->
+                list.apply { add(title) }
+            }
+            .combine(queryRandomScenicSpotByCity(City.HUALIEN_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.HUALIEN_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.TAITUNG_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.TAITUNG_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(flowOf(TitleItem("台灣離島"))) { list, title ->
+                list.apply { add(title) }
+            }
+            .combine(queryRandomScenicSpotByCity(City.PENGHU_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.PENGHU_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.KINMEN_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.KINMEN_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .combine(queryRandomScenicSpotByCity(City.LIENCHIANG_COUNTRY)) { list, items ->
+                list.apply {
+                    add(SubtitleItem(City.LIENCHIANG_COUNTRY.value))
+                    add(mappingToScenicSpotInfo(items))
+                }
+            }
+            .flowOn(Dispatchers.IO)
     }
 
-    override suspend fun syncScenicSpotComplete() {
-        _syncState.emit(SyncComplete)
+    private fun queryRandomScenicSpotByCity(city: City): Flow<List<ScenicSpotEntityItem>> {
+        return localDataSource.queryRandomScenicSpotByCity(city.name, SCENIC_SPOT_LIMIT)
     }
 
-    override fun getLastSyncScenicSpotTime(): Long {
-        return preferencesDataSource.lastSyncTime
+    private fun mappingToScenicSpotInfo(items: List<ScenicSpotEntityItem>): MultipleItems {
+        return MultipleItems(
+            mutableListOf<ScenicSpotInfo>().apply {
+                items.forEach { entity ->
+                    add(ScenicSpotInfo().update(entity))
+                }
+            }
+        )
     }
 
-    override fun setLastSyncScenicSpotTime(t: Long) {
-        preferencesDataSource.lastSyncTime = t
-    }
-
-    override fun getSyncCycleDays(): Int {
-        return preferencesDataSource.syncCycleDays
-    }
-
-    private fun migrateScenicSpotCity(
-        items: List<ScenicSpotEntityItem>,
-        city: City
-    ) {
-        items.forEach { it.city = city }
-    }
-
-    private fun saveLastSyncTime() {
-        preferencesDataSource.lastSyncTime = System.currentTimeMillis()
-    }
 }

@@ -30,5 +30,4 @@ class MainViewModel(
     private suspend fun syncScenicSpotData() {
         syncScenicSpotUseCase.syncScenicSpotData()
     }
-
 }

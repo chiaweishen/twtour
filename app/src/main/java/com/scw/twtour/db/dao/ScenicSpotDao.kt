@@ -19,6 +19,9 @@ interface ScenicSpotDao {
     @Query("SELECT * FROM scenic_spot_table WHERE city = :city LIMIT :limit")
     fun queryScenicSpotsByCity(city: String, limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
 
+    @Query("SELECT * FROM scenic_spot_table WHERE city = :city ORDER BY RANDOM() LIMIT :limit")
+    fun queryRandomScenicSpotsByCity(city: String, limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
+
     @Query("SELECT * FROM scenic_spot_table WHERE scenic_spot_name LIKE '%' || :keyword || '%' LIMIT :limit")
     fun queryScenicSpotsByName(
         keyword: String,
