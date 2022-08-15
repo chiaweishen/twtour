@@ -80,6 +80,7 @@ dependencies {
 
     //Coin
     implementation "io.coil-kt:coil:$coinVersion"
+    implementation("io.coil-kt:coil-svg:$coinVersion")
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.insert-koin:koin-test:$koinVersion"

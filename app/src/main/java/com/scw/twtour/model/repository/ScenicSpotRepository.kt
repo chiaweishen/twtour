@@ -19,7 +19,7 @@ class ScenicSpotRepositoryImpl(
 ) : ScenicSpotRepository {
 
     companion object {
-        private const val SCENIC_SPOT_LIMIT = 4
+        private const val SCENIC_SPOT_LIMIT = 12
     }
 
     override fun fetchItems(): Flow<List<ScenicSpotListItem>> {
@@ -150,7 +150,7 @@ class ScenicSpotRepositoryImpl(
                     add(mappingToScenicSpotInfo(items))
                 }
             }
-            .combine(flowOf(TitleItem("台灣離島"))) { list, title ->
+            .combine(flowOf(TitleItem("離島地區"))) { list, title ->
                 list.apply { add(title) }
             }
             .combine(queryRandomScenicSpotByCity(City.PENGHU_COUNTRY)) { list, items ->
