@@ -17,9 +17,24 @@ object ODataFilter {
         fun outlyingIslands(): String {
             return "${byCity(City.PENGHU_COUNTRY)} " +
                     "or ${byCity(City.KINMEN_COUNTRY)} " +
-                    "or ZipCode eq '951' " + // 綠島
-                    "or ZipCode eq '952' " + // 蘭嶼
-                    "or ZipCode eq '929'" // 小琉球
+                    "or ${lyudao()} " +
+                    "or ${lanyu()} " +
+                    "or ${xiaoliouchou()}"
+        }
+
+        // 綠島
+        fun lyudao(): String {
+            return "ZipCode eq '951'"
+        }
+
+        // 蘭嶼
+        fun lanyu(): String {
+            return "ZipCode eq '952'"
+        }
+
+        // 小琉球
+        fun xiaoliouchou(): String {
+            return "ZipCode eq '929'"
         }
     }
 }

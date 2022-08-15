@@ -22,5 +22,9 @@ enum class City(val value: String) {
     TAITUNG_COUNTRY("臺東縣"),
     KINMEN_COUNTRY("金門縣"),
     PENGHU_COUNTRY("澎湖縣"),
-    LIENCHIANG_COUNTRY("連江縣")
+    LIENCHIANG_COUNTRY("連江縣"),
+    // 區域
+    LANYU("蘭嶼"),
+    LYUDAO("綠島"),
+    XIAOLIOUCHOU("小琉球")
 }

@@ -20,11 +20,56 @@ interface ScenicSpotDao {
     fun queryScenicSpotsByCity(city: String, limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
 
     @Query("SELECT * FROM scenic_spot_table WHERE city = :city ORDER BY RANDOM() LIMIT :limit")
-    fun queryRandomScenicSpotsByCity(city: String, limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
+    fun queryRandomScenicSpotsByCity(
+        city: String,
+        limit: Int = -1
+    ): Flow<List<ScenicSpotEntityItem>>
+
+    @Query(
+        "SELECT * FROM scenic_spot_table WHERE city = :city " +
+                "AND (pic_url_1 NOT NULL OR pic_url_2 NOT NULL OR pic_url_3 NOT NULL) " +
+                "ORDER BY RANDOM() LIMIT :limit"
+    )
+    fun queryRandomScenicSpotsHasImageByCity(
+        city: String,
+        limit: Int = -1
+    ): Flow<List<ScenicSpotEntityItem>>
+
+    @Query(
+        "SELECT * FROM scenic_spot_table WHERE zip_code = '951' " +
+                "AND (pic_url_1 NOT NULL OR pic_url_2 NOT NULL OR pic_url_3 NOT NULL) " +
+                "ORDER BY RANDOM() LIMIT :limit"
+    )
+    fun queryRandomScenicSpotsHasImageInLyudao(limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
+
+    @Query(
+        "SELECT * FROM scenic_spot_table WHERE zip_code = '952' " +
+                "AND (pic_url_1 NOT NULL OR pic_url_2 NOT NULL OR pic_url_3 NOT NULL) " +
+                "ORDER BY RANDOM() LIMIT :limit"
+    )
+    fun queryRandomScenicSpotsHasImageInLanyu(limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
+
+    @Query(
+        "SELECT * FROM scenic_spot_table WHERE zip_code = '929' " +
+                "AND (pic_url_1 NOT NULL OR pic_url_2 NOT NULL OR pic_url_3 NOT NULL) " +
+                "ORDER BY RANDOM() LIMIT :limit"
+    )
+    fun queryRandomScenicSpotsHasImageInXiaoliouchou(limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
 
     @Query("SELECT * FROM scenic_spot_table WHERE scenic_spot_name LIKE '%' || :keyword || '%' LIMIT :limit")
     fun queryScenicSpotsByName(
         keyword: String,
+        limit: Int = -1
+    ): Flow<List<ScenicSpotEntityItem>>
+
+    @Query(
+        "SELECT *, (ABS(:positionLat) - ABS(position_lat)) * (ABS(:positionLat) - ABS(position_lat)) " +
+                "+ (ABS(:positionLon) - ABS(position_lon)) * (ABS(:positionLon) - ABS(position_lon)) as Distance " +
+                "FROM scenic_spot_table WHERE Distance > 0 ORDER BY Distance ASC LIMIT :limit"
+    )
+    fun queryScenicSpotsNearBy(
+        positionLat: Double,
+        positionLon: Double,
         limit: Int = -1
     ): Flow<List<ScenicSpotEntityItem>>
 

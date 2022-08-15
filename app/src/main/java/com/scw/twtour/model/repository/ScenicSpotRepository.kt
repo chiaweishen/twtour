@@ -1,191 +1,272 @@
 package com.scw.twtour.model.repository
 
-import com.scw.twtour.model.data.*
+import com.scw.twtour.model.data.MultipleItems
+import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.model.data.ScenicSpotListItem
+import com.scw.twtour.model.data.TitleItem
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.util.City
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 
 interface ScenicSpotRepository {
     fun fetchItems(): Flow<List<ScenicSpotListItem>>
 }
 
+@FlowPreview
 class ScenicSpotRepositoryImpl(
     private val localDataSource: ScenicSpotLocalDataSource
 ) : ScenicSpotRepository {
 
     companion object {
-        private const val SCENIC_SPOT_LIMIT = 12
+        private const val SCENIC_SPOT_LIMIT = 1
     }
 
     override fun fetchItems(): Flow<List<ScenicSpotListItem>> {
+
         return flowOf(mutableListOf<ScenicSpotListItem>())
-            .combine(flowOf(TitleItem("北台灣"))) { list, title ->
-                list.apply { add(title) }
+            .map { list ->
+                list.apply { add(TitleItem("北台灣")) }
             }
-            .combine(queryRandomScenicSpotByCity(City.KEELUNG)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.KEELUNG.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .flatMapConcat { list ->
+                flowOf(mutableListOf<ScenicSpotInfo>())
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.TAIPEI)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.TAIPEI, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.NEW_TAIPEI)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.NEW_TAIPEI, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.KEELUNG)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.KEELUNG, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.TAOYUAN)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.TAOYUAN, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.YILAN_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.YILAN_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.HSINCHU_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.HSINCHU_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.HSINCHU)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.HSINCHU, entityItems))
+                        }
+                    }
+                    .map { scenicSpotInfoList ->
+                        list.apply { add(MultipleItems(scenicSpotInfoList)) }
+                    }
             }
-            .combine(queryRandomScenicSpotByCity(City.TAIPEI)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.TAIPEI.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .map { list ->
+                list.apply { add(TitleItem("中台灣")) }
             }
-            .combine(queryRandomScenicSpotByCity(City.NEW_TAIPEI)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.NEW_TAIPEI.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .flatMapConcat { list ->
+                flowOf(mutableListOf<ScenicSpotInfo>())
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.MIAOLI_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.MIAOLI_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.TAICHUNG)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.TAICHUNG, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.CHANGHUA_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.CHANGHUA_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.NANTOU_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.NANTOU_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.YUNLIN_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.YUNLIN_COUNTRY, entityItems))
+                        }
+                    }
+                    .map { scenicSpotInfoList ->
+                        list.apply { add(MultipleItems(scenicSpotInfoList)) }
+                    }
             }
-            .combine(queryRandomScenicSpotByCity(City.YILAN_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.YILAN_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .map { list ->
+                list.apply { add(TitleItem("南台灣")) }
             }
-            .combine(queryRandomScenicSpotByCity(City.TAOYUAN)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.TAOYUAN.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .flatMapConcat { list ->
+                flowOf(mutableListOf<ScenicSpotInfo>())
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.CHIAYI_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.CHIAYI_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.CHIAYI)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.CHIAYI, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.TAINAN)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.TAINAN, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.KAOHSIUNG)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.KAOHSIUNG, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.PINGTUNG_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.PINGTUNG_COUNTRY, entityItems))
+                        }
+                    }
+                    .map { scenicSpotInfoList ->
+                        list.apply { add(MultipleItems(scenicSpotInfoList)) }
+                    }
             }
-            .combine(queryRandomScenicSpotByCity(City.HSINCHU_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.HSINCHU_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .map { list ->
+                list.apply { add(TitleItem("東台灣")) }
             }
-            .combine(queryRandomScenicSpotByCity(City.HSINCHU)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.HSINCHU.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .flatMapConcat { list ->
+                flowOf(mutableListOf<ScenicSpotInfo>())
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.HUALIEN_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.HUALIEN_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.TAITUNG_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.TAITUNG_COUNTRY, entityItems))
+                        }
+                    }
+                    .map { scenicSpotInfoList ->
+                        list.apply { add(MultipleItems(scenicSpotInfoList)) }
+                    }
             }
-            .combine(flowOf(TitleItem("中台灣"))) { list, title ->
-                list.apply { add(title) }
+            .map { list ->
+                list.apply { add(TitleItem("離島地區")) }
             }
-            .combine(queryRandomScenicSpotByCity(City.MIAOLI_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.MIAOLI_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.TAICHUNG)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.TAICHUNG.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.CHANGHUA_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.CHANGHUA_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.NANTOU_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.NANTOU_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.YUNLIN_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.YUNLIN_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(flowOf(TitleItem("南台灣"))) { list, title ->
-                list.apply { add(title) }
-            }
-            .combine(queryRandomScenicSpotByCity(City.CHIAYI_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.CHIAYI_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.CHIAYI)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.CHIAYI.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.TAINAN)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.TAINAN.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.KAOHSIUNG)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.KAOHSIUNG.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.PINGTUNG_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.PINGTUNG_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(flowOf(TitleItem("東台灣"))) { list, title ->
-                list.apply { add(title) }
-            }
-            .combine(queryRandomScenicSpotByCity(City.HUALIEN_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.HUALIEN_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.TAITUNG_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.TAITUNG_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(flowOf(TitleItem("離島地區"))) { list, title ->
-                list.apply { add(title) }
-            }
-            .combine(queryRandomScenicSpotByCity(City.PENGHU_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.PENGHU_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.KINMEN_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.KINMEN_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
-            }
-            .combine(queryRandomScenicSpotByCity(City.LIENCHIANG_COUNTRY)) { list, items ->
-                list.apply {
-                    add(SubtitleItem(City.LIENCHIANG_COUNTRY.value))
-                    add(mappingToScenicSpotInfo(items))
-                }
+            .flatMapConcat { list ->
+                flowOf(mutableListOf<ScenicSpotInfo>())
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.PENGHU_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.PENGHU_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.KINMEN_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.KINMEN_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        queryRandomScenicSpotsHasImageByCity(City.LIENCHIANG_COUNTRY)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            add(mappingToScenicSpotInfo(City.LIENCHIANG_COUNTRY, entityItems))
+                        }
+                    }
+                    .combine(
+                        localDataSource.queryRandomScenicSpotsHasImageInLanyu(SCENIC_SPOT_LIMIT)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            val info = mappingToScenicSpotInfo(City.LANYU, entityItems)
+                            info.city = City.LANYU.value
+                            add(info)
+                        }
+                    }
+                    .combine(
+                        localDataSource.queryRandomScenicSpotsHasImageInLyudao(SCENIC_SPOT_LIMIT)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            val info = mappingToScenicSpotInfo(City.LYUDAO, entityItems)
+                            info.city = City.LYUDAO.value
+                            add(info)
+                        }
+                    }
+                    .combine(
+                        localDataSource.queryRandomScenicSpotsHasImageInXiaoliouchou(SCENIC_SPOT_LIMIT)
+                    ) { scenicSpotInfoList, entityItems ->
+                        scenicSpotInfoList.apply {
+                            val info = mappingToScenicSpotInfo(City.XIAOLIOUCHOU, entityItems)
+                            info.city = City.XIAOLIOUCHOU.value
+                            add(info)
+                        }
+                    }
+                    .map { scenicSpotInfoList ->
+                        list.apply { add(MultipleItems(scenicSpotInfoList)) }
+                    }
             }
             .flowOn(Dispatchers.IO)
     }
 
-    private fun queryRandomScenicSpotByCity(city: City): Flow<List<ScenicSpotEntityItem>> {
-        return localDataSource.queryRandomScenicSpotByCity(city.name, SCENIC_SPOT_LIMIT)
+    private fun queryRandomScenicSpotsHasImageByCity(city: City): Flow<List<ScenicSpotEntityItem>> {
+        return localDataSource.queryRandomScenicSpotsHasImageByCity(city.name, SCENIC_SPOT_LIMIT)
     }
 
-    private fun mappingToScenicSpotInfo(items: List<ScenicSpotEntityItem>): MultipleItems {
-        return MultipleItems(
-            mutableListOf<ScenicSpotInfo>().apply {
-                items.forEach { entity ->
-                    add(ScenicSpotInfo().update(entity))
-                }
-            }
-        )
+    private fun mappingToScenicSpotInfo(
+        city: City,
+        items: List<ScenicSpotEntityItem>
+    ): ScenicSpotInfo {
+        return items.firstOrNull()?.let {
+            ScenicSpotInfo().update(it)
+        } ?: ScenicSpotInfo(city = city.value)
     }
 
 }

@@ -11,9 +11,20 @@ interface ScenicSpotLocalDataSource {
     suspend fun deleteAll()
 
     fun queryRandomScenicSpotByCity(
-        city: String,
+        cityName: String,
         limit: Int
     ): Flow<List<ScenicSpotEntityItem>>
+
+    fun queryRandomScenicSpotsHasImageByCity(
+        cityName: String,
+        limit: Int
+    ): Flow<List<ScenicSpotEntityItem>>
+
+    fun queryRandomScenicSpotsHasImageInLyudao(limit: Int): Flow<List<ScenicSpotEntityItem>>
+
+    fun queryRandomScenicSpotsHasImageInLanyu(limit: Int): Flow<List<ScenicSpotEntityItem>>
+
+    fun queryRandomScenicSpotsHasImageInXiaoliouchou(limit: Int): Flow<List<ScenicSpotEntityItem>>
 }
 
 class ScenicSpotLocalDataSourceImpl(
@@ -29,9 +40,28 @@ class ScenicSpotLocalDataSourceImpl(
     }
 
     override fun queryRandomScenicSpotByCity(
-        city: String,
+        cityName: String,
         limit: Int
     ): Flow<List<ScenicSpotEntityItem>> {
-        return scenicSpotDao.queryRandomScenicSpotsByCity(city, limit)
+        return scenicSpotDao.queryRandomScenicSpotsByCity(cityName, limit)
+    }
+
+    override fun queryRandomScenicSpotsHasImageByCity(
+        cityName: String,
+        limit: Int
+    ): Flow<List<ScenicSpotEntityItem>> {
+        return scenicSpotDao.queryRandomScenicSpotsHasImageByCity(cityName, limit)
+    }
+
+    override fun queryRandomScenicSpotsHasImageInLyudao(limit: Int): Flow<List<ScenicSpotEntityItem>> {
+        return scenicSpotDao.queryRandomScenicSpotsHasImageInLyudao(limit)
+    }
+
+    override fun queryRandomScenicSpotsHasImageInLanyu(limit: Int): Flow<List<ScenicSpotEntityItem>> {
+        return scenicSpotDao.queryRandomScenicSpotsHasImageInLanyu(limit)
+    }
+
+    override fun queryRandomScenicSpotsHasImageInXiaoliouchou(limit: Int): Flow<List<ScenicSpotEntityItem>> {
+        return scenicSpotDao.queryRandomScenicSpotsHasImageInXiaoliouchou(limit)
     }
 }

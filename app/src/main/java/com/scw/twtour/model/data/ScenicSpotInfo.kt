@@ -50,7 +50,7 @@ data class ScenicSpotInfo(
                 entity.class2?.also { add(it) }
                 entity.class3?.also { add(it) }
             },
-            city = entity.city?.name ?: ""
+            city = entity.city?.value ?: ""
         )
     }
 }

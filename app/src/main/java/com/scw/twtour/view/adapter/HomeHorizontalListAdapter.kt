@@ -47,7 +47,7 @@ class HomeHorizontalListAdapter :
         }
 
         fun bindData(item: ScenicSpotInfo) {
-            viewBinging.textTitle.text = item.name
+            viewBinging.textTitle.text = item.city
             viewBinging.viewPicture.load(item.pictures.firstOrNull())
         }
     }
