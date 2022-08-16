@@ -20,7 +20,8 @@ data class ScenicSpotInfo(
     var ticketInfo: String? = null,
     var remarks: String? = null,
     var classes: List<String> = mutableListOf(),
-    var city: String = ""
+    var city: String = "",
+    var distanceMeter: Int = 0
 ) {
 
     fun update(entity: ScenicSpotEntityItem): ScenicSpotInfo {

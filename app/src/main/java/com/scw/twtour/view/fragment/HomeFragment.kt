@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.scenicSpotItems.collect { items ->
+            viewModel.listItems.collect { items ->
                 homeListAdapter.submitList(items)
             }
         }

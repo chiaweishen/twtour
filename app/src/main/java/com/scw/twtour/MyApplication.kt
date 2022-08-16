@@ -70,7 +70,7 @@ class MyApplication : Application(), ImageLoaderFactory {
         return ImageLoader.Builder(this)
             .crossfade(true)
             .error(R.drawable.ic_baseline_broken_image_24)
-            .crossfade(500)
+            .crossfade(250)
             .components {
                 add(SvgDecoder.Factory())
             }
@@ -82,7 +82,7 @@ class MyApplication : Application(), ImageLoaderFactory {
             .diskCache {
                 DiskCache.Builder()
                     .directory(cacheDir.resolve("image_cache"))
-                    .maxSizePercent(0.05)
+                    .maxSizePercent(0.1)
                     .build()
             }
             .build()

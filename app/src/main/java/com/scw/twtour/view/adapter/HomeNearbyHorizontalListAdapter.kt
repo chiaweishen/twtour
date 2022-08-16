@@ -6,10 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.scw.twtour.databinding.ListHorizontalItemBinding
+import com.scw.twtour.databinding.ListItemNearbyHorizontalBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
+import java.text.DecimalFormat
 
-class HomeHorizontalListAdapter :
+class HomeNearbyHorizontalListAdapter :
     ListAdapter<ScenicSpotInfo, RecyclerView.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -33,13 +34,13 @@ class HomeHorizontalListAdapter :
         }
     }
 
-    class ContentViewHolder(private val viewBinging: ListHorizontalItemBinding) :
+    class ContentViewHolder(private val viewBinging: ListItemNearbyHorizontalBinding) :
         RecyclerView.ViewHolder(viewBinging.root) {
 
         companion object {
             fun newInstance(parent: ViewGroup): ContentViewHolder {
                 return ContentViewHolder(
-                    ListHorizontalItemBinding.inflate(
+                    ListItemNearbyHorizontalBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )
@@ -47,8 +48,20 @@ class HomeHorizontalListAdapter :
         }
 
         fun bindData(item: ScenicSpotInfo) {
-            viewBinging.textTitle.text = item.city
+            viewBinging.textTitle.text = item.name
+            viewBinging.textDistance.text = convertDistanceUnit(item.distanceMeter)
             viewBinging.viewPicture.load(item.pictures.firstOrNull())
+        }
+
+        private fun convertDistanceUnit(distanceMeter: Int): String {
+            return if (distanceMeter >= 1000) {
+                DecimalFormat("##0.00").run {
+                    "${format(distanceMeter / 1000.0)}km"
+                }
+
+            } else {
+                "${distanceMeter}m"
+            }
         }
     }
 }

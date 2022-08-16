@@ -8,5 +8,5 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<ScenicSpotSyncingRepository> { ScenicSpotSyncingRepositoryImpl(get(), get(), get()) }
-    single<ScenicSpotRepository> { ScenicSpotRepositoryImpl(get()) }
+    single<ScenicSpotRepository> { ScenicSpotRepositoryImpl(get(), get()) }
 }
