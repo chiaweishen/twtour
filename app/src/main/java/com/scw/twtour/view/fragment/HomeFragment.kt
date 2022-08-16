@@ -1,17 +1,22 @@
 package com.scw.twtour.view.fragment
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.MyApplication
 import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.domain.AuthUseCase
+import com.scw.twtour.util.AccessFineLocationGranted
 import com.scw.twtour.util.SyncComplete
+import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
 import com.scw.twtour.view.viewmodel.HomeViewModel
 import com.scw.twtour.view.viewmodel.MainViewModel
@@ -19,6 +24,7 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import pub.devrel.easypermissions.EasyPermissions
 
 class HomeFragment : Fragment() {
 
@@ -57,21 +63,63 @@ class HomeFragment : Fragment() {
         viewBinding.viewRecycler.adapter = homeListAdapter
         viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        homeListAdapter.setListener(object : AdapterListener {
+            override fun onLocationPermissionClick() {
+                checkAccessLocationFinePermission()
+            }
+        })
+
+        viewBinding.layoutSwipeRefresh.setOnRefreshListener {
+            viewModel.fetchScenicSpotItems()
+        }
     }
 
     private fun collectData() {
         viewLifecycleOwner.lifecycleScope.launch {
-            mainViewModel.syncState.collect { state ->
-                if (state == SyncComplete) {
-                    viewModel.fetchScenicSpotItems()
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.syncState.collect { state ->
+                    if (state == SyncComplete) {
+                        viewModel.fetchScenicSpotItems()
+                    }
                 }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.listItems.collect { items ->
-                homeListAdapter.submitList(items)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.listItems.collect { items ->
+                    viewBinding.layoutSwipeRefresh.isRefreshing = false
+                    homeListAdapter.submitList(items)
+                }
             }
+        }
+
+        // FIXME: 收不到 stateFlow 變更事件！？
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.permissionState.collect { state ->
+                    if (state == AccessFineLocationGranted) {
+                        viewModel.fetchScenicSpotItems()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkAccessLocationFinePermission() {
+        if (!EasyPermissions.hasPermissions(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
+            EasyPermissions.requestPermissions(
+                this@HomeFragment,
+                "請允許「位置權限」\n用以支援完整景點功能",
+                222,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        } else {
+            viewModel.fetchScenicSpotItems()
         }
     }
 

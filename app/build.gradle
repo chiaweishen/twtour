@@ -83,6 +83,9 @@ dependencies {
     implementation "io.coil-kt:coil:$coinVersion"
     implementation("io.coil-kt:coil-svg:$coinVersion")
 
+    // EASY Permission
+    implementation "pub.devrel:easypermissions:$easyPermissionVersion"
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.insert-koin:koin-test:$koinVersion"
     testImplementation "io.insert-koin:koin-test-junit4:$koinVersion"

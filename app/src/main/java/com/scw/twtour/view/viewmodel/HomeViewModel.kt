@@ -14,7 +14,7 @@ class HomeViewModel(
 ) : ViewModel() {
 
     private val _listItems: MutableStateFlow<List<HomeListItem>> = MutableStateFlow(emptyList())
-    val listItems: StateFlow<List<HomeListItem>> = _listItems.asStateFlow()
+    val listItems: StateFlow<List<HomeListItem>> get() = _listItems.asStateFlow()
 
     fun fetchScenicSpotItems() {
         viewModelScope.launch {

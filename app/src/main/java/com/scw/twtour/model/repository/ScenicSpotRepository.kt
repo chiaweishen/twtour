@@ -1,5 +1,7 @@
 package com.scw.twtour.model.repository
 
+import android.Manifest
+import android.content.Context
 import com.scw.twtour.model.data.*
 import com.scw.twtour.model.datasource.local.LocationLocalDataSource
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
@@ -7,7 +9,7 @@ import com.scw.twtour.util.City
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
-import timber.log.Timber
+import pub.devrel.easypermissions.EasyPermissions
 
 interface ScenicSpotRepository {
     fun fetchItems(): Flow<List<HomeListItem>>
@@ -15,6 +17,7 @@ interface ScenicSpotRepository {
 
 @FlowPreview
 class ScenicSpotRepositoryImpl(
+    private val context: Context,
     private val localDataSource: ScenicSpotLocalDataSource,
     private val locationLocalDataSource: LocationLocalDataSource
 ) : ScenicSpotRepository {
@@ -25,25 +28,16 @@ class ScenicSpotRepositoryImpl(
     }
 
     override fun fetchItems(): Flow<List<HomeListItem>> {
-        return locationLocalDataSource.getLastLocation()
-            .flatMapConcat { location ->
-                location?.let {
-                    localDataSource.queryNearbyScenicSpots(
-                        it.latitude,
-                        it.longitude,
-                        NEARBY_SCENIC_SPOT_LIMIT
-                    )
-                } ?: run {
-                    flowOf(emptyList())
+        return if (hasAccessLocationPermission()) {
+            nearbyFlow()
+        } else {
+            flowOf(
+                mutableListOf<HomeListItem>().apply {
+                    add(DiscoverNearByItem)
                 }
-            }
-            .combine(flowOf(mutableListOf<HomeListItem>())) { nearbyInfo, list ->
-                list.apply {
-                    add(NearbyItems(nearbyInfo))
-                }
-            }
+            )
+        }
             .map { list ->
-                Timber.d("list: $list")
                 list.apply { add(TitleItem("北台灣")) }
             }
             .flatMapConcat { list ->
@@ -222,6 +216,34 @@ class ScenicSpotRepositoryImpl(
 
     private fun queryRandomScenicSpotsHasImageByCity(city: City): Flow<List<ScenicSpotInfo>> {
         return localDataSource.queryRandomScenicSpotsHasImageByCity(city, CITY_SCENIC_SPOT_LIMIT)
+    }
+
+    private fun hasAccessLocationPermission(): Boolean {
+        return EasyPermissions.hasPermissions(
+            context, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) || EasyPermissions.hasPermissions(
+            context, Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    }
+
+    private fun nearbyFlow(): Flow<MutableList<HomeListItem>> {
+        return locationLocalDataSource.getLastLocation()
+            .flatMapConcat { location ->
+                location?.let {
+                    localDataSource.queryNearbyScenicSpots(
+                        it.latitude,
+                        it.longitude,
+                        NEARBY_SCENIC_SPOT_LIMIT
+                    )
+                } ?: run {
+                    flowOf(emptyList())
+                }
+            }
+            .combine(flowOf(mutableListOf<HomeListItem>())) { nearbyInfo, list ->
+                list.apply {
+                    add(NearbyItems(nearbyInfo))
+                }
+            }
     }
 
 }

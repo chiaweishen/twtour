@@ -25,7 +25,7 @@ class ScenicSpotSyncingRepositoryImpl(
     private val preferencesDataSource: ScenicSpotPreferencesDataSource
 ) : ScenicSpotSyncingRepository {
     private val _syncState = MutableStateFlow<SyncState>(SyncNone)
-    override val syncState = _syncState.asStateFlow()
+    override val syncState get() = _syncState.asStateFlow()
 
     private var syncStartTime: Long = 0
 

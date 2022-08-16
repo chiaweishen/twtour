@@ -1,24 +1,26 @@
 package com.scw.twtour.view.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.scw.twtour.databinding.ListItemCityBinding
-import com.scw.twtour.databinding.ListItemNearbyBinding
-import com.scw.twtour.databinding.ListItemTitleBinding
-import com.scw.twtour.model.data.CityItems
-import com.scw.twtour.model.data.HomeListItem
-import com.scw.twtour.model.data.NearbyItems
-import com.scw.twtour.model.data.TitleItem
+import com.scw.twtour.databinding.*
+import com.scw.twtour.model.data.*
 
 class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 
+    private var listener: AdapterListener? = null
+
     enum class ViewType {
-        NEARBY, TITLE, CITY
+        NEARBY, TITLE, CITY, DISCOVER_NEARBY
+    }
+
+    fun setListener(listener: AdapterListener?) {
+        this.listener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +28,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
             ViewType.NEARBY.ordinal -> NearbyViewHolder.newInstance(parent)
             ViewType.TITLE.ordinal -> TitleViewHolder.newInstance(parent)
             ViewType.CITY.ordinal -> CityViewHolder.newInstance(parent)
+            ViewType.DISCOVER_NEARBY.ordinal -> DiscoverNearbyViewHolder.newInstance(parent)
             else -> throw IllegalArgumentException("Unknown view type")
         }
     }
@@ -35,6 +38,9 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
             is NearbyViewHolder -> holder.bindData(getItem(position) as NearbyItems)
             is TitleViewHolder -> holder.bindData(getItem(position) as TitleItem)
             is CityViewHolder -> holder.bindData(getItem(position) as CityItems)
+            is DiscoverNearbyViewHolder -> holder.bindData {
+                listener?.onLocationPermissionClick()
+            }
         }
     }
 
@@ -43,6 +49,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
             is NearbyItems -> ViewType.NEARBY.ordinal
             is TitleItem -> ViewType.TITLE.ordinal
             is CityItems -> ViewType.CITY.ordinal
+            is DiscoverNearByItem -> ViewType.DISCOVER_NEARBY.ordinal
         }
     }
 
@@ -62,6 +69,10 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
             return oldItem == newItem
         }
     }
+}
+
+interface AdapterListener {
+    fun onLocationPermissionClick()
 }
 
 class TitleViewHolder(
@@ -136,5 +147,24 @@ class NearbyViewHolder(
 
     fun bindData(item: NearbyItems) {
         adapter.submitList(item.scenicSpots)
+    }
+}
+
+class DiscoverNearbyViewHolder(
+    private val viewBinding: ListItemDiscoverNearbyBinding
+) : ViewHolder(viewBinding.root) {
+
+    companion object {
+        fun newInstance(parent: ViewGroup): DiscoverNearbyViewHolder {
+            return DiscoverNearbyViewHolder(
+                ListItemDiscoverNearbyBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+        }
+    }
+
+    fun bindData(onClickListener: View.OnClickListener) {
+        viewBinding.buttonDiscover.setOnClickListener(onClickListener)
     }
 }
