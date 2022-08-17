@@ -10,6 +10,14 @@ object ODataFilter {
             }
         }
 
+        fun byZipCode(zipCode: Int): String {
+            return "ZipCode eq '$zipCode'"
+        }
+
+        fun isOutlyingIslands(city: City): Boolean {
+            return city == City.XIAOLIOUCHOU || city == City.LYUDAO || city == City.LANYU
+        }
+
         fun byId(id: String): String {
             return "ScenicSpotID eq '$id'"
         }

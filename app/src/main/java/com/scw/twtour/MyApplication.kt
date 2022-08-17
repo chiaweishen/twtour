@@ -82,7 +82,7 @@ class MyApplication : Application(), ImageLoaderFactory {
             .diskCache {
                 DiskCache.Builder()
                     .directory(cacheDir.resolve("image_cache"))
-                    .maxSizePercent(0.01)
+                    .maxSizePercent(0.001)
                     .build()
             }
             .build()

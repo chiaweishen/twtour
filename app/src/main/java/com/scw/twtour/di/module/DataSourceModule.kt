@@ -1,6 +1,7 @@
 package com.scw.twtour.di.module
 
 import com.scw.twtour.model.datasource.local.*
+import com.scw.twtour.model.datasource.remote.ScenicSpotPagingSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSourceImp
 import org.koin.android.ext.koin.androidContext
@@ -11,4 +12,5 @@ val dataSourceModule = module {
     single<ScenicSpotLocalDataSource> { ScenicSpotLocalDataSourceImpl(get()) }
     single<ScenicSpotPreferencesDataSource> { ScenicSpotPreferencesDataSourceImpl(androidContext()) }
     single<LocationLocalDataSource> { LocationLocalDataSourceImpl(androidContext()) }
+    factory { params -> ScenicSpotPagingSource(get(), params.get(), params.get()) }
 }

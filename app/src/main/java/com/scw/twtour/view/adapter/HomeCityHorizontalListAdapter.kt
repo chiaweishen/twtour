@@ -8,9 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.scw.twtour.databinding.ListItemCityHorizontalBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.util.City
 
 class HomeCityHorizontalListAdapter :
     ListAdapter<ScenicSpotInfo, RecyclerView.ViewHolder>(DiffCallback()) {
+
+    private var listener: AdapterListener? = null
+
+    fun setListener(listener: AdapterListener?) {
+        this.listener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ContentViewHolder.newInstance(parent)
@@ -18,7 +25,9 @@ class HomeCityHorizontalListAdapter :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ContentViewHolder) {
-            holder.bindData(getItem(position))
+            holder.bindData(getItem(position)) { city, zipCode ->
+                listener?.onCityItemClick(city, zipCode)
+            }
         }
     }
 
@@ -46,9 +55,16 @@ class HomeCityHorizontalListAdapter :
             }
         }
 
-        fun bindData(item: ScenicSpotInfo) {
-            viewBinging.textTitle.text = item.city
+        fun bindData(item: ScenicSpotInfo, proceed: (city: City?, zipCode: Int?) -> Unit) {
+            viewBinging.textTitle.text = item.city?.value
             viewBinging.viewPicture.load(item.pictures.firstOrNull())
+            itemView.setOnClickListener {
+                proceed.invoke(item.city, item.zipCode)
+            }
         }
+    }
+
+    interface AdapterListener {
+        fun onCityItemClick(city: City?, zipCode: Int?)
     }
 }

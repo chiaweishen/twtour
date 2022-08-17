@@ -5,6 +5,8 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 android {
     compileSdk 32
 

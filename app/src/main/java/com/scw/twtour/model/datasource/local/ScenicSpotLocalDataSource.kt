@@ -72,7 +72,7 @@ class ScenicSpotLocalDataSourceImpl(
                     add(ScenicSpotInfo().update(item))
                 }
                 if (isEmpty()) {
-                    add(ScenicSpotInfo(city = city.value))
+                    add(ScenicSpotInfo(city = city))
                 }
             }
         }
@@ -86,7 +86,7 @@ class ScenicSpotLocalDataSourceImpl(
                     add(ScenicSpotInfo().update(item))
                 }
                 if (isEmpty()) {
-                    add(ScenicSpotInfo(city = City.LYUDAO.value))
+                    add(ScenicSpotInfo(city = City.LYUDAO, zipCode = 951))
                 }
             }
         }
@@ -100,7 +100,7 @@ class ScenicSpotLocalDataSourceImpl(
                     add(ScenicSpotInfo().update(item))
                 }
                 if (isEmpty()) {
-                    add(ScenicSpotInfo(city = City.LANYU.value))
+                    add(ScenicSpotInfo(city = City.LANYU, zipCode = 952))
                 }
             }
         }
@@ -114,7 +114,7 @@ class ScenicSpotLocalDataSourceImpl(
                     add(ScenicSpotInfo().update(item))
                 }
                 if (isEmpty()) {
-                    add(ScenicSpotInfo(city = City.XIAOLIOUCHOU.value))
+                    add(ScenicSpotInfo(city = City.XIAOLIOUCHOU, zipCode = 929))
                 }
             }
         }

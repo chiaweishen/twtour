@@ -1,6 +1,8 @@
 package com.scw.twtour.model.data
 
+import com.scw.twtour.ext.removeDuplicateValue
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
+import com.scw.twtour.util.City
 
 data class ScenicSpotInfo(
     var id: String = "",
@@ -20,7 +22,7 @@ data class ScenicSpotInfo(
     var ticketInfo: String? = null,
     var remarks: String? = null,
     var classes: List<String> = mutableListOf(),
-    var city: String = "",
+    var city: City? = null,
     var distanceMeter: Int = 0
 ) {
 
@@ -50,8 +52,8 @@ data class ScenicSpotInfo(
                 entity.class1?.also { add(it) }
                 entity.class2?.also { add(it) }
                 entity.class3?.also { add(it) }
-            },
-            city = entity.city?.value ?: ""
+            }.removeDuplicateValue(),
+            city = entity.city
         )
     }
 }

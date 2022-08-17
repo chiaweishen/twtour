@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.scw.twtour.databinding.*
+import com.scw.twtour.databinding.ListItemCityBinding
+import com.scw.twtour.databinding.ListItemDiscoverNearbyBinding
+import com.scw.twtour.databinding.ListItemNearbyBinding
+import com.scw.twtour.databinding.ListItemTitleBinding
 import com.scw.twtour.model.data.*
+import com.scw.twtour.util.City
 
 class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 
@@ -37,7 +41,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
         when (holder) {
             is NearbyViewHolder -> holder.bindData(getItem(position) as NearbyItems)
             is TitleViewHolder -> holder.bindData(getItem(position) as TitleItem)
-            is CityViewHolder -> holder.bindData(getItem(position) as CityItems)
+            is CityViewHolder -> holder.bindData(getItem(position) as CityItems, listener)
             is DiscoverNearbyViewHolder -> holder.bindData {
                 listener?.onLocationPermissionClick()
             }
@@ -73,6 +77,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 
 interface AdapterListener {
     fun onLocationPermissionClick()
+    fun onCityItemClick(city: City?, zipCode: Int?)
 }
 
 class TitleViewHolder(
@@ -99,12 +104,18 @@ class CityViewHolder(
 ) : ViewHolder(viewBinding.root) {
 
     private val adapter = HomeCityHorizontalListAdapter()
+    private var listener: AdapterListener? = null
 
     init {
         viewBinding.viewRecycler.adapter = adapter
         viewBinding.viewRecycler.layoutManager = LinearLayoutManager(
             itemView.context, RecyclerView.HORIZONTAL, false
         )
+        adapter.setListener(object : HomeCityHorizontalListAdapter.AdapterListener {
+            override fun onCityItemClick(city: City?, zipCode: Int?) {
+                listener?.onCityItemClick(city, zipCode)
+            }
+        })
     }
 
     companion object {
@@ -117,7 +128,8 @@ class CityViewHolder(
         }
     }
 
-    fun bindData(item: CityItems) {
+    fun bindData(item: CityItems, listener: AdapterListener?) {
+        this.listener = listener
         adapter.submitList(item.scenicSpots)
     }
 }

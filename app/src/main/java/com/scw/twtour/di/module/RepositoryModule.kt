@@ -1,13 +1,13 @@
 package com.scw.twtour.di.module
 
-import com.scw.twtour.model.repository.ScenicSpotRepository
-import com.scw.twtour.model.repository.ScenicSpotRepositoryImpl
-import com.scw.twtour.model.repository.ScenicSpotSyncingRepository
-import com.scw.twtour.model.repository.ScenicSpotSyncingRepositoryImpl
+import com.scw.twtour.model.repository.*
+import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
+@FlowPreview
 val repositoryModule = module {
     single<ScenicSpotSyncingRepository> { ScenicSpotSyncingRepositoryImpl(get(), get(), get()) }
     single<ScenicSpotRepository> { ScenicSpotRepositoryImpl(androidContext(), get(), get()) }
+    single<ScenicSpotListRepository> { ScenicSpotListRepositoryImpl() }
 }

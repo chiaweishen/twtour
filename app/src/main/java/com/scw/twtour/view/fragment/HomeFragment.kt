@@ -9,12 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.MyApplication
 import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.domain.AuthUseCase
+import com.scw.twtour.ext.launchAndCollect
 import com.scw.twtour.util.AccessFineLocationGranted
+import com.scw.twtour.util.City
 import com.scw.twtour.util.SyncComplete
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
@@ -63,9 +66,18 @@ class HomeFragment : Fragment() {
         viewBinding.viewRecycler.adapter = homeListAdapter
         viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+
         homeListAdapter.setListener(object : AdapterListener {
             override fun onLocationPermissionClick() {
                 checkAccessLocationFinePermission()
+            }
+
+            override fun onCityItemClick(city: City?, zipCode: Int?) {
+                city?.also {
+                    val directions = HomeFragmentDirections
+                        .actionHomeFragmentToScenicSpotListFragment(it, zipCode ?: -1)
+                    findNavController().navigate(directions)
+                }
             }
         })
 
@@ -77,27 +89,23 @@ class HomeFragment : Fragment() {
     private fun collectData() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.syncState.collect { state ->
+                mainViewModel.syncState.launchAndCollect { state ->
                     if (state == SyncComplete) {
-                        viewModel.fetchScenicSpotItems()
+                        if (viewModel.listItems.value.isEmpty()) {
+                            viewModel.fetchScenicSpotItems()
+                        } else {
+                            homeListAdapter.submitList(viewModel.listItems.value)
+                        }
                     }
                 }
-            }
-        }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.listItems.collect { items ->
+                viewModel.listItems.launchAndCollect { items ->
                     viewBinding.layoutSwipeRefresh.isRefreshing = false
                     homeListAdapter.submitList(items)
                 }
-            }
-        }
 
-        // FIXME: 收不到 stateFlow 變更事件！？
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.permissionState.collect { state ->
+                // FIXME: 收不到 stateFlow 變更事件！？
+                mainViewModel.permissionState.launchAndCollect { state ->
                     if (state == AccessFineLocationGranted) {
                         viewModel.fetchScenicSpotItems()
                     }
