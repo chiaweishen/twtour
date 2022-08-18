@@ -9,10 +9,12 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.scw.twtour.di.module.*
 import com.scw.twtour.util.MyDebugTree
+import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
+@FlowPreview
 class MyApplication : Application(), ImageLoaderFactory {
 
     companion object {
