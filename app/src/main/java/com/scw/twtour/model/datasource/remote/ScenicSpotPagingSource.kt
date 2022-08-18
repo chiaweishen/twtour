@@ -3,6 +3,7 @@ package com.scw.twtour.model.datasource.remote
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.network.api.TourismApi
 import com.scw.twtour.network.util.ODataFilter
@@ -13,6 +14,7 @@ import timber.log.Timber
 
 class ScenicSpotPagingSource(
     private val tourismApi: TourismApi,
+    private val localDataSource: ScenicSpotLocalDataSource,
     private val city: City,
     private val zipCode: Int
 ) : PagingSource<Int, ScenicSpotInfo>() {
@@ -55,11 +57,15 @@ class ScenicSpotPagingSource(
             )
 
             val list = mutableListOf<ScenicSpotInfo>()
+            val entities = mutableListOf<ScenicSpotEntityItem>()
             entityList.collect {
                 it.forEach { entity ->
-                    list.add(ScenicSpotInfo(city = city).update(entity))
+                    entity.city = city
+                    entities.add(entity)
+                    list.add(ScenicSpotInfo().update(entity))
                 }
             }
+            localDataSource.insertAll(entities)
 
             val preKey = if (position == 1) null else position - 1
             val nextKey = if (list.isEmpty()) null else position + 1

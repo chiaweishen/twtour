@@ -23,7 +23,7 @@ class ScenicSpotPreferencesDataSourceImpl(context: Context) : ScenicSpotPreferen
         }
 
     override var syncCycleDays: Int
-        get() = prefs.getInt(SYNC_CYCLE_DAYS, 365) // FIXME: Syncing occurs concurrent exception!
+        get() = prefs.getInt(SYNC_CYCLE_DAYS, 7)
         set(value) {
             prefs.edit().putInt(SYNC_CYCLE_DAYS, value).apply()
         }

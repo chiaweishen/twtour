@@ -35,6 +35,8 @@ interface ScenicSpotLocalDataSource {
         locationLon: Double,
         limit: Int
     ): Flow<List<ScenicSpotInfo>>
+
+    suspend fun insertAll(scenicSpots: List<ScenicSpotEntityItem>)
 }
 
 class ScenicSpotLocalDataSourceImpl(
@@ -140,6 +142,10 @@ class ScenicSpotLocalDataSourceImpl(
                 }
             }
         }
+    }
+
+    override suspend fun insertAll(scenicSpots: List<ScenicSpotEntityItem>) {
+        scenicSpotDao.insertScenicSpots(scenicSpots)
     }
 
 }

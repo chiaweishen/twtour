@@ -42,37 +42,37 @@ class ScenicSpotRepositoryImpl(
             }
             .flatMapConcat { list ->
                 flowOf(mutableListOf<ScenicSpotInfo>())
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.TAIPEI)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.NEW_TAIPEI)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.KEELUNG)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.TAOYUAN)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.YILAN_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.HSINCHU_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.HSINCHU)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
@@ -86,27 +86,27 @@ class ScenicSpotRepositoryImpl(
             }
             .flatMapConcat { list ->
                 flowOf(mutableListOf<ScenicSpotInfo>())
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.MIAOLI_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.TAICHUNG)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.CHANGHUA_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.NANTOU_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.YUNLIN_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
@@ -120,27 +120,27 @@ class ScenicSpotRepositoryImpl(
             }
             .flatMapConcat { list ->
                 flowOf(mutableListOf<ScenicSpotInfo>())
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.CHIAYI_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.CHIAYI)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.TAINAN)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.KAOHSIUNG)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.PINGTUNG_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
@@ -154,12 +154,12 @@ class ScenicSpotRepositoryImpl(
             }
             .flatMapConcat { list ->
                 flowOf(mutableListOf<ScenicSpotInfo>())
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.HUALIEN_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.TAITUNG_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
@@ -173,34 +173,34 @@ class ScenicSpotRepositoryImpl(
             }
             .flatMapConcat { list ->
                 flowOf(mutableListOf<ScenicSpotInfo>())
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.PENGHU_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.KINMEN_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         queryRandomScenicSpotsHasImageByCity(City.LIENCHIANG_COUNTRY)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         localDataSource.queryRandomScenicSpotsHasImageInLanyu(CITY_SCENIC_SPOT_LIMIT)
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         localDataSource.queryRandomScenicSpotsHasImageInLyudao(
                             CITY_SCENIC_SPOT_LIMIT
                         )
                     ) { scenicSpotInfoList, randomInfoList ->
                         scenicSpotInfoList.apply { add(randomInfoList.first()) }
                     }
-                    .combine(
+                    .zip(
                         localDataSource.queryRandomScenicSpotsHasImageInXiaoliouchou(
                             CITY_SCENIC_SPOT_LIMIT
                         )
@@ -239,7 +239,7 @@ class ScenicSpotRepositoryImpl(
                     flowOf(emptyList())
                 }
             }
-            .combine(flowOf(mutableListOf<HomeListItem>())) { nearbyInfo, list ->
+            .zip(flowOf(mutableListOf<HomeListItem>())) { nearbyInfo, list ->
                 list.apply {
                     add(NearbyItems(nearbyInfo))
                 }
