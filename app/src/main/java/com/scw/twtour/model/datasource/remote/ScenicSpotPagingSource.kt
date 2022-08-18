@@ -38,6 +38,7 @@ class ScenicSpotPagingSource(
                             .add(ScenicSpotEntityItem::scenicSpotID.name)
                             .add(ScenicSpotEntityItem::scenicSpotName.name)
                             .add(ScenicSpotEntityItem::description.name)
+                            .add(ScenicSpotEntityItem::descriptionDetail.name)
                             .add(ScenicSpotEntityItem::picture.name)
                             .add(ScenicSpotEntityItem::zipCode.name)
                             .add(ScenicSpotEntityItem::class1.name)
