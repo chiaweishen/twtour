@@ -12,6 +12,7 @@ data class ScenicSpotInfo(
     var phone: String? = null,
     var address: String? = null,
     var zipCode: Int? = null,
+    var zipName: String? = null,
     var travelInfo: String? = null,
     var openTime: String? = null,
     var pictures: List<String> = mutableListOf(),
@@ -41,7 +42,7 @@ data class ScenicSpotInfo(
                 entity.picture?.pictureUrl1?.let { add(it) }
                 entity.picture?.pictureUrl2?.let { add(it) }
                 entity.picture?.pictureUrl3?.let { add(it) }
-            },
+            }.removeDuplicateValue(),
             websiteUrl = entity.websiteUrl,
             position = Position().update(entity.position),
             parkingInfo = entity.parkingInfo,

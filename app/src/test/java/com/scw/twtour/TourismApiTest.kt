@@ -1,11 +1,11 @@
 package com.scw.twtour
 
+import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.network.api.TourismApi
-import com.scw.twtour.util.City
 import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.model.entity.ScenicSpotEntityItem
+import com.scw.twtour.util.City
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.test.runTest
@@ -47,17 +47,6 @@ class TourismApiTest : ApiTest() {
         api.scenicSpot(
             ODataParams.Companion.Builder(1)
                 .filter(ODataFilter.ScenicSpot.byId("C1_379000000A_000425"))
-                .build()
-        )
-            .catch { e -> Assert.fail(e.message) }
-            .collect { scenicSpots -> assert(scenicSpots) }
-    }
-
-    @Test
-    fun `test get outlyingIslands of scenic spot`() = runTest {
-        api.scenicSpot(
-            ODataParams.Companion.Builder(30)
-                .filter(ODataFilter.ScenicSpot.outlyingIslands())
                 .build()
         )
             .catch { e -> Assert.fail(e.message) }

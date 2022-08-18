@@ -8,6 +8,6 @@ import org.koin.dsl.module
 @FlowPreview
 val repositoryModule = module {
     single<ScenicSpotSyncingRepository> { ScenicSpotSyncingRepositoryImpl(get(), get(), get()) }
-    single<ScenicSpotRepository> { ScenicSpotRepositoryImpl(androidContext(), get(), get()) }
+    single<ScenicSpotRepository> { ScenicSpotRepositoryImpl(androidContext(), get(), get(), get()) }
     single<ScenicSpotListRepository> { ScenicSpotListRepositoryImpl() }
 }

@@ -70,7 +70,7 @@ class MyApplication : Application(), ImageLoaderFactory {
         return ImageLoader.Builder(this)
             .crossfade(true)
             .error(R.drawable.ic_baseline_broken_image_24)
-            .crossfade(250)
+            .crossfade(500)
             .components {
                 add(SvgDecoder.Factory())
             }

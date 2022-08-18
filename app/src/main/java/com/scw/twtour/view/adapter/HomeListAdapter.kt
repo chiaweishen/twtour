@@ -77,7 +77,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 
 interface AdapterListener {
     fun onLocationPermissionClick()
-    fun onCityItemClick(city: City?, zipCode: Int?)
+    fun onCityItemClick(city: City)
 }
 
 class TitleViewHolder(
@@ -112,8 +112,8 @@ class CityViewHolder(
             itemView.context, RecyclerView.HORIZONTAL, false
         )
         adapter.setListener(object : HomeCityHorizontalListAdapter.AdapterListener {
-            override fun onCityItemClick(city: City?, zipCode: Int?) {
-                listener?.onCityItemClick(city, zipCode)
+            override fun onCityItemClick(city: City) {
+                listener?.onCityItemClick(city)
             }
         })
     }
@@ -130,7 +130,7 @@ class CityViewHolder(
 
     fun bindData(item: CityItems, listener: AdapterListener?) {
         this.listener = listener
-        adapter.submitList(item.scenicSpots)
+        adapter.submitList(item.cities)
     }
 }
 
