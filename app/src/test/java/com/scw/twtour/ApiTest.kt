@@ -4,6 +4,7 @@ import com.scw.twtour.di.module.*
 import com.scw.twtour.network.api.AuthApi
 import com.scw.twtour.network.util.HeadersProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -13,6 +14,7 @@ import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
 import org.koin.test.inject
 
+@FlowPreview
 @OptIn(ExperimentalCoroutinesApi::class)
 open class ApiTest : KoinTest {
 
@@ -25,7 +27,8 @@ open class ApiTest : KoinTest {
                 viewModule,
                 repositoryModule,
                 useCaseModule,
-                dataSourceModule
+                dataSourceModule,
+                utilModule
             )
         )
     }

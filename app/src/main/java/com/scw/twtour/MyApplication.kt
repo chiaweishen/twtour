@@ -62,7 +62,8 @@ class MyApplication : Application(), ImageLoaderFactory {
                     viewModule,
                     repositoryModule,
                     useCaseModule,
-                    dataSourceModule
+                    dataSourceModule,
+                    utilModule
                 )
             )
         }

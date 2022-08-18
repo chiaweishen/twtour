@@ -4,29 +4,45 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_margin="16dp"
-    android:layout_height="132dp">
+    android:layout_height="148dp"
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="16dp">
 
     <ImageView
         android:id="@+id/view_picture"
         android:layout_width="120dp"
         android:layout_height="90dp"
+        android:layout_marginTop="16dp"
         android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_zipcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_rectangle"
+        android:textSize="12sp"
+        android:layout_marginStart="16dp"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="2dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view_picture"
+        tools:text="松山區" />
 
     <TextView
         android:id="@+id/text_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:paddingStart="16dp"
         android:paddingTop="8dp"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/view_picture"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view_picture"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="101大樓 - 101大樓101大樓101大樓101大樓101大樓101大樓101大樓101大樓101大樓101大樓" />
 
@@ -35,13 +51,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:maxLines="3"
         android:gravity="center_vertical"
+        android:maxLines="3"
         android:paddingStart="16dp"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/view_picture"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/view_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/view_picture"
         app:layout_constraintTop_toBottomOf="@+id/text_title"
         tools:text="只要destination有設定Arguments，就會自動產生Arguments Class。例：Destination name為Bfragment，Arguments Class就是BFragmentArgs。可以用Argument Class中的formBundle(arguments)來取得BFragmentArgs實體，或著Kotlin也可使用by navArgs()這個委託方法" />
 
@@ -49,54 +65,53 @@
         android:id="@+id/text_class1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:paddingVertical="4dp"
-        android:paddingHorizontal="8dp"
         android:background="@drawable/bg_capsule"
-        app:layout_constraintTop_toBottomOf="@+id/view_picture"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_picture"
         tools:text="遊憩類" />
 
     <TextView
         android:id="@+id/text_class2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="8dp"
-        android:paddingVertical="4dp"
-        android:paddingHorizontal="8dp"
         android:background="@drawable/bg_capsule"
-        app:layout_constraintTop_toBottomOf="@+id/view_picture"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/text_class1"
+        app:layout_constraintTop_toBottomOf="@+id/view_picture"
         tools:text="大自然風景類" />
 
     <TextView
         android:id="@+id/text_class3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="8dp"
-        android:paddingVertical="4dp"
-        android:paddingHorizontal="8dp"
         android:background="@drawable/bg_capsule"
-        app:layout_constraintTop_toBottomOf="@+id/view_picture"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/text_class2"
+        app:layout_constraintTop_toBottomOf="@+id/view_picture"
         tools:text="運動體能類" />
 
     <View
         android:layout_width="0dp"
         android:layout_height="0.5dp"
         android:background="#A0A0A0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
