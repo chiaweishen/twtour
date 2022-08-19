@@ -9,12 +9,12 @@ class ScenicSpotEntity : ArrayList<ScenicSpotEntityItem>()
 @Entity(tableName = "scenic_spot_table")
 data class ScenicSpotEntityItem(
     @SerializedName("ScenicSpotID")
-    @ColumnInfo(name = "scenic_spot_id")
+    @ColumnInfo(name = "id")
     @PrimaryKey
     var scenicSpotID: String = "",
 
     @SerializedName("ScenicSpotName")
-    @ColumnInfo(name = "scenic_spot_name")
+    @Ignore
     var scenicSpotName: String = "",
 
     @SerializedName("DescriptionDetail")
@@ -22,6 +22,7 @@ data class ScenicSpotEntityItem(
     var descriptionDetail: String? = null,
 
     @SerializedName("Description")
+    @Ignore
     var description: String? = null,
 
     @SerializedName("Phone")
@@ -33,7 +34,7 @@ data class ScenicSpotEntityItem(
     var address: String? = null,
 
     @SerializedName("ZipCode")
-    @ColumnInfo(name = "zip_code")
+    @Ignore
     var zipCode: Int? = null,
 
     @SerializedName("TravelInfo")
@@ -45,7 +46,7 @@ data class ScenicSpotEntityItem(
     var openTime: String? = null,
 
     @SerializedName("Picture")
-    @Embedded
+    @Ignore
     var picture: Picture? = null,
 
     @SerializedName("WebsiteUrl")
@@ -85,20 +86,18 @@ data class ScenicSpotEntityItem(
     var class3: String? = null,
 
     @SerializedName("City")
+    @Ignore
     var city: City? = null
 )
 
 data class Picture(
     @SerializedName("PictureUrl1")
-    @ColumnInfo(name = "pic_url_1")
     var pictureUrl1: String? = null,
 
     @SerializedName("PictureUrl2")
-    @ColumnInfo(name = "pic_url_2")
     var pictureUrl2: String? = null,
 
     @SerializedName("PictureUrl3")
-    @ColumnInfo(name = "pic_url_3")
     var pictureUrl3: String? = null,
 )
 

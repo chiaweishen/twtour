@@ -3,6 +3,9 @@ package com.scw.twtour.model.data
 import com.scw.twtour.ext.removeDuplicateValue
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.util.City
+import com.scw.twtour.util.ZipCodeUtil
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.get
 
 data class ScenicSpotInfo(
     var id: String = "",
@@ -12,6 +15,7 @@ data class ScenicSpotInfo(
     var phone: String? = null,
     var address: String? = null,
     var zipCode: Int? = null,
+    var zipCodeName: String? = null,
     var travelInfo: String? = null,
     var openTime: String? = null,
     var pictures: List<String> = mutableListOf(),
@@ -24,7 +28,9 @@ data class ScenicSpotInfo(
     var classes: List<String> = mutableListOf(),
     var city: City? = null,
     var distanceMeter: Int = 0
-) {
+) : KoinComponent {
+
+    private val zipCodeUtil = get<ZipCodeUtil>()
 
     fun update(entity: ScenicSpotEntityItem): ScenicSpotInfo {
         return this.copy(
@@ -35,13 +41,14 @@ data class ScenicSpotInfo(
             phone = entity.phone,
             address = entity.address,
             zipCode = entity.zipCode,
+            zipCodeName = zipCodeUtil.getZipCodeName(entity.zipCode),
             travelInfo = entity.travelInfo,
             openTime = entity.openTime,
             pictures = mutableListOf<String>().apply {
                 entity.picture?.pictureUrl1?.let { add(it) }
                 entity.picture?.pictureUrl2?.let { add(it) }
                 entity.picture?.pictureUrl3?.let { add(it) }
-            },
+            }.removeDuplicateValue(),
             websiteUrl = entity.websiteUrl,
             position = Position().update(entity.position),
             parkingInfo = entity.parkingInfo,

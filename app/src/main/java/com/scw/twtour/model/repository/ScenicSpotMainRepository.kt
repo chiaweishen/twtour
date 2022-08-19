@@ -5,10 +5,15 @@ import android.content.Context
 import com.scw.twtour.model.data.*
 import com.scw.twtour.model.datasource.local.LocationLocalDataSource
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
+import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
+import com.scw.twtour.model.entity.ScenicSpotEntityItem
+import com.scw.twtour.network.util.ODataSelect
 import com.scw.twtour.util.City
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import pub.devrel.easypermissions.EasyPermissions
 
 interface ScenicSpotRepository {
@@ -19,11 +24,11 @@ interface ScenicSpotRepository {
 class ScenicSpotRepositoryImpl(
     private val context: Context,
     private val localDataSource: ScenicSpotLocalDataSource,
-    private val locationLocalDataSource: LocationLocalDataSource
+    private val locationLocalDataSource: LocationLocalDataSource,
+    private val remoteDataSource: ScenicSpotRemoteDataSource
 ) : ScenicSpotRepository {
 
     companion object {
-        private const val CITY_SCENIC_SPOT_LIMIT = 1
         private const val NEARBY_SCENIC_SPOT_LIMIT = 20
     }
 
@@ -38,184 +43,59 @@ class ScenicSpotRepositoryImpl(
             )
         }
             .map { list ->
-                list.apply { add(TitleItem("北台灣")) }
+                list.apply {
+                    add(TitleItem("北台灣"))
+                    add(CityItems(
+                        mutableListOf<CityInfo>().apply {
+                            add(CityInfo(City.TAIPEI, 0))
+                            add(CityInfo(City.NEW_TAIPEI, 0))
+                            add(CityInfo(City.KEELUNG, 0))
+                            add(CityInfo(City.TAOYUAN, 0))
+                            add(CityInfo(City.YILAN_COUNTRY, 0))
+                            add(CityInfo(City.HSINCHU_COUNTRY, 0))
+                            add(CityInfo(City.HSINCHU, 0))
+                        }
+                    ))
+                    add(TitleItem("中台灣"))
+                    add(CityItems(
+                        mutableListOf<CityInfo>().apply {
+                            add(CityInfo(City.MIAOLI_COUNTRY, 0))
+                            add(CityInfo(City.TAICHUNG, 0))
+                            add(CityInfo(City.CHANGHUA_COUNTRY, 0))
+                            add(CityInfo(City.NANTOU_COUNTRY, 0))
+                            add(CityInfo(City.YUNLIN_COUNTRY, 0))
+                        }
+                    ))
+                    add(TitleItem("南台灣"))
+                    add(CityItems(
+                        mutableListOf<CityInfo>().apply {
+                            add(CityInfo(City.CHIAYI_COUNTRY, 0))
+                            add(CityInfo(City.CHIAYI, 0))
+                            add(CityInfo(City.TAINAN, 0))
+                            add(CityInfo(City.KAOHSIUNG, 0))
+                            add(CityInfo(City.PINGTUNG_COUNTRY, 0))
+                        }
+                    ))
+                    add(TitleItem("東台灣"))
+                    add(CityItems(
+                        mutableListOf<CityInfo>().apply {
+                            add(CityInfo(City.HUALIEN_COUNTRY, 0))
+                            add(CityInfo(City.TAITUNG_COUNTRY, 0))
+                        }
+                    ))
+                    add(TitleItem("離島地區"))
+                    add(CityItems(
+                        mutableListOf<CityInfo>().apply {
+                            add(CityInfo(City.PENGHU_COUNTRY, 0))
+                            add(CityInfo(City.KINMEN_COUNTRY, 0))
+                            add(CityInfo(City.LIENCHIANG_COUNTRY, 0))
+                            add(CityInfo(City.LANYU, 0))
+                            add(CityInfo(City.LYUDAO, 0))
+                            add(CityInfo(City.XIAOLIOUCHOU, 0))
+                        }
+                    ))
+                }
             }
-            .flatMapConcat { list ->
-                flowOf(mutableListOf<ScenicSpotInfo>())
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.TAIPEI)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.NEW_TAIPEI)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.KEELUNG)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.TAOYUAN)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.YILAN_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.HSINCHU_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.HSINCHU)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .map { scenicSpotInfoList ->
-                        list.apply { add(CityItems(scenicSpotInfoList)) }
-                    }
-            }
-            .map { list ->
-                list.apply { add(TitleItem("中台灣")) }
-            }
-            .flatMapConcat { list ->
-                flowOf(mutableListOf<ScenicSpotInfo>())
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.MIAOLI_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.TAICHUNG)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.CHANGHUA_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.NANTOU_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.YUNLIN_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .map { scenicSpotInfoList ->
-                        list.apply { add(CityItems(scenicSpotInfoList)) }
-                    }
-            }
-            .map { list ->
-                list.apply { add(TitleItem("南台灣")) }
-            }
-            .flatMapConcat { list ->
-                flowOf(mutableListOf<ScenicSpotInfo>())
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.CHIAYI_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.CHIAYI)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.TAINAN)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.KAOHSIUNG)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.PINGTUNG_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .map { scenicSpotInfoList ->
-                        list.apply { add(CityItems(scenicSpotInfoList)) }
-                    }
-            }
-            .map { list ->
-                list.apply { add(TitleItem("東台灣")) }
-            }
-            .flatMapConcat { list ->
-                flowOf(mutableListOf<ScenicSpotInfo>())
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.HUALIEN_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.TAITUNG_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .map { scenicSpotInfoList ->
-                        list.apply { add(CityItems(scenicSpotInfoList)) }
-                    }
-            }
-            .map { list ->
-                list.apply { add(TitleItem("離島地區")) }
-            }
-            .flatMapConcat { list ->
-                flowOf(mutableListOf<ScenicSpotInfo>())
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.PENGHU_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.KINMEN_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        queryRandomScenicSpotsHasImageByCity(City.LIENCHIANG_COUNTRY)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        localDataSource.queryRandomScenicSpotsHasImageInLanyu(CITY_SCENIC_SPOT_LIMIT)
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        localDataSource.queryRandomScenicSpotsHasImageInLyudao(
-                            CITY_SCENIC_SPOT_LIMIT
-                        )
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .zip(
-                        localDataSource.queryRandomScenicSpotsHasImageInXiaoliouchou(
-                            CITY_SCENIC_SPOT_LIMIT
-                        )
-                    ) { scenicSpotInfoList, randomInfoList ->
-                        scenicSpotInfoList.apply { add(randomInfoList.first()) }
-                    }
-                    .map { scenicSpotInfoList ->
-                        list.apply { add(CityItems(scenicSpotInfoList)) }
-                    }
-            }
-            .flowOn(Dispatchers.IO)
-    }
-
-    private fun queryRandomScenicSpotsHasImageByCity(city: City): Flow<List<ScenicSpotInfo>> {
-        return localDataSource.queryRandomScenicSpotsHasImageByCity(city, CITY_SCENIC_SPOT_LIMIT)
     }
 
     private fun hasAccessLocationPermission(): Boolean {
@@ -239,9 +119,30 @@ class ScenicSpotRepositoryImpl(
                     flowOf(emptyList())
                 }
             }
-            .zip(flowOf(mutableListOf<HomeListItem>())) { nearbyInfo, list ->
-                list.apply {
-                    add(NearbyItems(nearbyInfo))
+            .flatMapConcat { list ->
+                remoteDataSource.getScenicSpotByIds(
+                    list.map { it.id },
+                    ODataSelect.Builder()
+                        .add(ScenicSpotEntityItem::scenicSpotID.name)
+                        .add(ScenicSpotEntityItem::scenicSpotName.name)
+                        .add(ScenicSpotEntityItem::picture.name)
+                        .build()
+                ).map { items ->
+                    mutableListOf<ScenicSpotInfo>().apply {
+                        items.forEach { item ->
+                            val distance: Int? = list.filter { it.id == item.scenicSpotID }.let {
+                                it.firstOrNull()?.distanceMeter
+                            }
+                            distance?.also {
+                                add(ScenicSpotInfo(distanceMeter = it).update(item))
+                            }
+                        }
+                        sortBy { it.distanceMeter }
+                    }
+                }.map { nearbyInfo ->
+                    mutableListOf<HomeListItem>().apply {
+                        add(NearbyItems(nearbyInfo))
+                    }
                 }
             }
     }

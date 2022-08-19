@@ -38,7 +38,19 @@ class ScenicSpotPagingAdapter :
             info?.also {
                 viewBinding.viewPicture.load(it.pictures.firstOrNull())
                 viewBinding.textTitle.text = it.name
-                viewBinding.textDescription.text = it.description
+
+                if (it.description?.isNotBlank() == true) {
+                    viewBinding.textDescription.text = it.description
+                } else if (it.descriptionDetail?.isNotBlank() == true) {
+                    viewBinding.textDescription.text = it.descriptionDetail
+                }
+
+                it.zipCodeName?.takeIf { it.isNotBlank() }?.also { zipCodeName ->
+                    viewBinding.textZipcode.text = zipCodeName
+                    viewBinding.textZipcode.visibility = View.VISIBLE
+                } ?: run {
+                    viewBinding.textZipcode.visibility = View.GONE
+                }
 
                 it.classes.firstOrNull()?.also { class1 ->
                     viewBinding.textClass1.text = class1

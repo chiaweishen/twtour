@@ -9,10 +9,12 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import com.scw.twtour.di.module.*
 import com.scw.twtour.util.MyDebugTree
+import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
+@FlowPreview
 class MyApplication : Application(), ImageLoaderFactory {
 
     companion object {
@@ -60,7 +62,8 @@ class MyApplication : Application(), ImageLoaderFactory {
                     viewModule,
                     repositoryModule,
                     useCaseModule,
-                    dataSourceModule
+                    dataSourceModule,
+                    utilModule
                 )
             )
         }
@@ -70,7 +73,7 @@ class MyApplication : Application(), ImageLoaderFactory {
         return ImageLoader.Builder(this)
             .crossfade(true)
             .error(R.drawable.ic_baseline_broken_image_24)
-            .crossfade(250)
+            .crossfade(500)
             .components {
                 add(SvgDecoder.Factory())
             }

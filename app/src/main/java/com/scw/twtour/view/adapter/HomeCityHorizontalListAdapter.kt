@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.scw.twtour.databinding.ListItemCityHorizontalBinding
-import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.model.data.CityInfo
 import com.scw.twtour.util.City
 
 class HomeCityHorizontalListAdapter :
-    ListAdapter<ScenicSpotInfo, RecyclerView.ViewHolder>(DiffCallback()) {
+    ListAdapter<CityInfo, RecyclerView.ViewHolder>(DiffCallback()) {
 
     private var listener: AdapterListener? = null
 
@@ -25,19 +25,19 @@ class HomeCityHorizontalListAdapter :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ContentViewHolder) {
-            holder.bindData(getItem(position)) { city, zipCode ->
-                listener?.onCityItemClick(city, zipCode)
+            holder.bindData(getItem(position)) { city ->
+                listener?.onCityItemClick(city)
             }
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ScenicSpotInfo>() {
+    class DiffCallback : DiffUtil.ItemCallback<CityInfo>() {
 
-        override fun areItemsTheSame(oldItem: ScenicSpotInfo, newItem: ScenicSpotInfo): Boolean {
-            return oldItem.id == newItem.id
+        override fun areItemsTheSame(oldItem: CityInfo, newItem: CityInfo): Boolean {
+            return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: ScenicSpotInfo, newItem: ScenicSpotInfo): Boolean {
+        override fun areContentsTheSame(oldItem: CityInfo, newItem: CityInfo): Boolean {
             return oldItem == newItem
         }
     }
@@ -55,16 +55,16 @@ class HomeCityHorizontalListAdapter :
             }
         }
 
-        fun bindData(item: ScenicSpotInfo, proceed: (city: City?, zipCode: Int?) -> Unit) {
-            viewBinging.textTitle.text = item.city?.value
-            viewBinging.viewPicture.load(item.pictures.firstOrNull())
+        fun bindData(item: CityInfo, proceed: (city: City) -> Unit) {
+            viewBinging.textTitle.text = item.city.value
+            viewBinging.viewPicture.load(item.drawableResId)
             itemView.setOnClickListener {
-                proceed.invoke(item.city, item.zipCode)
+                proceed.invoke(item.city)
             }
         }
     }
 
     interface AdapterListener {
-        fun onCityItemClick(city: City?, zipCode: Int?)
+        fun onCityItemClick(city: City)
     }
 }

@@ -72,12 +72,16 @@ class HomeFragment : Fragment() {
                 checkAccessLocationFinePermission()
             }
 
-            override fun onCityItemClick(city: City?, zipCode: Int?) {
-                city?.also {
-                    val directions = HomeFragmentDirections
-                        .actionHomeFragmentToScenicSpotListFragment(it, zipCode ?: -1)
-                    findNavController().navigate(directions)
+            override fun onCityItemClick(city: City) {
+                val zipCode: Int = when (city) {
+                    City.LANYU -> 952
+                    City.LYUDAO -> 951
+                    City.XIAOLIOUCHOU -> 929
+                    else -> 0
                 }
+                val directions = HomeFragmentDirections
+                    .actionHomeFragmentToScenicSpotListFragment(city, zipCode)
+                findNavController().navigate(directions)
             }
         })
 
@@ -91,17 +95,12 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.syncState.launchAndCollect { state ->
                     if (state == SyncComplete) {
-                        if (viewModel.listItems.value.isEmpty()) {
+                        if (viewModel.listItems.value?.isEmpty() == true) {
                             viewModel.fetchScenicSpotItems()
                         } else {
                             homeListAdapter.submitList(viewModel.listItems.value)
                         }
                     }
-                }
-
-                viewModel.listItems.launchAndCollect { items ->
-                    viewBinding.layoutSwipeRefresh.isRefreshing = false
-                    homeListAdapter.submitList(items)
                 }
 
                 // FIXME: 收不到 stateFlow 變更事件！？
@@ -111,6 +110,11 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+        }
+
+        viewModel.listItems.observe(viewLifecycleOwner) { items ->
+            viewBinding.layoutSwipeRefresh.isRefreshing = false
+            homeListAdapter.submitList(items)
         }
     }
 

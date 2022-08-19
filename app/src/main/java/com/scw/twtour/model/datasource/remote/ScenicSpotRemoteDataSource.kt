@@ -1,10 +1,10 @@
 package com.scw.twtour.model.datasource.remote
 
-import com.scw.twtour.network.api.TourismApi
-import com.scw.twtour.util.City
-import com.scw.twtour.network.util.ODataParams
-import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
+import com.scw.twtour.network.api.TourismApi
+import com.scw.twtour.network.util.ODataFilter
+import com.scw.twtour.network.util.ODataParams
+import com.scw.twtour.util.City
 import kotlinx.coroutines.flow.Flow
 
 interface ScenicSpotRemoteDataSource {
@@ -12,6 +12,12 @@ interface ScenicSpotRemoteDataSource {
         city: City,
         count: Int,
         skip: Int,
+        select: String? = null,
+        orderby: String? = null
+    ): Flow<List<ScenicSpotEntityItem>>
+
+    fun getScenicSpotByIds(
+        ids: List<String>,
         select: String? = null,
         orderby: String? = null
     ): Flow<List<ScenicSpotEntityItem>>
@@ -32,6 +38,20 @@ class ScenicSpotRemoteDataSourceImp(
                 .select(select)
                 .skip(skip)
                 .filter(ODataFilter.ScenicSpot.byCity(city))
+                .orderby(orderby)
+                .build()
+        )
+    }
+
+    override fun getScenicSpotByIds(
+        ids: List<String>,
+        select: String?,
+        orderby: String?
+    ): Flow<List<ScenicSpotEntityItem>> {
+        return tourismApi.scenicSpot(
+            ODataParams.Companion.Builder(ids.size)
+                .select(select)
+                .filter(ODataFilter.ScenicSpot.byIds(ids))
                 .orderby(orderby)
                 .build()
         )

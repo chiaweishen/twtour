@@ -48,11 +48,7 @@ class ScenicSpotSyncingRepositoryImpl(
             city, LOAD_COUNT, skip,
             ODataSelect.Builder()
                 .add(ScenicSpotEntityItem::scenicSpotID.name)
-                .add(ScenicSpotEntityItem::scenicSpotName.name)
-                .add(ScenicSpotEntityItem::description.name)
-                .add(ScenicSpotEntityItem::zipCode.name)
                 .add(ScenicSpotEntityItem::position.name)
-                .add(ScenicSpotEntityItem::picture.name)
                 .build()
         )
 

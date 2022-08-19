@@ -16,7 +16,7 @@ interface LocationLocalDataSource {
 }
 
 class LocationLocalDataSourceImpl(context: Context) : LocationLocalDataSource {
-    private var locationClient: FusedLocationProviderClient =
+    private val locationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
     @RequiresPermission(Manifest.permission.ACCESS_FINE_LOCATION)
