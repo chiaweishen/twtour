@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -43,6 +44,7 @@ class ScenicSpotListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        initSearchView()
         collectData()
     }
 
@@ -52,7 +54,8 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
-        pagingAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        pagingAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         viewBinding.viewRecycler.adapter = pagingAdapter
@@ -67,9 +70,30 @@ class ScenicSpotListFragment : Fragment() {
         })
     }
 
-    private fun collectData() {
+    private fun initSearchView() {
+        viewBinding.searchFilterView.setOnQueryTextListener(object :
+            SearchView.OnQueryTextListener {
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Timber.i("onQueryTextSubmit: $query")
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                Timber.i("onQueryTextChange: $newText")
+                collectData(newText)
+                return true
+            }
+        })
+    }
+
+    private fun collectData(query: String = "") {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getScenicSpotInfoList(args.city, args.zipCode).collectLatest { pagingData ->
+            viewModel.getScenicSpotInfoList(
+                args.city,
+                args.zipCode,
+                query
+            ).collectLatest { pagingData ->
                 pagingAdapter.submitData(pagingData)
             }
         }

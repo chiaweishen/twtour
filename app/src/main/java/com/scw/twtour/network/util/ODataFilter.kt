@@ -4,14 +4,14 @@ import com.scw.twtour.util.City
 
 object ODataFilter {
     object ScenicSpot {
-        fun byCity(city: City): String {
+        fun byCity(city: City, query: String = ""): String {
             return city.value.let {
-                "City eq '$it' or startswith(Address, '$it')"
+                "(City eq '$it' or startswith(Address, '$it')) AND contains(ScenicSpotName, '$query')"
             }
         }
 
-        fun byZipCode(zipCode: Int): String {
-            return "ZipCode eq '$zipCode'"
+        fun byZipCode(zipCode: Int, query: String = ""): String {
+            return "(ZipCode eq '$zipCode') AND contains(ScenicSpotName, '$query')"
         }
 
         fun byId(id: String): String {

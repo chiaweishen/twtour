@@ -13,7 +13,7 @@ class ScenicSpotListViewModel(
     private val listRepository: ScenicSpotListRepository
 ) : ViewModel() {
 
-    fun getScenicSpotInfoList(city: City, zipCode: Int): Flow<PagingData<ScenicSpotInfo>> {
-        return listRepository.getScenicSpotListByCity(city, zipCode).cachedIn(viewModelScope)
+    fun getScenicSpotInfoList(city: City, zipCode: Int, query: String = ""): Flow<PagingData<ScenicSpotInfo>> {
+        return listRepository.getScenicSpotListByCity(city, zipCode, query).cachedIn(viewModelScope)
     }
 }

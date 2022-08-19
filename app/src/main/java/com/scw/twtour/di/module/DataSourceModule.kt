@@ -12,5 +12,5 @@ val dataSourceModule = module {
     single<ScenicSpotLocalDataSource> { ScenicSpotLocalDataSourceImpl(get()) }
     single<ScenicSpotPreferencesDataSource> { ScenicSpotPreferencesDataSourceImpl(androidContext()) }
     single<LocationLocalDataSource> { LocationLocalDataSourceImpl(androidContext()) }
-    factory { params -> ScenicSpotPagingSource(get(), params.get(), params.get()) }
+    factory { params -> ScenicSpotPagingSource(get(), params.get(), params.get(), params.get()) }
 }

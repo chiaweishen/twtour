@@ -6,10 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.ScenicSpotListFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_filter_view"
+        android:layout_width="0dp"
+        android:layout_height="34dp"
+        android:layout_margin="16dp"
+        app:iconifiedByDefault="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:queryHint="景點名稱" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/view_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:fadingEdgeLength="8dp"
@@ -20,7 +32,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/search_filter_view" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/linear_progress_indicator"

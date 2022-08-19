@@ -13,18 +13,26 @@ import org.koin.core.component.get
 import org.koin.core.parameter.parametersOf
 
 interface ScenicSpotListRepository : KoinComponent {
-    fun getScenicSpotListByCity(city: City, zipCode: Int): Flow<PagingData<ScenicSpotInfo>>
+    fun getScenicSpotListByCity(
+        city: City,
+        zipCode: Int,
+        query: String = ""
+    ): Flow<PagingData<ScenicSpotInfo>>
 }
 
-class ScenicSpotListRepositoryImpl: ScenicSpotListRepository {
+class ScenicSpotListRepositoryImpl : ScenicSpotListRepository {
 
-    override fun getScenicSpotListByCity(city: City, zipCode: Int): Flow<PagingData<ScenicSpotInfo>> {
+    override fun getScenicSpotListByCity(
+        city: City,
+        zipCode: Int,
+        query: String
+    ): Flow<PagingData<ScenicSpotInfo>> {
         return Pager(
             config = PagingConfig(
                 pageSize = PAGE_SIZE,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { get<ScenicSpotPagingSource> { parametersOf(city, zipCode) } },
+            pagingSourceFactory = { get<ScenicSpotPagingSource> { parametersOf(city, zipCode, query) } },
             initialKey = 1
         ).flow
     }

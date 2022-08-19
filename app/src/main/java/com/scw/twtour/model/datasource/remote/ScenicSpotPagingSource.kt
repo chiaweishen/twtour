@@ -16,7 +16,8 @@ import timber.log.Timber
 class ScenicSpotPagingSource(
     private val tourismApi: TourismApi,
     private val city: City,
-    private val zipCode: Int
+    private val zipCode: Int,
+    private val query: String
 ) : PagingSource<Int, ScenicSpotInfo>() {
 
     companion object {
@@ -75,9 +76,9 @@ class ScenicSpotPagingSource(
 
     private fun getODataFilter(): String {
         return if (isOutlyingIslands(city)) {
-            ODataFilter.ScenicSpot.byZipCode(zipCode)
+            ODataFilter.ScenicSpot.byZipCode(zipCode, query)
         } else {
-            ODataFilter.ScenicSpot.byCity(city)
+            ODataFilter.ScenicSpot.byCity(city, query)
         }
     }
 
