@@ -13,8 +13,14 @@ import com.scw.twtour.model.data.ScenicSpotInfo
 class ScenicSpotPagingAdapter :
     PagingDataAdapter<ScenicSpotInfo, ScenicSpotPagingAdapter.ScenicSpotViewHolder>(DiffCallback) {
 
+    private var listener: AdapterListener? = null
+
+    fun setAdapterListener(listener: AdapterListener?) {
+        this.listener = listener
+    }
+
     override fun onBindViewHolder(holder: ScenicSpotViewHolder, position: Int) {
-        holder.bindData(getItem(position))
+        holder.bindData(getItem(position), listener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScenicSpotViewHolder {
@@ -34,8 +40,12 @@ class ScenicSpotPagingAdapter :
             }
         }
 
-        fun bindData(info: ScenicSpotInfo?) {
+        fun bindData(info: ScenicSpotInfo?, listener: AdapterListener?) {
             info?.also {
+                itemView.setOnClickListener {
+                    listener?.onItemClick(info)
+                }
+
                 viewBinding.viewPicture.load(it.pictures.firstOrNull())
                 viewBinding.textTitle.text = it.name
 
@@ -85,5 +95,9 @@ class ScenicSpotPagingAdapter :
         override fun areContentsTheSame(oldItem: ScenicSpotInfo, newItem: ScenicSpotInfo): Boolean {
             return oldItem == newItem
         }
+    }
+
+    interface AdapterListener {
+        fun onItemClick(info: ScenicSpotInfo)
     }
 }

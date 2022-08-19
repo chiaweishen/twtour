@@ -16,6 +16,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_scenicSpotDetailsFragment"
+            app:destination="@id/scenicSpotDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/scenicSpotListFragment"
@@ -28,10 +31,17 @@
         <argument
             android:name="zipCode"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_scenicSpotListFragment_to_scenicSpotDetailsFragment"
+            app:destination="@id/scenicSpotDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/scenicSpotDetailsFragment"
         android:name="com.scw.twtour.view.fragment.ScenicSpotDetailsFragment"
         android:label="fragment_scenic_spot_details"
-        tools:layout="@layout/fragment_scenic_spot_details" />
+        tools:layout="@layout/fragment_scenic_spot_details" >
+        <argument
+            android:name="scenic_spot_id"
+            app:argType="string" />
+    </fragment>
 </navigation>

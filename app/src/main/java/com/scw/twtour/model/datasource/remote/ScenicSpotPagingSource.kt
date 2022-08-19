@@ -9,6 +9,8 @@ import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
 import com.scw.twtour.network.util.ODataSelect
 import com.scw.twtour.util.City
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOn
 import timber.log.Timber
 
 class ScenicSpotPagingSource(
@@ -49,7 +51,7 @@ class ScenicSpotPagingSource(
                     .filter(getODataFilter())
                     .skip((position - 1).coerceAtLeast(0) * PAGE_SIZE)
                     .build()
-            )
+            ).flowOn(Dispatchers.IO)
 
             val list = mutableListOf<ScenicSpotInfo>()
             entityList.collect {

@@ -1,8 +1,8 @@
 package com.scw.twtour.network.api
 
+import com.scw.twtour.model.entity.ScenicSpotEntity
 import com.scw.twtour.network.util.HeadersProvider
 import com.scw.twtour.network.util.ODataParams
-import com.scw.twtour.model.entity.ScenicSpotEntity
 import kotlinx.coroutines.flow.Flow
 import retrofit2.http.GET
 import retrofit2.http.HeaderMap

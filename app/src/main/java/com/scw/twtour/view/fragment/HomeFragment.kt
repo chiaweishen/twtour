@@ -1,3 +1,5 @@
+@file:OptIn(FlowPreview::class)
+
 package com.scw.twtour.view.fragment
 
 import android.Manifest
@@ -16,6 +18,7 @@ import com.scw.twtour.MyApplication
 import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.domain.AuthUseCase
 import com.scw.twtour.ext.launchAndCollect
+import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.util.AccessFineLocationGranted
 import com.scw.twtour.util.City
 import com.scw.twtour.util.SyncComplete
@@ -23,7 +26,7 @@ import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
 import com.scw.twtour.view.viewmodel.HomeViewModel
 import com.scw.twtour.view.viewmodel.MainViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.FlowPreview
 import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -79,9 +82,17 @@ class HomeFragment : Fragment() {
                     City.XIAOLIOUCHOU -> 929
                     else -> 0
                 }
-                val directions = HomeFragmentDirections
-                    .actionHomeFragmentToScenicSpotListFragment(city, zipCode)
-                findNavController().navigate(directions)
+                findNavController().navigate(
+                    HomeFragmentDirections
+                        .actionHomeFragmentToScenicSpotListFragment(city, zipCode)
+                )
+            }
+
+            override fun onScenicSpotItemClick(scenicSpotInfo: ScenicSpotInfo) {
+                findNavController().navigate(
+                    HomeFragmentDirections
+                        .actionHomeFragmentToScenicSpotDetailsFragment(scenicSpotInfo.id)
+                )
             }
         })
 
@@ -91,7 +102,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun collectData() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.syncState.launchAndCollect { state ->
                     if (state == SyncComplete) {

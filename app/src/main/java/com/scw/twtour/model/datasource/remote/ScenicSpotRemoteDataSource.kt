@@ -16,6 +16,12 @@ interface ScenicSpotRemoteDataSource {
         orderby: String? = null
     ): Flow<List<ScenicSpotEntityItem>>
 
+    fun getScenicSpotById(
+        id: String,
+        select: String? = null,
+        orderby: String? = null
+    ): Flow<List<ScenicSpotEntityItem>>
+
     fun getScenicSpotByIds(
         ids: List<String>,
         select: String? = null,
@@ -26,6 +32,7 @@ interface ScenicSpotRemoteDataSource {
 class ScenicSpotRemoteDataSourceImp(
     private val tourismApi: TourismApi
 ) : ScenicSpotRemoteDataSource {
+
     override fun getScenicSpotsByCity(
         city: City,
         count: Int,
@@ -38,6 +45,20 @@ class ScenicSpotRemoteDataSourceImp(
                 .select(select)
                 .skip(skip)
                 .filter(ODataFilter.ScenicSpot.byCity(city))
+                .orderby(orderby)
+                .build()
+        )
+    }
+
+    override fun getScenicSpotById(
+        id: String,
+        select: String?,
+        orderby: String?
+    ): Flow<List<ScenicSpotEntityItem>> {
+        return tourismApi.scenicSpot(
+            ODataParams.Companion.Builder(1)
+                .select(select)
+                .filter(ODataFilter.ScenicSpot.byId(id))
                 .orderby(orderby)
                 .build()
         )

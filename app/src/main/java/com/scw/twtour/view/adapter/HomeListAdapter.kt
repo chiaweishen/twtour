@@ -39,7 +39,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         when (holder) {
-            is NearbyViewHolder -> holder.bindData(getItem(position) as NearbyItems)
+            is NearbyViewHolder -> holder.bindData(getItem(position) as NearbyItems, listener)
             is TitleViewHolder -> holder.bindData(getItem(position) as TitleItem)
             is CityViewHolder -> holder.bindData(getItem(position) as CityItems, listener)
             is DiscoverNearbyViewHolder -> holder.bindData {
@@ -78,6 +78,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 interface AdapterListener {
     fun onLocationPermissionClick()
     fun onCityItemClick(city: City)
+    fun onScenicSpotItemClick(scenicSpotInfo: ScenicSpotInfo)
 }
 
 class TitleViewHolder(
@@ -139,12 +140,18 @@ class NearbyViewHolder(
 ) : ViewHolder(viewBinding.root) {
 
     private val adapter = HomeNearbyHorizontalListAdapter()
+    private var listener: AdapterListener? = null
 
     init {
         viewBinding.viewRecycler.adapter = adapter
         viewBinding.viewRecycler.layoutManager = LinearLayoutManager(
             itemView.context, RecyclerView.HORIZONTAL, false
         )
+        adapter.setListener(object : HomeNearbyHorizontalListAdapter.AdapterListener {
+            override fun onScenicSpotItemClick(scenicSpotInfo: ScenicSpotInfo) {
+                listener?.onScenicSpotItemClick(scenicSpotInfo)
+            }
+        })
     }
 
     companion object {
@@ -157,7 +164,8 @@ class NearbyViewHolder(
         }
     }
 
-    fun bindData(item: NearbyItems) {
+    fun bindData(item: NearbyItems, listener: AdapterListener?) {
+        this.listener = listener
         adapter.submitList(item.scenicSpots)
     }
 }

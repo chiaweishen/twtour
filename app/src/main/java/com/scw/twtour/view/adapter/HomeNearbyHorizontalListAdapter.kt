@@ -13,13 +13,19 @@ import java.text.DecimalFormat
 class HomeNearbyHorizontalListAdapter :
     ListAdapter<ScenicSpotInfo, RecyclerView.ViewHolder>(DiffCallback()) {
 
+    private var listener: AdapterListener? = null
+
+    fun setListener(listener: AdapterListener?) {
+        this.listener = listener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return ContentViewHolder.newInstance(parent)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is ContentViewHolder) {
-            holder.bindData(getItem(position))
+            holder.bindData(getItem(position), listener)
         }
     }
 
@@ -47,10 +53,13 @@ class HomeNearbyHorizontalListAdapter :
             }
         }
 
-        fun bindData(item: ScenicSpotInfo) {
+        fun bindData(item: ScenicSpotInfo, listener: AdapterListener?) {
             viewBinging.textTitle.text = item.name
             viewBinging.textDistance.text = convertDistanceUnit(item.distanceMeter)
             viewBinging.viewPicture.load(item.pictures.firstOrNull())
+            itemView.setOnClickListener {
+                listener?.onScenicSpotItemClick(item)
+            }
         }
 
         private fun convertDistanceUnit(distanceMeter: Int): String {
@@ -63,5 +72,9 @@ class HomeNearbyHorizontalListAdapter :
                 "${distanceMeter}m"
             }
         }
+    }
+
+    interface AdapterListener {
+        fun onScenicSpotItemClick(scenicSpotInfo: ScenicSpotInfo)
     }
 }

@@ -9,11 +9,9 @@ import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.network.util.ODataSelect
 import com.scw.twtour.util.City
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import pub.devrel.easypermissions.EasyPermissions
 
 interface ScenicSpotRepository {
@@ -143,7 +141,7 @@ class ScenicSpotRepositoryImpl(
                     mutableListOf<HomeListItem>().apply {
                         add(NearbyItems(nearbyInfo))
                     }
-                }
+                }.flowOn(Dispatchers.IO)
             }
     }
 

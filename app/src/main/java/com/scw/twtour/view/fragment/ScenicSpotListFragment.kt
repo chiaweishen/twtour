@@ -6,11 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.scw.twtour.databinding.FragmentScenicSpotListBinding
+import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -23,8 +25,8 @@ class ScenicSpotListFragment : Fragment() {
     private val args by navArgs<ScenicSpotListFragmentArgs>()
     private val viewModel by viewModel<ScenicSpotListViewModel>()
 
-    private var _binding: FragmentScenicSpotListBinding? = null
-    private val binding get() = _binding!!
+    private var _viewBinding: FragmentScenicSpotListBinding? = null
+    private val viewBinding get() = _viewBinding!!
 
     private val pagingAdapter = ScenicSpotPagingAdapter()
 
@@ -33,8 +35,8 @@ class ScenicSpotListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentScenicSpotListBinding.inflate(inflater, container, false)
-        return binding.root
+        _viewBinding = FragmentScenicSpotListBinding.inflate(inflater, container, false)
+        return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,17 +47,26 @@ class ScenicSpotListFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        _viewBinding = null
     }
 
     private fun initRecyclerView() {
-        binding.viewRecycler.layoutManager =
+        viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        binding.viewRecycler.adapter = pagingAdapter
+        viewBinding.viewRecycler.adapter = pagingAdapter
+
+        pagingAdapter.setAdapterListener(object : ScenicSpotPagingAdapter.AdapterListener {
+            override fun onItemClick(info: ScenicSpotInfo) {
+                findNavController().navigate(
+                    ScenicSpotListFragmentDirections
+                        .actionScenicSpotListFragmentToScenicSpotDetailsFragment(info.id)
+                )
+            }
+        })
     }
 
     private fun collectData() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getScenicSpotInfoList(args.city, args.zipCode).collectLatest { pagingData ->
                 pagingAdapter.submitData(pagingData)
             }
@@ -70,7 +81,7 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     private fun updateLoadingState(loadStates: CombinedLoadStates) {
-        binding.linearProgressIndicator.visibility =
+        viewBinding.linearProgressIndicator.visibility =
             if (loadStates.append is LoadState.Loading) View.VISIBLE else View.GONE
 
         val errorState = when {

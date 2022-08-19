@@ -10,4 +10,5 @@ val repositoryModule = module {
     single<ScenicSpotSyncingRepository> { ScenicSpotSyncingRepositoryImpl(get(), get(), get()) }
     single<ScenicSpotRepository> { ScenicSpotRepositoryImpl(androidContext(), get(), get(), get()) }
     single<ScenicSpotListRepository> { ScenicSpotListRepositoryImpl() }
+    single<ScenicSpotDetailsRepository> { ScenicSpotDetailsRepositoryImpl(get()) }
 }
