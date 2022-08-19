@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.databinding.FragmentScenicSpotListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
@@ -51,6 +52,7 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        pagingAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         viewBinding.viewRecycler.adapter = pagingAdapter

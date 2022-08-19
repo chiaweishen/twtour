@@ -25,8 +25,10 @@ class ScenicSpotPagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, ScenicSpotInfo>): Int? {
         return state.anchorPosition?.let { position ->
-            state.closestPageToPosition(position)?.prevKey?.plus(1)
-                ?: state.closestPageToPosition(position)?.nextKey?.minus(1)
+            val preKey = state.closestPageToPosition(position)?.prevKey
+            val nextKey = state.closestPageToPosition(position)?.nextKey
+            Timber.i("getRefreshKey preKey: $preKey, nextKey: $nextKey")
+            preKey?.plus(1) ?: nextKey?.minus(1)
         }
     }
 

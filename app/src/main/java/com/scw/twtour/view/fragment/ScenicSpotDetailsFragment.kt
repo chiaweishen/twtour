@@ -1,5 +1,7 @@
 package com.scw.twtour.view.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,12 +58,48 @@ class ScenicSpotDetailsFragment : Fragment() {
             viewImage.load(info.pictures.firstOrNull())
             textTitle.text = info.name
 
-            displayTextView(textAddress, info.address, "地址:\n")
-            displayTextView(textTel, info.phone, "電話:\n")
+            displayTextView(textAddress, info.address)
+            displayTextView(textTel, info.phone)
             displayTextView(textOpenTime, info.openTime, "開放時間:\n")
             displayTextView(textRemark, info.remarks, "注意事項:\n")
-            displayTextView(textParking, info.parkingInfo, "停車資訊:\n")
+            displayTextView(textParking, info.parkingInfo)
             displayTextView(textTravelInfo, info.travelInfo, "旅遊資訊:\n")
+
+            info.position?.also { position ->
+                position.lat?.also { lat ->
+                    position.lon?.also { lon ->
+                        textAddress.setOnClickListener {
+                            intentMap(info.name, lat, lon)
+                        }
+
+                        if (info.address.isNullOrBlank()) {
+                            textAddress.visibility = View.VISIBLE
+                            textAddress.text = "地圖"
+                        }
+                    }
+                }
+            }
+
+            info.phone?.also { phone ->
+                textTel.setOnClickListener {
+                    intentPhoneDial(phone)
+                }
+            }
+
+            info.parkingPosition?.also { position ->
+                position.lat?.also { lat ->
+                    position.lon?.also { lon ->
+                        textParking.setOnClickListener {
+                            intentMap("", lat, lon)
+                        }
+
+                        if (info.parkingInfo.isNullOrBlank()) {
+                            textParking.visibility = View.VISIBLE
+                            textParking.text = "停車資訊"
+                        }
+                    }
+                }
+            }
 
             if (info.descriptionDetail?.isNotBlank() == true) {
                 textDescription.text = info.descriptionDetail
@@ -73,6 +111,17 @@ class ScenicSpotDetailsFragment : Fragment() {
                 textDescription.visibility = View.GONE
             }
         }
+    }
+
+    private fun intentPhoneDial(phone: String) {
+        startActivity(Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null)))
+    }
+
+    private fun intentMap(name: String, lat: Double, lon: Double) {
+        val uri = Uri.parse("geo:${lat},${lon}?q=${Uri.encode(name)}")
+        val mapIntent = Intent(Intent.ACTION_VIEW, uri)
+        mapIntent.setPackage("com.google.android.apps.maps")
+        startActivity(mapIntent)
     }
 
     private fun displayTextView(view: TextView, text: String?, prefix: String = "") {

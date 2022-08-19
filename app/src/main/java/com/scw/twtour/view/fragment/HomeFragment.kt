@@ -66,6 +66,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() {
+        homeListAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewBinding.viewRecycler.adapter = homeListAdapter
         viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
