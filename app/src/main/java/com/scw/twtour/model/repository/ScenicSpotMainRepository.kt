@@ -2,6 +2,7 @@ package com.scw.twtour.model.repository
 
 import android.Manifest
 import android.content.Context
+import com.scw.twtour.R
 import com.scw.twtour.model.data.*
 import com.scw.twtour.model.datasource.local.LocationLocalDataSource
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
@@ -45,23 +46,23 @@ class ScenicSpotRepositoryImpl(
                     add(TitleItem("北台灣"))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
-                            add(CityInfo(City.TAIPEI, 0))
-                            add(CityInfo(City.NEW_TAIPEI, 0))
-                            add(CityInfo(City.KEELUNG, 0))
-                            add(CityInfo(City.TAOYUAN, 0))
-                            add(CityInfo(City.YILAN_COUNTRY, 0))
-                            add(CityInfo(City.HSINCHU_COUNTRY, 0))
-                            add(CityInfo(City.HSINCHU, 0))
+                            add(CityInfo(City.TAIPEI, R.drawable.taipei))
+                            add(CityInfo(City.NEW_TAIPEI, R.drawable.new_taipei))
+                            add(CityInfo(City.KEELUNG, R.drawable.keelung))
+                            add(CityInfo(City.TAOYUAN, R.drawable.taoyuan))
+                            add(CityInfo(City.YILAN_COUNTRY, R.drawable.yilan))
+                            add(CityInfo(City.HSINCHU_COUNTRY, R.drawable.hsinchu_country))
+                            add(CityInfo(City.HSINCHU, R.drawable.hsinchu))
                         }
                     ))
                     add(TitleItem("中台灣"))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
-                            add(CityInfo(City.MIAOLI_COUNTRY, 0))
-                            add(CityInfo(City.TAICHUNG, 0))
-                            add(CityInfo(City.CHANGHUA_COUNTRY, 0))
-                            add(CityInfo(City.NANTOU_COUNTRY, 0))
-                            add(CityInfo(City.YUNLIN_COUNTRY, 0))
+                            add(CityInfo(City.MIAOLI_COUNTRY, R.drawable.miaoli_country))
+                            add(CityInfo(City.TAICHUNG, R.drawable.taichung))
+                            add(CityInfo(City.CHANGHUA_COUNTRY, R.drawable.changhua))
+                            add(CityInfo(City.NANTOU_COUNTRY, R.drawable.nantou_country))
+                            add(CityInfo(City.YUNLIN_COUNTRY, R.drawable.yunlin_country))
                         }
                     ))
                     add(TitleItem("南台灣"))
