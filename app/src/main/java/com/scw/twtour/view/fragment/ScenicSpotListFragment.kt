@@ -1,10 +1,13 @@
 package com.scw.twtour.view.fragment
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -31,6 +34,9 @@ class ScenicSpotListFragment : Fragment() {
     private val viewBinding get() = _viewBinding!!
 
     private val pagingAdapter = ScenicSpotPagingAdapter()
+    private val handler = Handler(Looper.getMainLooper())
+    private var queryTextChangeRunnable: Runnable? = null
+    private var lastQuery: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +51,7 @@ class ScenicSpotListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initSearchView()
-        collectData()
+        collectDataWorkaround()
     }
 
     override fun onDestroyView() {
@@ -54,11 +60,13 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     private fun initRecyclerView() {
+        viewBinding.viewRecycler.adapter = pagingAdapter
+
         pagingAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
         viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        viewBinding.viewRecycler.adapter = pagingAdapter
 
         pagingAdapter.setAdapterListener(object : ScenicSpotPagingAdapter.AdapterListener {
             override fun onItemClick(info: ScenicSpotInfo) {
@@ -75,33 +83,59 @@ class ScenicSpotListFragment : Fragment() {
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                Timber.i("onQueryTextSubmit: $query")
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 Timber.i("onQueryTextChange: $newText")
-                collectData(newText)
+                collectFilterData(newText)
                 return true
             }
         })
     }
 
-    private fun collectData(query: String = "") {
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.getScenicSpotInfoList(
-                args.city,
-                args.zipCode,
-                query
-            ).collectLatest { pagingData ->
-                pagingAdapter.submitData(pagingData)
+    private fun collectFilterData(query: String) {
+        queryTextChangeRunnable?.also { r ->
+            handler.removeCallbacks(r)
+        }
+        queryTextChangeRunnable = handler.postDelayed(500) {
+            if (lastQuery != query) {
+                lastQuery = query
+                collectData(query)
             }
         }
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            pagingAdapter.loadStateFlow.collectLatest { loadStates ->
-                Timber.i("Paging load states: $loadStates")
-                updateLoadingState(loadStates)
+    /** FIXME: Workaround
+     * 跳轉頁面回來後，再次 collect 會取得先前 page 資料，導致 list view 位置被拉回
+     * **/
+    private var isDataCollected: Boolean = false
+    private fun collectDataWorkaround() {
+        if (!isDataCollected) {
+            isDataCollected = true
+            collectData()
+        }
+    }
+
+    private fun collectData(query: String = "") {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            launch {
+                viewModel.getScenicSpotInfoList(
+                    args.city,
+                    args.zipCode,
+                    query
+                ).collectLatest { pagingData ->
+                    pagingAdapter.submitData(pagingData)
+                }
+            }
+
+            launch {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    pagingAdapter.loadStateFlow.collectLatest { loadStates ->
+                        Timber.i("Paging load states: $loadStates")
+                        updateLoadingState(loadStates)
+                    }
+                }
             }
         }
     }
