@@ -27,7 +27,7 @@
     <fragment
         android:id="@+id/scenicSpotListFragment"
         android:name="com.scw.twtour.view.fragment.ScenicSpotListFragment"
-        android:label="fragment_scenic_spot_list"
+        android:label=""
         tools:layout="@layout/fragment_scenic_spot_list">
         <argument
             android:name="city"
@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/scenicSpotDetailsFragment"
         android:name="com.scw.twtour.view.fragment.ScenicSpotDetailsFragment"
-        android:label="fragment_scenic_spot_details"
+        android:label=""
         tools:layout="@layout/fragment_scenic_spot_details" >
         <argument
             android:name="scenic_spot_id"

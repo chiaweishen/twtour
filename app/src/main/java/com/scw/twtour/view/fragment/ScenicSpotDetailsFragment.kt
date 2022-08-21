@@ -26,16 +26,6 @@ class ScenicSpotDetailsFragment : Fragment() {
     private var _viewBinding: FragmentScenicSpotDetailsBinding? = null
     private val viewBinding get() = _viewBinding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (requireActivity() as MainActivity).setActionBarTitle(args.scenicSpotName)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchScenicSpotItems(args.scenicSpotId)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -48,6 +38,12 @@ class ScenicSpotDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         collectData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (requireActivity() as MainActivity).setActionBarTitle(args.scenicSpotName)
+        viewModel.fetchScenicSpotItems(args.scenicSpotId)
     }
 
     override fun onDestroyView() {

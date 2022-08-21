@@ -42,11 +42,6 @@ class ScenicSpotListFragment : Fragment() {
     private var queryTextChangeRunnable: Runnable? = null
     private var lastQuery: String = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (requireActivity() as MainActivity).setActionBarTitle(args.city.value)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,6 +57,11 @@ class ScenicSpotListFragment : Fragment() {
         initSearchView()
         initFloatingActionButton()
         collectDataWorkaround()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (requireActivity() as MainActivity).setActionBarTitle(args.city.value)
     }
 
     override fun onDestroyView() {
