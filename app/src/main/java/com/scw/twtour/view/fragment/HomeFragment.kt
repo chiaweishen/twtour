@@ -4,6 +4,8 @@ package com.scw.twtour.view.fragment
 
 import android.Manifest
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +21,6 @@ import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.domain.AuthUseCase
 import com.scw.twtour.ext.launchAndCollect
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.util.AccessFineLocationGranted
 import com.scw.twtour.util.City
 import com.scw.twtour.util.SyncComplete
 import com.scw.twtour.view.adapter.AdapterListener
@@ -63,6 +64,28 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         collectData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (hasAccessFineLocationPermission()) {
+            viewModel.fetchScenicSpotItems()
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (hasAccessFineLocationPermission()) {
+            viewModel.fetchScenicSpotItems()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                viewBinding.viewRecycler.smoothScrollToPosition(0)
+            }, 500)
+        }
     }
 
     private fun initView() {
@@ -119,13 +142,6 @@ class HomeFragment : Fragment() {
                         }
                     }
                 }
-
-                // FIXME: 收不到 stateFlow 變更事件！？
-                mainViewModel.permissionState.launchAndCollect { state ->
-                    if (state == AccessFineLocationGranted) {
-                        viewModel.fetchScenicSpotItems()
-                    }
-                }
             }
         }
 
@@ -136,20 +152,21 @@ class HomeFragment : Fragment() {
     }
 
     private fun checkAccessLocationFinePermission() {
-        if (!EasyPermissions.hasPermissions(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        ) {
+        if (!hasAccessFineLocationPermission()) {
             EasyPermissions.requestPermissions(
                 this@HomeFragment,
                 "請允許「位置權限」\n用以支援完整景點功能",
                 222,
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
-        } else {
-            viewModel.fetchScenicSpotItems()
         }
+    }
+
+    private fun hasAccessFineLocationPermission(): Boolean {
+        return EasyPermissions.hasPermissions(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
     }
 
     override fun onDestroyView() {

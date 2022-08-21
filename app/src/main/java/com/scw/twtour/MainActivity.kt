@@ -25,7 +25,7 @@ import org.koin.core.parameter.parametersOf
 import pub.devrel.easypermissions.EasyPermissions
 
 @FlowPreview
-class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
@@ -64,14 +64,6 @@ class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>) {
-        viewModel.grantAccessFineLocationPermission()
-    }
-
-    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
-        viewModel.deniedAccessFineLocationPermission()
     }
 
     private fun setupActionBar(toolbar: Toolbar) {
