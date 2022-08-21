@@ -66,10 +66,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun initView() {
-        homeListAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewBinding.viewRecycler.adapter = homeListAdapter
+
         viewBinding.viewRecycler.layoutManager =
             LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+
+        homeListAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
         homeListAdapter.setListener(object : AdapterListener {
             override fun onLocationPermissionClick() {
@@ -92,7 +95,9 @@ class HomeFragment : Fragment() {
             override fun onScenicSpotItemClick(scenicSpotInfo: ScenicSpotInfo) {
                 findNavController().navigate(
                     HomeFragmentDirections
-                        .actionHomeFragmentToScenicSpotDetailsFragment(scenicSpotInfo.id)
+                        .actionHomeFragmentToScenicSpotDetailsFragment(
+                            scenicSpotInfo.id, scenicSpotInfo.name
+                        )
                 )
             }
         })

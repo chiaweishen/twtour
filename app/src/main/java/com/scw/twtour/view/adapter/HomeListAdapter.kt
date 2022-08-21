@@ -108,11 +108,15 @@ class CityViewHolder(
     private var listener: AdapterListener? = null
 
     init {
-        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewBinding.viewRecycler.adapter = adapter
+
         viewBinding.viewRecycler.layoutManager = LinearLayoutManager(
             itemView.context, RecyclerView.HORIZONTAL, false
         )
+
+        adapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
         adapter.setListener(object : HomeCityHorizontalListAdapter.AdapterListener {
             override fun onCityItemClick(city: City) {
                 listener?.onCityItemClick(city)
@@ -144,11 +148,15 @@ class NearbyViewHolder(
     private var listener: AdapterListener? = null
 
     init {
-        adapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         viewBinding.viewRecycler.adapter = adapter
+
         viewBinding.viewRecycler.layoutManager = LinearLayoutManager(
             itemView.context, RecyclerView.HORIZONTAL, false
         )
+
+        adapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
         adapter.setListener(object : HomeNearbyHorizontalListAdapter.AdapterListener {
             override fun onScenicSpotItemClick(scenicSpotInfo: ScenicSpotInfo) {
                 listener?.onScenicSpotItemClick(scenicSpotInfo)

@@ -16,15 +16,18 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.scw.twtour.MainActivity
 import com.scw.twtour.databinding.FragmentScenicSpotListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
+@FlowPreview
 class ScenicSpotListFragment : Fragment() {
 
     private val args by navArgs<ScenicSpotListFragmentArgs>()
@@ -37,6 +40,11 @@ class ScenicSpotListFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
     private var queryTextChangeRunnable: Runnable? = null
     private var lastQuery: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity() as MainActivity).setActionBarTitle(args.city.value)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,7 +80,7 @@ class ScenicSpotListFragment : Fragment() {
             override fun onItemClick(info: ScenicSpotInfo) {
                 findNavController().navigate(
                     ScenicSpotListFragmentDirections
-                        .actionScenicSpotListFragmentToScenicSpotDetailsFragment(info.id)
+                        .actionScenicSpotListFragmentToScenicSpotDetailsFragment(info.id, info.name)
                 )
             }
         })

@@ -10,11 +10,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
+import com.scw.twtour.MainActivity
 import com.scw.twtour.databinding.FragmentScenicSpotDetailsBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.view.viewmodel.ScenicSpotDetailsViewModel
+import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@FlowPreview
 class ScenicSpotDetailsFragment : Fragment() {
 
     private val args by navArgs<ScenicSpotDetailsFragmentArgs>()
@@ -22,6 +25,11 @@ class ScenicSpotDetailsFragment : Fragment() {
 
     private var _viewBinding: FragmentScenicSpotDetailsBinding? = null
     private val viewBinding get() = _viewBinding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity() as MainActivity).setActionBarTitle(args.scenicSpotName)
+    }
 
     override fun onStart() {
         super.onStart()

@@ -13,4 +13,23 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.Twtour.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">#51624F</item>
+        <item name="colorPrimaryVariant">#AEBEA1</item>
+        <item name="colorOnPrimary">#A2B4AC</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">#E6D5AA</item>
+        <item name="colorSecondaryVariant">#a19b77</item>
+        <item name="colorOnSecondary">#e0e6aa</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+<!--        <item name="android:statusBarColor">#212121</item>-->
+        <!-- Customize your theme here. -->
+    </style>
+
 </resources>
