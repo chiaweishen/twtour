@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.MainActivity
 import com.scw.twtour.databinding.FragmentScenicSpotListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
 import kotlinx.coroutines.FlowPreview
@@ -59,6 +60,7 @@ class ScenicSpotListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
         initSearchView()
+        initFloatingActionButton()
         collectDataWorkaround()
     }
 
@@ -84,6 +86,15 @@ class ScenicSpotListFragment : Fragment() {
                 )
             }
         })
+
+        viewBinding.viewRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val offsetVertical = recyclerView.computeVerticalScrollOffset()
+                val screenHeight = ScreenUtil.getScreenHeight(requireContext())
+                updateFloatingActionButton (dy < 0 && offsetVertical > screenHeight)
+            }
+        })
     }
 
     private fun initSearchView() {
@@ -100,6 +111,22 @@ class ScenicSpotListFragment : Fragment() {
                 return true
             }
         })
+    }
+
+    private fun initFloatingActionButton() {
+        viewBinding.fab.setOnClickListener {
+            val offsetVertical = viewBinding.viewRecycler.computeVerticalScrollOffset()
+            val screenHeight = ScreenUtil.getScreenHeight(requireContext())
+            if (offsetVertical > screenHeight * 5) {
+                viewBinding.viewRecycler.scrollToPosition(0)
+            } else {
+                viewBinding.viewRecycler.smoothScrollToPosition(0)
+            }
+        }
+    }
+
+    private fun updateFloatingActionButton(show: Boolean) {
+        if (show) { viewBinding.fab.show() } else { viewBinding.fab.hide() }
     }
 
     private fun collectFilterData(query: String) {
