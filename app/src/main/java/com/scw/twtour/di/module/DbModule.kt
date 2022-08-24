@@ -7,4 +7,5 @@ import org.koin.dsl.module
 val dbModule = module {
     single { BasicDatabase.getInstance(androidContext()) }
     single { get<BasicDatabase>().scenicSpotDao() }
+    single { get<BasicDatabase>().noteDao() }
 }

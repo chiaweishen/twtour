@@ -40,43 +40,63 @@ class ScenicSpotPagingAdapter :
             }
         }
 
-        fun bindData(info: ScenicSpotInfo?, listener: AdapterListener?) {
-            info?.also {
+        fun bindData(scenicSpotInfo: ScenicSpotInfo?, listener: AdapterListener?) {
+            scenicSpotInfo?.also { info ->
                 itemView.setOnClickListener {
                     listener?.onItemClick(info)
                 }
-
-                viewBinding.viewPicture.load(it.pictures.firstOrNull())
-                viewBinding.textTitle.text = it.name
-
-                if (it.description?.isNotBlank() == true) {
-                    viewBinding.textDescription.text = it.description
-                } else if (it.descriptionDetail?.isNotBlank() == true) {
-                    viewBinding.textDescription.text = it.descriptionDetail
+                viewBinding.viewStar.setOnClickListener { view ->
+                    info.star = !info.star
+                    view.isActivated = !view.isActivated
+                    listener?.onStarClick(info)
+                }
+                viewBinding.viewPushPin.setOnClickListener { view ->
+                    info.pin = !info.pin
+                    view.isActivated = !view.isActivated
+                    listener?.onPushPinClick(info)
                 }
 
-                it.zipCodeName?.takeIf { it.isNotBlank() }?.also { zipCodeName ->
+                viewBinding.viewStar.isActivated = info.star
+                viewBinding.viewPushPin.isActivated = info.pin
+
+                viewBinding.viewPicture.load(info.pictures.firstOrNull())
+                viewBinding.textTitle.text = info.name
+
+                if (info.description?.isNotBlank() == true) {
+                    viewBinding.textDescription.text = info.description
+                } else if (info.descriptionDetail?.isNotBlank() == true) {
+                    viewBinding.textDescription.text = info.descriptionDetail
+                }
+
+                info.city?.also { city ->
+                    viewBinding.textCity.text = city.value
+                    viewBinding.textCity.visibility = View.VISIBLE
+                } ?: run {
+                    viewBinding.textCity.visibility = View.GONE
+                }
+
+                info.zipCodeName?.takeIf { it.isNotBlank() }?.also { zipCodeName ->
                     viewBinding.textZipcode.text = zipCodeName
                     viewBinding.textZipcode.visibility = View.VISIBLE
                 } ?: run {
                     viewBinding.textZipcode.visibility = View.GONE
                 }
 
-                it.classes.firstOrNull()?.also { class1 ->
+                info.classes.firstOrNull()?.also { class1 ->
                     viewBinding.textClass1.text = class1
                     viewBinding.textClass1.visibility = View.VISIBLE
                 } ?: run {
                     viewBinding.textClass1.visibility = View.GONE
                 }
 
-                it.classes.getOrNull(1)?.also { class2 ->
+                info.classes.getOrNull(1)?.also { class2 ->
                     viewBinding.textClass2.text = class2
                     viewBinding.textClass2.visibility = View.VISIBLE
                 } ?: run {
                     viewBinding.textClass2.visibility = View.GONE
                 }
 
-                it.classes.getOrNull(2)?.also { class3 ->
+                info.classes.getOrNull(2)?.also { class3 ->
                     viewBinding.textClass3.text = class3
                     viewBinding.textClass3.visibility = View.VISIBLE
                 } ?: run {
@@ -99,5 +119,7 @@ class ScenicSpotPagingAdapter :
 
     interface AdapterListener {
         fun onItemClick(info: ScenicSpotInfo)
+        fun onStarClick(info: ScenicSpotInfo)
+        fun onPushPinClick(info: ScenicSpotInfo)
     }
 }

@@ -3,23 +3,23 @@ package com.scw.twtour.view.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.scw.twtour.MainActivity
-import com.scw.twtour.databinding.FragmentScenicSpotListBinding
+import com.scw.twtour.R
+import com.scw.twtour.databinding.FragmentSearchBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.util.City
 import com.scw.twtour.util.ScreenUtil
+import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
 import kotlinx.coroutines.FlowPreview
@@ -29,44 +29,93 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 @FlowPreview
-class ScenicSpotListFragment : Fragment() {
+class SearchFragment : Fragment() {
 
-    private val args by navArgs<ScenicSpotListFragmentArgs>()
     private val viewModel by viewModel<ScenicSpotListViewModel>()
 
-    private var _viewBinding: FragmentScenicSpotListBinding? = null
+    private var _viewBinding: FragmentSearchBinding? = null
     private val viewBinding get() = _viewBinding!!
 
     private val pagingAdapter = ScenicSpotPagingAdapter()
     private val handler = Handler(Looper.getMainLooper())
     private var queryTextChangeRunnable: Runnable? = null
     private var lastQuery: String = ""
+    private var city: City = City.ALL
+    private var lastCity: City = city
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _viewBinding = FragmentScenicSpotListBinding.inflate(inflater, container, false)
+        _viewBinding = FragmentSearchBinding.inflate(inflater, container, false)
         return viewBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
         initRecyclerView()
         initSearchView()
         initFloatingActionButton()
-        collectDataWorkaround()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        (requireActivity() as MainActivity).setActionBarTitle(args.city.value)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _viewBinding = null
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        requireActivity().menuInflater.inflate(R.menu.city, menu)
+    }
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        city = when (item.itemId) {
+            R.id.city_taipei -> City.TAIPEI
+            R.id.city_new_taipei -> City.NEW_TAIPEI
+            R.id.city_taoyuan -> City.TAOYUAN
+            R.id.city_taichung -> City.TAICHUNG
+            R.id.city_tainan -> City.TAINAN
+            R.id.city_kaoshiung -> City.KAOHSIUNG
+            R.id.city_keelung -> City.KEELUNG
+            R.id.city_hsinchu -> City.HSINCHU
+            R.id.city_hsinchu_country -> City.HSINCHU_COUNTRY
+            R.id.city_miaoli_country -> City.MIAOLI_COUNTRY
+            R.id.city_changhua_country -> City.CHANGHUA_COUNTRY
+            R.id.city_nantou_country -> City.NANTOU_COUNTRY
+            R.id.city_yunlin_country -> City.YUNLIN_COUNTRY
+            R.id.city_chiayi -> City.CHIAYI
+            R.id.city_chiayi_country -> City.CHIAYI_COUNTRY
+            R.id.city_pingtung_country -> City.PINGTUNG_COUNTRY
+            R.id.city_yilan_country -> City.YILAN_COUNTRY
+            R.id.city_hualien_country -> City.HUALIEN_COUNTRY
+            R.id.city_taitung_country -> City.TAITUNG_COUNTRY
+            R.id.city_kimen_country -> City.KINMEN_COUNTRY
+            R.id.city_penghu_country -> City.PENGHU_COUNTRY
+            R.id.city_lienchiang_country -> City.LIENCHIANG_COUNTRY
+            R.id.city_lanyu -> City.LANYU
+            R.id.city_lyudao -> City.LYUDAO
+            R.id.city_xiaoliouchou -> City.XIAOLIOUCHOU
+            else -> City.ALL
+        }
+        if (lastCity != city) {
+            lastCity = city
+            viewBinding.btnCity.text = city.value
+            query(lastQuery, true)
+        }
+        return super.onContextItemSelected(item)
+    }
+
+    private fun initView() {
+        registerForContextMenu(viewBinding.btnCity)
+        viewBinding.btnCity.setOnClickListener { view ->
+            view.showContextMenu()
+        }
     }
 
     private fun initRecyclerView() {
@@ -81,8 +130,8 @@ class ScenicSpotListFragment : Fragment() {
         pagingAdapter.setAdapterListener(object : ScenicSpotPagingAdapter.AdapterListener {
             override fun onItemClick(info: ScenicSpotInfo) {
                 findNavController().navigate(
-                    ScenicSpotListFragmentDirections
-                        .actionScenicSpotListFragmentToScenicSpotDetailsFragment(info.id, info.name)
+                    SearchFragmentDirections
+                        .actionSearchFragmentToScenicSpotDetailsFragment(info.id, info.name)
                 )
             }
 
@@ -100,13 +149,13 @@ class ScenicSpotListFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 val offsetVertical = recyclerView.computeVerticalScrollOffset()
                 val screenHeight = ScreenUtil.getScreenHeight(requireContext())
-                updateFloatingActionButton (dy < 0 && offsetVertical > screenHeight)
+                updateFloatingActionButton(dy < 0 && offsetVertical > screenHeight)
             }
         })
     }
 
     private fun initSearchView() {
-        viewBinding.searchFilterView.setOnQueryTextListener(object :
+        viewBinding.searchView.setOnQueryTextListener(object :
             SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -114,11 +163,27 @@ class ScenicSpotListFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                Timber.i("onQueryTextChange: $newText")
-                collectFilterData(newText)
+                query(newText)
                 return true
             }
         })
+    }
+
+    private fun query(query: String, isCityChanged: Boolean = false) {
+        Timber.i("query: $query")
+        if (query.isNotBlank()) {
+            queryTextChangeRunnable?.also { r ->
+                handler.removeCallbacks(r)
+            }
+            queryTextChangeRunnable = handler.postDelayed(500) {
+                if (lastQuery != query || isCityChanged) {
+                    lastQuery = query
+                    collectData(query)
+                }
+            }
+        } else {
+            clearData()
+        }
     }
 
     private fun initFloatingActionButton() {
@@ -134,38 +199,24 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     private fun updateFloatingActionButton(show: Boolean) {
-        if (show) { viewBinding.fab.show() } else { viewBinding.fab.hide() }
-    }
-
-    private fun collectFilterData(query: String) {
-        queryTextChangeRunnable?.also { r ->
-            handler.removeCallbacks(r)
-        }
-        queryTextChangeRunnable = handler.postDelayed(500) {
-            if (lastQuery != query) {
-                lastQuery = query
-                collectData(query)
-            }
+        if (show) {
+            viewBinding.fab.show()
+        } else {
+            viewBinding.fab.hide()
         }
     }
 
-    /** FIXME: Workaround
-     * 跳轉頁面回來後，再次 collect 會取得先前 page 資料，導致 list view 位置被拉回
-     * **/
-    private var isDataCollected: Boolean = false
-    private fun collectDataWorkaround() {
-        if (!isDataCollected) {
-            isDataCollected = true
-            collectData()
-        }
+    private fun clearData() {
+        lastQuery = ""
+        pagingAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
     }
 
-    private fun collectData(query: String = "") {
+    private fun collectData(query: String) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.getScenicSpotInfoList(
-                    args.city,
-                    args.zipCode,
+                    city,
+                    ZipCodeUtil.getOutlingIslandsZipCode(city),
                     query
                 ).collectLatest { pagingData ->
                     pagingAdapter.submitData(pagingData)

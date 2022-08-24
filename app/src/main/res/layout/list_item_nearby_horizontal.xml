@@ -36,12 +36,13 @@
             app:layout_constraintEnd_toStartOf="@+id/text_distance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_picture"
-            tools:text="101大樓" />
+            tools:text="101大樓 _101大樓101大樓" />
 
         <TextView
             android:id="@+id/text_distance"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:minWidth="48dp"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
@@ -50,6 +51,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="200m" />
+
+        <ImageView
+            android:id="@+id/view_star"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/selector_stars_24"
+            app:layout_constraintBottom_toTopOf="@+id/text_distance"
+            app:layout_constraintEnd_toEndOf="@+id/text_distance"
+            app:layout_constraintStart_toEndOf="@+id/view_push_pin"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            />
+
+        <ImageView
+            android:id="@+id/view_push_pin"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/selector_pin_push_24"
+            app:layout_constraintBottom_toTopOf="@+id/text_distance"
+            app:layout_constraintEnd_toStartOf="@+id/view_star"
+            app:layout_constraintStart_toStartOf="@+id/text_distance"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

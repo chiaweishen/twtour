@@ -7,15 +7,19 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.scw.twtour.db.converter.Converters
+import com.scw.twtour.db.dao.NoteDao
 import com.scw.twtour.db.dao.ScenicSpotDao
+import com.scw.twtour.model.entity.NoteEntity
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 
 
-@Database(entities = [ScenicSpotEntityItem::class], version = 1)
+@Database(entities = [ScenicSpotEntityItem::class, NoteEntity::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class BasicDatabase : RoomDatabase() {
 
     abstract fun scenicSpotDao(): ScenicSpotDao
+
+    abstract fun noteDao(): NoteDao
 
     companion object {
         private var INSTANCE: BasicDatabase? = null

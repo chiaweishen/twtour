@@ -29,7 +29,7 @@ class TourismApiTest : ApiTest() {
     fun `test get scenic spot by city`() = runTest {
         api.scenicSpot(
             ODataParams.Companion.Builder(1000)
-                .filter(ODataFilter.ScenicSpot.byCity(City.TAIPEI))
+                .filter(ODataFilter.ScenicSpot.queryByCityAndNameKeyword(City.TAIPEI))
                 .select(
                     ODataSelect.Builder()
                         .add(ScenicSpotEntityItem::scenicSpotID.name)
@@ -46,7 +46,7 @@ class TourismApiTest : ApiTest() {
     fun `test get scenic spot by id`() = runTest {
         api.scenicSpot(
             ODataParams.Companion.Builder(1)
-                .filter(ODataFilter.ScenicSpot.byId("C1_379000000A_000425"))
+                .filter(ODataFilter.ScenicSpot.queryById("C1_379000000A_000425"))
                 .build()
         )
             .catch { e -> Assert.fail(e.message) }

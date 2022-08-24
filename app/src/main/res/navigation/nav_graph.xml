@@ -23,18 +23,19 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/scenicSpotListFragment"
         android:name="com.scw.twtour.view.fragment.ScenicSpotListFragment"
         android:label=""
         tools:layout="@layout/fragment_scenic_spot_list">
-        <argument
-            android:name="city"
-            app:argType="com.scw.twtour.util.City" />
-        <argument
-            android:name="zipCode"
-            app:argType="integer" />
         <action
             android:id="@+id/action_scenicSpotListFragment_to_scenicSpotDetailsFragment"
             app:destination="@id/scenicSpotDetailsFragment"
@@ -42,17 +43,32 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <argument
+            android:name="zipCode"
+            app:argType="integer" />
+        <argument
+            android:name="city"
+            app:argType="com.scw.twtour.util.City" />
     </fragment>
     <fragment
         android:id="@+id/scenicSpotDetailsFragment"
         android:name="com.scw.twtour.view.fragment.ScenicSpotDetailsFragment"
         android:label=""
-        tools:layout="@layout/fragment_scenic_spot_details" >
+        tools:layout="@layout/fragment_scenic_spot_details">
         <argument
             android:name="scenic_spot_id"
             app:argType="string" />
         <argument
             android:name="scenic_spot_name"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.scw.twtour.view.fragment.SearchFragment"
+        android:label="景點搜尋"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_scenicSpotDetailsFragment"
+            app:destination="@id/scenicSpotDetailsFragment" />
     </fragment>
 </navigation>

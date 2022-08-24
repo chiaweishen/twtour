@@ -10,6 +10,6 @@ import org.koin.dsl.module
 val viewModule = module {
     viewModel { params -> MainViewModel(params.get(), get()) }
     viewModel { HomeViewModel(get()) }
-    viewModel { ScenicSpotListViewModel(get()) }
-    viewModel { ScenicSpotDetailsViewModel(get()) }
+    viewModel { ScenicSpotListViewModel(get(), get()) }
+    viewModel { ScenicSpotDetailsViewModel(get(), get()) }
 }

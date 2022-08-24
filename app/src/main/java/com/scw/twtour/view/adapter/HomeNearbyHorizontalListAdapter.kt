@@ -53,12 +53,16 @@ class HomeNearbyHorizontalListAdapter :
             }
         }
 
-        fun bindData(item: ScenicSpotInfo, listener: AdapterListener?) {
-            viewBinging.textTitle.text = item.name
-            viewBinging.textDistance.text = convertDistanceUnit(item.distanceMeter)
-            viewBinging.viewPicture.load(item.pictures.firstOrNull())
-            itemView.setOnClickListener {
-                listener?.onScenicSpotItemClick(item)
+        fun bindData(info: ScenicSpotInfo, listener: AdapterListener?) {
+            with(viewBinging) {
+                textTitle.text = info.name
+                textDistance.text = convertDistanceUnit(info.distanceMeter)
+                viewStar.isActivated = info.star
+                viewPushPin.isActivated = info.pin
+                viewPicture.load(info.pictures.firstOrNull())
+                itemView.setOnClickListener {
+                    listener?.onScenicSpotItemClick(info)
+                }
             }
         }
 

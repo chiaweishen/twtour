@@ -8,6 +8,13 @@
     android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="16dp">
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="136dp" />
+
     <ImageView
         android:id="@+id/view_picture"
         android:layout_width="120dp"
@@ -17,17 +24,50 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/view_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:scaleType="center"
+        android:src="@drawable/selector_stars_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/view_push_pin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:src="@drawable/selector_pin_push_24"
+        app:layout_constraintEnd_toStartOf="@+id/view_star"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_rectangle_solid"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="2dp"
+        android:textSize="12sp"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="基隆市" />
+
     <TextView
         android:id="@+id/text_zipcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/bg_rectangle"
         android:paddingHorizontal="4dp"
         android:paddingVertical="2dp"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/view_picture"
+        app:layout_constraintStart_toEndOf="@+id/text_city"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="松山區" />
 
@@ -38,12 +78,11 @@
         android:layout_marginTop="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:paddingStart="16dp"
         android:paddingTop="24dp"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/view_picture"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="101大樓 - 101大樓101大樓101大樓101大樓101大樓101大樓101大樓101大樓101大樓101大樓" />
 
@@ -54,11 +93,10 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="3"
-        android:paddingStart="16dp"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/view_picture"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/view_picture"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toBottomOf="@+id/text_title"
         tools:text="只要destination有設定Arguments，就會自動產生Arguments Class。例：Destination name為Bfragment，Arguments Class就是BFragmentArgs。可以用Argument Class中的formBundle(arguments)來取得BFragmentArgs實體，或著Kotlin也可使用by navArgs()這個委託方法" />
 

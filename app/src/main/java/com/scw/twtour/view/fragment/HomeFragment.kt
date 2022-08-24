@@ -6,23 +6,25 @@ import android.Manifest
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.MyApplication
+import com.scw.twtour.R
 import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.domain.AuthUseCase
 import com.scw.twtour.ext.launchAndCollect
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.util.City
 import com.scw.twtour.util.SyncComplete
+import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
 import com.scw.twtour.view.viewmodel.HomeViewModel
@@ -62,6 +64,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initMenu()
         initView()
         collectData()
     }
@@ -71,6 +74,11 @@ class HomeFragment : Fragment() {
         if (hasAccessFineLocationPermission()) {
             viewModel.fetchScenicSpotItems()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 
     @Deprecated("Deprecated in Java")
@@ -103,15 +111,10 @@ class HomeFragment : Fragment() {
             }
 
             override fun onCityItemClick(city: City) {
-                val zipCode: Int = when (city) {
-                    City.LANYU -> 952
-                    City.LYUDAO -> 951
-                    City.XIAOLIOUCHOU -> 929
-                    else -> 0
-                }
+                val zipCode = ZipCodeUtil.getOutlingIslandsZipCode(city)
                 findNavController().navigate(
                     HomeFragmentDirections
-                        .actionHomeFragmentToScenicSpotListFragment(city, zipCode)
+                        .actionHomeFragmentToScenicSpotListFragment(zipCode, city)
                 )
             }
 
@@ -128,6 +131,18 @@ class HomeFragment : Fragment() {
         viewBinding.layoutSwipeRefresh.setOnRefreshListener {
             viewModel.fetchScenicSpotItems()
         }
+    }
+
+    private fun initMenu() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.main, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return menuItem.onNavDestinationSelected(findNavController())
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun collectData() {
@@ -169,8 +184,4 @@ class HomeFragment : Fragment() {
         )
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _viewBinding = null
-    }
 }

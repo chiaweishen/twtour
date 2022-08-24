@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/city_all"
+        android:title="全部地區" />
+    <item
+        android:id="@+id/city_taipei"
+        android:title="臺北市" />
+    <item
+        android:id="@+id/city_new_taipei"
+        android:title="新北市" />
+    <item
+        android:id="@+id/city_taoyuan"
+        android:title="桃園市" />
+    <item
+        android:id="@+id/city_taichung"
+        android:title="臺中市" />
+    <item
+        android:id="@+id/city_tainan"
+        android:title="臺南市" />
+    <item
+        android:id="@+id/city_kaoshiung"
+        android:title="高雄市" />
+    <item
+        android:id="@+id/city_keelung"
+        android:title="基隆市" />
+    <item
+        android:id="@+id/city_hsinchu"
+        android:title="新竹市" />
+    <item
+        android:id="@+id/city_hsinchu_country"
+        android:title="新竹縣" />
+    <item
+        android:id="@+id/city_miaoli_country"
+        android:title="苗栗縣" />
+    <item
+        android:id="@+id/city_changhua_country"
+        android:title="彰化縣" />
+    <item
+        android:id="@+id/city_nantou_country"
+        android:title="南投縣" />
+    <item
+        android:id="@+id/city_yunlin_country"
+        android:title="雲林縣" />
+    <item
+        android:id="@+id/city_chiayi_country"
+        android:title="嘉義縣" />
+    <item
+        android:id="@+id/city_chiayi"
+        android:title="嘉義市" />
+    <item
+        android:id="@+id/city_pingtung_country"
+        android:title="屏東縣" />
+    <item
+        android:id="@+id/city_yilan_country"
+        android:title="宜蘭縣" />
+    <item
+        android:id="@+id/city_hualien_country"
+        android:title="花蓮縣" />
+    <item
+        android:id="@+id/city_taitung_country"
+        android:title="臺東縣" />
+    <item
+        android:id="@+id/city_kimen_country"
+        android:title="金門縣" />
+    <item
+        android:id="@+id/city_penghu_country"
+        android:title="澎湖縣" />
+    <item
+        android:id="@+id/city_lienchiang_country"
+        android:title="連江縣" />
+    <item
+        android:id="@+id/city_lanyu"
+        android:title="蘭嶼" />
+    <item
+        android:id="@+id/city_lyudao"
+        android:title="綠島" />
+    <item
+        android:id="@+id/city_xiaoliouchou"
+        android:title="小琉球" />
+</menu>

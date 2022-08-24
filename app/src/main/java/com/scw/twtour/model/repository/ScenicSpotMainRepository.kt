@@ -68,11 +68,11 @@ class ScenicSpotRepositoryImpl(
                     add(TitleItem("南台灣"))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
-                            add(CityInfo(City.CHIAYI_COUNTRY, 0))
-                            add(CityInfo(City.CHIAYI, 0))
-                            add(CityInfo(City.TAINAN, 0))
-                            add(CityInfo(City.KAOHSIUNG, 0))
-                            add(CityInfo(City.PINGTUNG_COUNTRY, 0))
+                            add(CityInfo(City.CHIAYI_COUNTRY, R.drawable.chiayi_country))
+                            add(CityInfo(City.CHIAYI, R.drawable.chiayi))
+                            add(CityInfo(City.TAINAN, R.drawable.tainan))
+                            add(CityInfo(City.KAOHSIUNG, R.drawable.kaohshiung))
+                            add(CityInfo(City.PINGTUNG_COUNTRY, R.drawable.pingtung_country))
                         }
                     ))
                     add(TitleItem("東台灣"))
@@ -113,7 +113,7 @@ class ScenicSpotRepositoryImpl(
                         it.latitude,
                         it.longitude,
                         NEARBY_SCENIC_SPOT_LIMIT
-                    )
+                    ).flowOn(Dispatchers.IO)
                 } ?: run {
                     flowOf(emptyList())
                 }
@@ -138,11 +138,21 @@ class ScenicSpotRepositoryImpl(
                         }
                         sortBy { it.distanceMeter }
                     }
-                }.map { nearbyInfo ->
-                    mutableListOf<HomeListItem>().apply {
-                        add(NearbyItems(nearbyInfo))
-                    }
                 }.flowOn(Dispatchers.IO)
+            }
+            .flatMapConcat { nearbyInfo ->
+                localDataSource.clearInvalidNote()
+                localDataSource.queryNotes(nearbyInfo.map { it.id }.toTypedArray())
+                    .map { noteEntities ->
+                        noteEntities.forEach { noteEntity ->
+                            nearbyInfo.filter { it.id == noteEntity.id }.also {
+                                it.firstOrNull()?.update(noteEntity)
+                            }
+                        }
+                        mutableListOf<HomeListItem>().apply {
+                            add(NearbyItems(nearbyInfo))
+                        }
+                    }.flowOn(Dispatchers.IO)
             }
     }
 

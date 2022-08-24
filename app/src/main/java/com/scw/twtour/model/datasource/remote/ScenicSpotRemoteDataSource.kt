@@ -44,7 +44,7 @@ class ScenicSpotRemoteDataSourceImp(
             ODataParams.Companion.Builder(count)
                 .select(select)
                 .skip(skip)
-                .filter(ODataFilter.ScenicSpot.byCity(city))
+                .filter(ODataFilter.ScenicSpot.queryByCityAndNameKeyword(city))
                 .orderby(orderby)
                 .build()
         )
@@ -58,7 +58,7 @@ class ScenicSpotRemoteDataSourceImp(
         return tourismApi.scenicSpot(
             ODataParams.Companion.Builder(1)
                 .select(select)
-                .filter(ODataFilter.ScenicSpot.byId(id))
+                .filter(ODataFilter.ScenicSpot.queryById(id))
                 .orderby(orderby)
                 .build()
         )
@@ -72,7 +72,7 @@ class ScenicSpotRemoteDataSourceImp(
         return tourismApi.scenicSpot(
             ODataParams.Companion.Builder(ids.size)
                 .select(select)
-                .filter(ODataFilter.ScenicSpot.byIds(ids))
+                .filter(ODataFilter.ScenicSpot.queryByIdList(ids))
                 .orderby(orderby)
                 .build()
         )

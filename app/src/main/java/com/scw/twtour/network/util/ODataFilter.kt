@@ -4,24 +4,29 @@ import com.scw.twtour.util.City
 
 object ODataFilter {
     object ScenicSpot {
-        fun byCity(city: City, query: String = ""): String {
+
+        fun queryByNameKeyword(query: String): String {
+            return "contains(ScenicSpotName, '$query')"
+        }
+
+        fun queryByCityAndNameKeyword(city: City, query: String = ""): String {
             return city.value.let {
                 "(City eq '$it' or startswith(Address, '$it')) AND contains(ScenicSpotName, '$query')"
             }
         }
 
-        fun byZipCode(zipCode: Int, query: String = ""): String {
+        fun queryByZipCodeAndNameKeyword(zipCode: Int, query: String = ""): String {
             return "(ZipCode eq '$zipCode') AND contains(ScenicSpotName, '$query')"
         }
 
-        fun byId(id: String): String {
+        fun queryById(id: String): String {
             return "ScenicSpotID eq '$id'"
         }
 
-        fun byIds(ids: List<String>): String {
+        fun queryByIdList(ids: List<String>): String {
             val list = mutableListOf<String>()
             ids.forEach { id ->
-                list.add(byId(id))
+                list.add(queryById(id))
             }
             return list.joinToString(" OR ")
         }

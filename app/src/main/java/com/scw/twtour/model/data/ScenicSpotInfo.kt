@@ -1,6 +1,7 @@
 package com.scw.twtour.model.data
 
 import com.scw.twtour.ext.removeDuplicateValue
+import com.scw.twtour.model.entity.NoteEntity
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.util.City
 import com.scw.twtour.util.ZipCodeUtil
@@ -27,41 +28,48 @@ data class ScenicSpotInfo(
     var remarks: String? = null,
     var classes: List<String> = mutableListOf(),
     var city: City? = null,
-    var distanceMeter: Int = 0
+    var distanceMeter: Int = 0,
+    var star: Boolean = false,
+    var pin: Boolean = false
 ) : KoinComponent {
 
     private val zipCodeUtil = get<ZipCodeUtil>()
 
     fun update(entity: ScenicSpotEntityItem): ScenicSpotInfo {
-        return this.copy(
-            id = entity.scenicSpotID,
-            name = entity.scenicSpotName,
-            descriptionDetail = entity.descriptionDetail,
-            description = entity.description,
-            phone = entity.phone,
-            address = entity.address,
-            zipCode = entity.zipCode,
-            zipCodeName = zipCodeUtil.getZipCodeName(entity.zipCode),
-            travelInfo = entity.travelInfo,
-            openTime = entity.openTime,
-            pictures = mutableListOf<String>().apply {
-                entity.picture?.pictureUrl1?.let { add(it) }
-                entity.picture?.pictureUrl2?.let { add(it) }
-                entity.picture?.pictureUrl3?.let { add(it) }
-            }.removeDuplicateValue(),
-            websiteUrl = entity.websiteUrl,
-            position = Position().update(entity.position),
-            parkingInfo = entity.parkingInfo,
-            parkingPosition = Position().update(entity.parkingPosition),
-            ticketInfo = entity.ticketInfo,
-            remarks = entity.remarks,
-            classes = mutableListOf<String>().apply {
-                entity.class1?.also { add(it) }
-                entity.class2?.also { add(it) }
-                entity.class3?.also { add(it) }
-            }.removeDuplicateValue(),
-            city = entity.city
-        )
+        id = entity.scenicSpotID
+        name = entity.scenicSpotName
+        descriptionDetail = entity.descriptionDetail
+        description = entity.description
+        phone = entity.phone
+        address = entity.address
+        zipCode = entity.zipCode
+        zipCodeName = zipCodeUtil.getZipCodeName(entity.zipCode)
+        travelInfo = entity.travelInfo
+        openTime = entity.openTime
+        pictures = mutableListOf<String>().apply {
+            entity.picture?.pictureUrl1?.let { add(it) }
+            entity.picture?.pictureUrl2?.let { add(it) }
+            entity.picture?.pictureUrl3?.let { add(it) }
+        }.removeDuplicateValue()
+        websiteUrl = entity.websiteUrl
+        position = Position().update(entity.position)
+        parkingInfo = entity.parkingInfo
+        parkingPosition = Position().update(entity.parkingPosition)
+        ticketInfo = entity.ticketInfo
+        remarks = entity.remarks
+        classes = mutableListOf<String>().apply {
+            entity.class1?.also { add(it) }
+            entity.class2?.also { add(it) }
+            entity.class3?.also { add(it) }
+        }.removeDuplicateValue()
+        city = entity.city
+        return this
+    }
+
+    fun update(entity: NoteEntity): ScenicSpotInfo {
+        star = entity.star
+        pin = entity.pin
+        return this
     }
 }
 

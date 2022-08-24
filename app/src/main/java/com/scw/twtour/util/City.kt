@@ -1,6 +1,7 @@
 package com.scw.twtour.util
 
 enum class City(val value: String) {
+    ALL("全部地區"),
     TAIPEI("臺北市"),
     NEW_TAIPEI("新北市"),
     TAOYUAN("桃園市"),

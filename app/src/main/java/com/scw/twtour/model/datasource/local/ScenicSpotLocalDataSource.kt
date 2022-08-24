@@ -1,8 +1,10 @@
 package com.scw.twtour.model.datasource.local
 
 import android.location.Location
+import com.scw.twtour.db.dao.NoteDao
 import com.scw.twtour.db.dao.ScenicSpotDao
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.model.entity.NoteEntity
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,10 +20,19 @@ interface ScenicSpotLocalDataSource {
         locationLon: Double,
         limit: Int
     ): Flow<List<ScenicSpotInfo>>
+
+    fun queryNotes(scenicSpotIds: Array<String>): Flow<List<NoteEntity>>
+
+    fun queryNote(scenicSpotId: String): Flow<NoteEntity?>
+
+    suspend fun clearInvalidNote()
+
+    suspend fun insertNote(noteEntity: NoteEntity)
 }
 
 class ScenicSpotLocalDataSourceImpl(
-    private val scenicSpotDao: ScenicSpotDao
+    private val scenicSpotDao: ScenicSpotDao,
+    private val noteDao: NoteDao
 ) : ScenicSpotLocalDataSource {
 
     override suspend fun cache(scenicSpots: List<ScenicSpotEntityItem>) {
@@ -52,5 +63,21 @@ class ScenicSpotLocalDataSourceImpl(
                 }
             }
         }
+    }
+
+    override fun queryNotes(scenicSpotIds: Array<String>): Flow<List<NoteEntity>> {
+        return noteDao.queryNoteScenicSpots(*scenicSpotIds)
+    }
+
+    override fun queryNote(scenicSpotId: String): Flow<NoteEntity?> {
+        return noteDao.queryNoteScenicSpot(scenicSpotId)
+    }
+
+    override suspend fun clearInvalidNote() {
+        noteDao.clearInvalid()
+    }
+
+    override suspend fun insertNote(noteEntity: NoteEntity) {
+        noteDao.insert(noteEntity)
     }
 }

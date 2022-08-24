@@ -10,6 +10,17 @@ import timber.log.Timber
 class ZipCodeUtil(context: Context) {
     private val zipCodeMap = mutableMapOf<Int, String>()
 
+    companion object {
+        fun getOutlingIslandsZipCode(city: City): Int {
+            return when (city) {
+                City.LANYU -> 952
+                City.LYUDAO -> 951
+                City.XIAOLIOUCHOU -> 929
+                else -> 0
+            }
+        }
+    }
+
     init {
         try {
             val jsonString = context.resources

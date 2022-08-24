@@ -69,6 +69,20 @@ class ScenicSpotDetailsFragment : Fragment() {
             displayTextView(textParking, info.parkingInfo)
             displayTextView(textTravelInfo, info.travelInfo, "旅遊資訊:\n")
 
+            viewStar.setOnClickListener { view ->
+                info.star = !info.star
+                view.isActivated = !view.isActivated
+                viewModel.clickStar(info)
+            }
+            viewPushPin.setOnClickListener { view ->
+                info.pin = !info.pin
+                view.isActivated = !view.isActivated
+                viewModel.clickPushPin(info)
+            }
+
+            viewStar.isActivated = info.star
+            viewPushPin.isActivated = info.pin
+
             info.position?.also { position ->
                 position.lat?.also { lat ->
                     position.lon?.also { lon ->

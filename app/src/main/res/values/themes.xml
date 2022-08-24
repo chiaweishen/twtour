@@ -19,16 +19,16 @@
         <item name="windowNoTitle">true</item>
 
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#51624F</item>
-        <item name="colorPrimaryVariant">#AEBEA1</item>
-        <item name="colorOnPrimary">#A2B4AC</item>
+        <item name="colorPrimary">#009688</item>
+        <item name="colorPrimaryVariant">#00796b</item>
+        <item name="colorOnPrimary">#80cbc4</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#E6D5AA</item>
-        <item name="colorSecondaryVariant">#a19b77</item>
-        <item name="colorOnSecondary">#e0e6aa</item>
+        <item name="colorSecondary">#f5eedd</item>
+        <item name="colorSecondaryVariant">#90722a</item>
+<!--        <item name="colorSecondaryVariant">#90722a</item>-->
+        <item name="colorOnSecondary">#3a2e11</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/colorPrimary</item>
-<!--        <item name="android:statusBarColor">#212121</item>-->
+        <item name="android:statusBarColor">#00796b</item>
         <!-- Customize your theme here. -->
     </style>
 
