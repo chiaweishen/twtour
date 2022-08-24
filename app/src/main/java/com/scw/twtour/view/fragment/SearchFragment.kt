@@ -103,11 +103,8 @@ class SearchFragment : Fragment() {
             R.id.city_xiaoliouchou -> City.XIAOLIOUCHOU
             else -> City.ALL
         }
-        if (lastCity != city) {
-            lastCity = city
-            viewBinding.btnCity.text = city.value
-            query(lastQuery, true)
-        }
+        updateCityView()
+        query(lastQuery, city)
         return super.onContextItemSelected(item)
     }
 
@@ -116,6 +113,11 @@ class SearchFragment : Fragment() {
         viewBinding.btnCity.setOnClickListener { view ->
             view.showContextMenu()
         }
+        updateCityView()
+    }
+
+    private fun updateCityView() {
+        viewBinding.btnCity.text = city.value
     }
 
     private fun initRecyclerView() {
@@ -163,22 +165,23 @@ class SearchFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                query(newText)
+                query(newText, lastCity)
                 return true
             }
         })
     }
 
-    private fun query(query: String, isCityChanged: Boolean = false) {
+    private fun query(query: String, city: City) {
         Timber.i("query: $query")
         if (query.isNotBlank()) {
             queryTextChangeRunnable?.also { r ->
                 handler.removeCallbacks(r)
             }
             queryTextChangeRunnable = handler.postDelayed(500) {
-                if (lastQuery != query || isCityChanged) {
+                if (lastQuery != query || lastCity != city) {
                     lastQuery = query
-                    collectData(query)
+                    lastCity = city
+                    collectData(query, city)
                 }
             }
         } else {
@@ -211,7 +214,7 @@ class SearchFragment : Fragment() {
         pagingAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
     }
 
-    private fun collectData(query: String) {
+    private fun collectData(query: String, city: City) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.getScenicSpotInfoList(
