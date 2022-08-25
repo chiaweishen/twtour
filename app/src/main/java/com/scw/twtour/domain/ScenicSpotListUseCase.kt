@@ -3,7 +3,7 @@ package com.scw.twtour.domain
 import androidx.paging.PagingData
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.model.repository.ScenicSpotListRepository
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 import kotlinx.coroutines.flow.Flow
 
 interface ScenicSpotListUseCase {

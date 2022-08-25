@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.scw.twtour.databinding.ListItemCityHorizontalBinding
 import com.scw.twtour.model.data.CityInfo
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 
 class HomeCityHorizontalListAdapter :
     ListAdapter<CityInfo, RecyclerView.ViewHolder>(DiffCallback()) {

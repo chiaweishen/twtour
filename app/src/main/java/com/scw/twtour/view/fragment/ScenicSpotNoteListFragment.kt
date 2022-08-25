@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.databinding.FragmentScenicSpotNoteListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.util.NoteType
+import com.scw.twtour.constant.NoteType
 import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 import com.scw.twtour.view.viewmodel.ScenicSpotNoteListViewModel

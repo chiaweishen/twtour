@@ -22,8 +22,8 @@ import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.domain.AuthUseCase
 import com.scw.twtour.ext.launchAndCollect
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.util.City
-import com.scw.twtour.util.SyncComplete
+import com.scw.twtour.constant.City
+import com.scw.twtour.constant.SyncComplete
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter

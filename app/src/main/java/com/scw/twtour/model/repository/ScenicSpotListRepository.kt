@@ -7,8 +7,8 @@ import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.model.datasource.remote.NoteScenicSpotPagingSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotPagingSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotPagingSource.Companion.PAGE_SIZE
-import com.scw.twtour.util.City
-import com.scw.twtour.util.NoteType
+import com.scw.twtour.constant.City
+import com.scw.twtour.constant.NoteType
 import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get

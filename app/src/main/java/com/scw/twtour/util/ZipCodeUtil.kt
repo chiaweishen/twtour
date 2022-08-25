@@ -2,6 +2,7 @@ package com.scw.twtour.util
 
 import android.content.Context
 import com.scw.twtour.R
+import com.scw.twtour.constant.City
 import org.json.JSONArray
 import org.json.JSONObject
 import timber.log.Timber

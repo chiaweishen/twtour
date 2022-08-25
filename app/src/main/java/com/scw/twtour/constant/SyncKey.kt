@@ -1,4 +1,4 @@
-package com.scw.twtour.util
+package com.scw.twtour.constant
 
 data class SyncKey(
     val city: City,

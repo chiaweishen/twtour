@@ -13,7 +13,7 @@ import com.scw.twtour.databinding.ListItemDiscoverNearbyBinding
 import com.scw.twtour.databinding.ListItemNearbyBinding
 import com.scw.twtour.databinding.ListItemTitleBinding
 import com.scw.twtour.model.data.*
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 
 class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 

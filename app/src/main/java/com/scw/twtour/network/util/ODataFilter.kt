@@ -1,6 +1,6 @@
 package com.scw.twtour.network.util
 
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 
 object ODataFilter {
     object ScenicSpot {

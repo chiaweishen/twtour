@@ -6,7 +6,7 @@ import com.scw.twtour.db.dao.ScenicSpotDao
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.model.entity.NoteEntity
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
-import com.scw.twtour.util.NoteType
+import com.scw.twtour.constant.NoteType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

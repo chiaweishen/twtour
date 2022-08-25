@@ -7,7 +7,7 @@ import androidx.paging.cachedIn
 import com.scw.twtour.domain.NoteScenicSpotUseCase
 import com.scw.twtour.domain.ScenicSpotListUseCase
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

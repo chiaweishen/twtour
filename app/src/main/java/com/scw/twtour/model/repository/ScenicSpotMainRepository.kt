@@ -9,7 +9,7 @@ import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*

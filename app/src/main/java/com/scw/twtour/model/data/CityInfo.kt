@@ -1,6 +1,6 @@
 package com.scw.twtour.model.data
 
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 
 data class CityInfo(
     val city: City,

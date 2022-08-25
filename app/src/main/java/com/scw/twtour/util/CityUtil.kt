@@ -1,5 +1,7 @@
 package com.scw.twtour.util
 
+import com.scw.twtour.constant.City
+
 object CityUtil {
     fun parseAddressToCity(address: String?): City? {
         return address?.let {

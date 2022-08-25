@@ -4,7 +4,7 @@ import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.network.api.TourismApi
 import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 import kotlinx.coroutines.flow.Flow
 
 interface ScenicSpotRemoteDataSource {

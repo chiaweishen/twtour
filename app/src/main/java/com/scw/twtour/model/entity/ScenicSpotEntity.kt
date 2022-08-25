@@ -2,7 +2,7 @@ package com.scw.twtour.model.entity
 
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 
 class ScenicSpotEntity : ArrayList<ScenicSpotEntityItem>()
 

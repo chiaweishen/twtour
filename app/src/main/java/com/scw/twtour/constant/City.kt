@@ -1,4 +1,4 @@
-package com.scw.twtour.util
+package com.scw.twtour.constant
 
 enum class City(val value: String) {
     ALL("全部地區"),

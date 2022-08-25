@@ -5,7 +5,7 @@ import com.scw.twtour.network.api.TourismApi
 import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.test.runTest

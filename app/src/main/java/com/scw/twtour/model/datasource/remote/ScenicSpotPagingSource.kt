@@ -9,7 +9,7 @@ import com.scw.twtour.network.api.TourismApi
 import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 import com.scw.twtour.util.CityUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

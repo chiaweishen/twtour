@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.R
 import com.scw.twtour.databinding.FragmentSearchBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.util.City
+import com.scw.twtour.constant.City
 import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
