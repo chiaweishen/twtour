@@ -10,6 +10,12 @@ interface NoteDao {
     @Query("SELECT * FROM note_table")
     fun queryAllNoteScenicSpots(): Flow<List<NoteEntity>>
 
+    @Query("SELECT * FROM note_table WHERE star = 1 LIMIT :limit OFFSET :offset")
+    fun queryStarNoteScenicSpots(offset: Int? = 0, limit: Int? = -1): Flow<List<NoteEntity>>
+
+    @Query("SELECT * FROM note_table WHERE pin = 1 LIMIT :limit OFFSET :offset")
+    fun queryPushPinNoteScenicSpots(offset: Int? = 0, limit: Int? = -1): Flow<List<NoteEntity>>
+
     @Query("SELECT * FROM note_table WHERE id = :id")
     fun queryNoteScenicSpot(id: String): Flow<NoteEntity?>
 

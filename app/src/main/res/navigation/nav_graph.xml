@@ -30,6 +30,9 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_scenicSpotNoteTabFragment"
+            app:destination="@id/scenicSpotNoteTabFragment" />
     </fragment>
     <fragment
         android:id="@+id/scenicSpotListFragment"
@@ -44,11 +47,11 @@
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
-            android:name="zipCode"
-            app:argType="integer" />
-        <argument
             android:name="city"
             app:argType="com.scw.twtour.util.City" />
+        <argument
+            android:name="zipCode"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/scenicSpotDetailsFragment"
@@ -69,6 +72,15 @@
         tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_searchFragment_to_scenicSpotDetailsFragment"
+            app:destination="@id/scenicSpotDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scenicSpotNoteTabFragment"
+        android:name="com.scw.twtour.view.fragment.ScenicSpotNoteTabFragment"
+        android:label="景點筆記"
+        tools:layout="@layout/fragment_scenic_spot_note_tab">
+        <action
+            android:id="@+id/action_scenicSpotNoteTabFragment_to_scenicSpotDetailsFragment"
             app:destination="@id/scenicSpotDetailsFragment" />
     </fragment>
 </navigation>

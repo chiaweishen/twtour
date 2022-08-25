@@ -64,9 +64,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

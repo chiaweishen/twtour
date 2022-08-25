@@ -9,20 +9,17 @@ import com.scw.twtour.network.api.TourismApi
 import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.util.City
 import com.scw.twtour.util.CityUtil
+import com.scw.twtour.util.NoteType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
-class ScenicSpotPagingSource(
+class NoteScenicSpotPagingSource(
     private val tourismApi: TourismApi,
     private val localDataSource: ScenicSpotLocalDataSource,
-    private val city: City,
-    private val zipCode: Int,
-    private val query: String
+    private val noteType: NoteType
 ) : PagingSource<Int, ScenicSpotInfo>() {
 
     companion object {
@@ -43,7 +40,20 @@ class ScenicSpotPagingSource(
             val list = mutableListOf<ScenicSpotInfo>()
             val position = params.key ?: 1
 
-            tourismApi.scenicSpot(
+            localDataSource.clearInvalidNote()
+            val notes = localDataSource.queryNotes(
+                noteType,
+                PAGE_SIZE,
+                (position - 1).coerceAtLeast(0) * PAGE_SIZE
+            ).flowOn(Dispatchers.IO).first()
+
+            val ids = mutableListOf<String>().apply {
+                notes.forEach {
+                    add(it.id)
+                }
+            }
+
+            val scenicSpotEntities = tourismApi.scenicSpot(
                 ODataParams.Companion.Builder(PAGE_SIZE)
                     .select(
                         ODataSelect.Builder().apply {
@@ -56,43 +66,27 @@ class ScenicSpotPagingSource(
                             add(ScenicSpotEntityItem::class1.name)
                             add(ScenicSpotEntityItem::class2.name)
                             add(ScenicSpotEntityItem::class3.name)
-                            if (city == City.ALL) {
-                                add(ScenicSpotEntityItem::address.name)
-                                add(ScenicSpotEntityItem::city.name)
-                            }
+                            add(ScenicSpotEntityItem::address.name)
+                            add(ScenicSpotEntityItem::city.name)
                         }.build()
                     )
-                    .filter(getODataFilter())
-                    .skip((position - 1).coerceAtLeast(0) * PAGE_SIZE)
+                    .filter(ODataFilter.ScenicSpot.queryByIdList(ids))
                     .build()
-            )
-                .first() // Bad Smell
-                .also { scenicSpotEntities ->
-                    val ids = mutableListOf<String>()
-                    scenicSpotEntities.forEach { scenicSpotEntity ->
-                        list.add(ScenicSpotInfo().update(scenicSpotEntity))
-                        ids.add(scenicSpotEntity.scenicSpotID)
+            ).first()
+
+            scenicSpotEntities.forEach { scenicSpotItem ->
+                list.add(
+                    (if (noteType == NoteType.STAR) {
+                        ScenicSpotInfo(star = true)
+                    } else {
+                        ScenicSpotInfo(pin = true)
+                    }).update(scenicSpotItem).apply {
+                        if (city == null) {
+                            city = CityUtil.parseAddressToCity(address)
+                        }
                     }
-                    localDataSource.clearInvalidNote()
-                    localDataSource.queryNotes(ids.toTypedArray())
-                        .map { noteEntities ->
-                            noteEntities.forEach { noteEntity ->
-                                list.filter { it.id == noteEntity.id }.also {
-                                    it.firstOrNull()?.update(noteEntity)
-                                }
-                            }
-                            list
-                        }
-                        .flowOn(Dispatchers.IO)
-                        .first() // Bad Smell
-                        .forEach { info ->
-                            if (city == City.ALL && info.city == null) {
-                                info.city = CityUtil.parseAddressToCity(info.address)
-                            } else {
-                                info.city = city
-                            }
-                        }
-                }
+                )
+            }
 
             val preKey = if (position == 1) null else position - 1
             val nextKey = if (list.size < PAGE_SIZE) null else position + 1
@@ -104,17 +98,4 @@ class ScenicSpotPagingSource(
         }
     }
 
-    private fun getODataFilter(): String {
-        return if (city == City.ALL) {
-            ODataFilter.ScenicSpot.queryByNameKeyword(query)
-        } else if (isOutlyingIslands(city)) {
-            ODataFilter.ScenicSpot.queryByZipCodeAndNameKeyword(zipCode, query)
-        } else {
-            ODataFilter.ScenicSpot.queryByCityAndNameKeyword(city, query)
-        }
-    }
-
-    private fun isOutlyingIslands(city: City): Boolean {
-        return city == City.XIAOLIOUCHOU || city == City.LYUDAO || city == City.LANYU
-    }
 }

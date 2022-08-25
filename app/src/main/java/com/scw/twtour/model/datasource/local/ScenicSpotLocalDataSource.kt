@@ -6,6 +6,7 @@ import com.scw.twtour.db.dao.ScenicSpotDao
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.model.entity.NoteEntity
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
+import com.scw.twtour.util.NoteType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -22,6 +23,8 @@ interface ScenicSpotLocalDataSource {
     ): Flow<List<ScenicSpotInfo>>
 
     fun queryNotes(scenicSpotIds: Array<String>): Flow<List<NoteEntity>>
+
+    fun queryNotes(noteType: NoteType, limit: Int?, offset: Int?): Flow<List<NoteEntity>>
 
     fun queryNote(scenicSpotId: String): Flow<NoteEntity?>
 
@@ -67,6 +70,14 @@ class ScenicSpotLocalDataSourceImpl(
 
     override fun queryNotes(scenicSpotIds: Array<String>): Flow<List<NoteEntity>> {
         return noteDao.queryNoteScenicSpots(*scenicSpotIds)
+    }
+
+    override fun queryNotes(noteType: NoteType, limit: Int?, offset: Int?): Flow<List<NoteEntity>> {
+        return if (noteType == NoteType.PUSH_PIN) {
+            noteDao.queryPushPinNoteScenicSpots(offset, limit)
+        } else {
+            noteDao.queryStarNoteScenicSpots(offset, limit)
+        }
     }
 
     override fun queryNote(scenicSpotId: String): Flow<NoteEntity?> {

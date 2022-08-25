@@ -11,27 +11,18 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-<!--        <View-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="0dp"-->
-<!--            android:background="#f5eedd"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/search_view"/>-->
-
         <TextView
             android:id="@+id/btn_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/ic_baseline_filter_alt_24"
             android:gravity="center"
             android:minWidth="100dp"
             android:padding="8dp"
             android:text="全部地區"
             app:layout_constraintBottom_toBottomOf="@+id/search_view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/search_view" />
+            app:layout_constraintTop_toTopOf="@+id/search_view"
+            app:drawableStartCompat="@drawable/ic_baseline_filter_alt_24" />
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
@@ -85,9 +76,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
-            app:contentInsetStartWithNavigation="0dp"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

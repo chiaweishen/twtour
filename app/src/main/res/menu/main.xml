@@ -3,8 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/scenicSpotNoteTabFragment"
+        android:title="search"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_book_24" />
+
+    <item
         android:id="@+id/searchFragment"
         android:title="search"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_search_24" />
+
 </menu>

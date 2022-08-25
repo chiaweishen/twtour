@@ -10,8 +10,12 @@ import coil.load
 import com.scw.twtour.databinding.ListItemScenicSpotBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
 
-class ScenicSpotPagingAdapter :
+class ScenicSpotPagingAdapter(private val noteViewSource: NoteViewSource = NoteViewSource.NONE) :
     PagingDataAdapter<ScenicSpotInfo, ScenicSpotPagingAdapter.ScenicSpotViewHolder>(DiffCallback) {
+
+    enum class NoteViewSource {
+        NONE, PUSH_PIN, STAR
+    }
 
     private var listener: AdapterListener? = null
 
@@ -20,7 +24,7 @@ class ScenicSpotPagingAdapter :
     }
 
     override fun onBindViewHolder(holder: ScenicSpotViewHolder, position: Int) {
-        holder.bindData(getItem(position), listener)
+        holder.bindData(getItem(position), listener, noteViewSource)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScenicSpotViewHolder {
@@ -40,11 +44,22 @@ class ScenicSpotPagingAdapter :
             }
         }
 
-        fun bindData(scenicSpotInfo: ScenicSpotInfo?, listener: AdapterListener?) {
+        fun bindData(
+            scenicSpotInfo: ScenicSpotInfo?,
+            listener: AdapterListener?,
+            noteViewSource: NoteViewSource?
+        ) {
             scenicSpotInfo?.also { info ->
                 itemView.setOnClickListener {
                     listener?.onItemClick(info)
                 }
+
+                if (noteViewSource == NoteViewSource.PUSH_PIN) {
+                    viewBinding.viewStar.visibility = View.GONE
+                } else if (noteViewSource == NoteViewSource.STAR) {
+                    viewBinding.viewPushPin.visibility = View.GONE
+                }
+
                 viewBinding.viewStar.setOnClickListener { view ->
                     info.star = !info.star
                     view.isActivated = !view.isActivated

@@ -114,7 +114,7 @@ class HomeFragment : Fragment() {
                 val zipCode = ZipCodeUtil.getOutlingIslandsZipCode(city)
                 findNavController().navigate(
                     HomeFragmentDirections
-                        .actionHomeFragmentToScenicSpotListFragment(zipCode, city)
+                        .actionHomeFragmentToScenicSpotListFragment(city, zipCode)
                 )
             }
 

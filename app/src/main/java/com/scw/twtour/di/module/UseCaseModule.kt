@@ -9,4 +9,5 @@ val useCaseModule = module {
     single<ScenicSpotUseCase> { ScenicSpotUseCaseImpl(get(), get()) }
     single<ScenicSpotListUseCase> { ScenicSpotListUseCaseImpl(get()) }
     single<NoteScenicSpotUseCase> { NoteScenicSpotUseCaseImpl(get()) }
+    single<ScenicSpotNoteListUseCase> { ScenicSpotNoteListUseCaseImpl(get()) }
 }
