@@ -16,35 +16,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.scw.twtour.MyApplication
 import com.scw.twtour.R
-import com.scw.twtour.databinding.FragmentHomeBinding
-import com.scw.twtour.domain.AuthUseCase
-import com.scw.twtour.ext.launchAndCollect
-import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.constant.City
 import com.scw.twtour.constant.SyncComplete
+import com.scw.twtour.databinding.FragmentHomeBinding
+import com.scw.twtour.ext.launchAndCollect
+import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
 import com.scw.twtour.view.viewmodel.HomeViewModel
 import com.scw.twtour.view.viewmodel.MainViewModel
 import kotlinx.coroutines.FlowPreview
-import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import pub.devrel.easypermissions.EasyPermissions
 
 class HomeFragment : Fragment() {
 
-    private val mainViewModel by viewModel<MainViewModel> {
-        parametersOf(get<AuthUseCase> {
-            parametersOf(
-                MyApplication.getClientId(),
-                MyApplication.getClientSecret()
-            )
-        })
-    }
+    private val mainViewModel by viewModel<MainViewModel>()
 
     private val viewModel by viewModel<HomeViewModel>()
 
