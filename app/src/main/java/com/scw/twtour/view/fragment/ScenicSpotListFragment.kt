@@ -14,13 +14,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.MainActivity
 import com.scw.twtour.databinding.FragmentScenicSpotListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
+import com.scw.twtour.view.util.ScenicSpotPagingLayoutManager
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -37,6 +35,7 @@ class ScenicSpotListFragment : Fragment() {
     private var _viewBinding: FragmentScenicSpotListBinding? = null
     private val viewBinding get() = _viewBinding!!
 
+    private lateinit var layoutManager: ScenicSpotPagingLayoutManager
     private val pagingAdapter = ScenicSpotPagingAdapter()
     private val handler = Handler(Looper.getMainLooper())
     private var queryTextChangeRunnable: Runnable? = null
@@ -53,32 +52,13 @@ class ScenicSpotListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-        initSearchView()
-        initFloatingActionButton()
-        collectDataWorkaround()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        (requireActivity() as MainActivity).setActionBarTitle(args.city.value)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _viewBinding = null
-    }
-
-    private fun initRecyclerView() {
-        viewBinding.viewRecycler.adapter = pagingAdapter
-
-        pagingAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-        viewBinding.viewRecycler.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        pagingAdapter.setAdapterListener(object : ScenicSpotPagingAdapter.AdapterListener {
+        layoutManager = ScenicSpotPagingLayoutManager(
+            viewBinding.viewRecycler,
+            viewBinding.fab,
+            null,
+            pagingAdapter
+        )
+        layoutManager.initView(object : ScenicSpotPagingLayoutManager.AdapterListener {
             override fun onItemClick(info: ScenicSpotInfo) {
                 findNavController().navigate(
                     ScenicSpotListFragmentDirections
@@ -93,16 +73,22 @@ class ScenicSpotListFragment : Fragment() {
             override fun onPushPinClick(info: ScenicSpotInfo) {
                 viewModel.clickPushPin(info)
             }
+
+            override fun onRefresh() {}
         })
 
-        viewBinding.viewRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val offsetVertical = recyclerView.computeVerticalScrollOffset()
-                val screenHeight = ScreenUtil.getScreenHeight(requireContext())
-                updateFloatingActionButton (dy < 0 && offsetVertical > screenHeight)
-            }
-        })
+        initSearchView()
+        collectDataWorkaround()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (requireActivity() as MainActivity).setActionBarTitle(args.city.value)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 
     private fun initSearchView() {
@@ -119,22 +105,6 @@ class ScenicSpotListFragment : Fragment() {
                 return true
             }
         })
-    }
-
-    private fun initFloatingActionButton() {
-        viewBinding.fab.setOnClickListener {
-            val offsetVertical = viewBinding.viewRecycler.computeVerticalScrollOffset()
-            val screenHeight = ScreenUtil.getScreenHeight(requireContext())
-            if (offsetVertical > screenHeight * 5) {
-                viewBinding.viewRecycler.scrollToPosition(0)
-            } else {
-                viewBinding.viewRecycler.smoothScrollToPosition(0)
-            }
-        }
-    }
-
-    private fun updateFloatingActionButton(show: Boolean) {
-        if (show) { viewBinding.fab.show() } else { viewBinding.fab.hide() }
     }
 
     private fun collectFilterData(query: String) {

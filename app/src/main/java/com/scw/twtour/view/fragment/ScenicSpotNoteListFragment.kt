@@ -9,13 +9,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.scw.twtour.constant.NoteType
 import com.scw.twtour.databinding.FragmentScenicSpotNoteListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.constant.NoteType
-import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
+import com.scw.twtour.view.util.ScenicSpotPagingLayoutManager
 import com.scw.twtour.view.viewmodel.ScenicSpotNoteListViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -31,6 +29,7 @@ class ScenicSpotNoteListFragment : Fragment() {
     private var _viewBinding: FragmentScenicSpotNoteListBinding? = null
     private val viewBinding get() = _viewBinding!!
 
+    private lateinit var layoutManager: ScenicSpotPagingLayoutManager
     private lateinit var pagingAdapter: ScenicSpotPagingAdapter
 
     private lateinit var noteType: NoteType
@@ -68,26 +67,13 @@ class ScenicSpotNoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-        initFloatingActionButton()
-        collectDataWorkaround()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _viewBinding = null
-    }
-
-    private fun initRecyclerView() {
-        viewBinding.viewRecycler.adapter = pagingAdapter
-
-        pagingAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-        viewBinding.viewRecycler.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        pagingAdapter.setAdapterListener(object : ScenicSpotPagingAdapter.AdapterListener {
+        layoutManager = ScenicSpotPagingLayoutManager(
+            viewBinding.viewRecycler,
+            viewBinding.fab,
+            viewBinding.layoutSwipeRefresh,
+            pagingAdapter
+        )
+        layoutManager.initView(object : ScenicSpotPagingLayoutManager.AdapterListener {
             override fun onItemClick(info: ScenicSpotInfo) {
                 findNavController().navigate(
                     ScenicSpotNoteTabFragmentDirections
@@ -105,40 +91,18 @@ class ScenicSpotNoteListFragment : Fragment() {
             override fun onPushPinClick(info: ScenicSpotInfo) {
                 viewModel.clickPushPin(info)
             }
-        })
 
-        viewBinding.viewRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val offsetVertical = recyclerView.computeVerticalScrollOffset()
-                val screenHeight = ScreenUtil.getScreenHeight(requireContext())
-                updateFloatingActionButton(dy < 0 && offsetVertical > screenHeight)
+            override fun onRefresh() {
+                collectData()
             }
         })
 
-        viewBinding.layoutSwipeRefresh.setOnRefreshListener {
-            collectData()
-        }
+        collectDataWorkaround()
     }
 
-    private fun initFloatingActionButton() {
-        viewBinding.fab.setOnClickListener {
-            val offsetVertical = viewBinding.viewRecycler.computeVerticalScrollOffset()
-            val screenHeight = ScreenUtil.getScreenHeight(requireContext())
-            if (offsetVertical > screenHeight * 5) {
-                viewBinding.viewRecycler.scrollToPosition(0)
-            } else {
-                viewBinding.viewRecycler.smoothScrollToPosition(0)
-            }
-        }
-    }
-
-    private fun updateFloatingActionButton(show: Boolean) {
-        if (show) {
-            viewBinding.fab.show()
-        } else {
-            viewBinding.fab.hide()
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
     }
 
     /** FIXME: Workaround
@@ -152,7 +116,7 @@ class ScenicSpotNoteListFragment : Fragment() {
         }
     }
 
-    private fun collectData(query: String = "") {
+    private fun collectData() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.getNoteScenicSpotInfoList(noteType).collectLatest { pagingData ->

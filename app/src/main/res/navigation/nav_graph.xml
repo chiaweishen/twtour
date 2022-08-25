@@ -48,7 +48,7 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="city"
-            app:argType="com.scw.twtour.util.City" />
+            app:argType="com.scw.twtour.constant.City" />
         <argument
             android:name="zipCode"
             app:argType="integer" />
