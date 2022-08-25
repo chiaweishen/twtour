@@ -43,7 +43,7 @@ class ScenicSpotPagingSource(
             val list = mutableListOf<ScenicSpotInfo>()
             val position = params.key ?: 1
 
-            tourismApi.scenicSpot(
+            val scenicSpotEntities = tourismApi.scenicSpot(
                 ODataParams.Companion.Builder(PAGE_SIZE)
                     .select(
                         ODataSelect.Builder().apply {
@@ -65,33 +65,33 @@ class ScenicSpotPagingSource(
                     .filter(getODataFilter())
                     .skip((position - 1).coerceAtLeast(0) * PAGE_SIZE)
                     .build()
-            )
-                .first() // Bad Smell
-                .also { scenicSpotEntities ->
-                    val ids = mutableListOf<String>()
-                    scenicSpotEntities.forEach { scenicSpotEntity ->
-                        list.add(ScenicSpotInfo().update(scenicSpotEntity))
-                        ids.add(scenicSpotEntity.scenicSpotID)
+            ).first() // Bad Smell
+
+            val ids = mutableListOf<String>()
+            scenicSpotEntities.forEach { scenicSpotEntity ->
+                list.add(ScenicSpotInfo().update(scenicSpotEntity))
+                ids.add(scenicSpotEntity.scenicSpotID)
+            }
+
+            localDataSource.clearInvalidNote()
+            val noteEntities = localDataSource.queryNotes(ids.toTypedArray())
+                .map { noteEntities ->
+                    noteEntities.forEach { noteEntity ->
+                        list.filter { it.id == noteEntity.id }.also {
+                            it.firstOrNull()?.update(noteEntity)
+                        }
                     }
-                    localDataSource.clearInvalidNote()
-                    localDataSource.queryNotes(ids.toTypedArray())
-                        .map { noteEntities ->
-                            noteEntities.forEach { noteEntity ->
-                                list.filter { it.id == noteEntity.id }.also {
-                                    it.firstOrNull()?.update(noteEntity)
-                                }
-                            }
-                            list
-                        }
-                        .flowOn(Dispatchers.IO)
-                        .first() // Bad Smell
-                        .forEach { info ->
-                            if (city == City.ALL && info.city == null) {
-                                info.city = CityUtil.parseAddressToCity(info.address)
-                            } else {
-                                info.city = city
-                            }
-                        }
+                    list
+                }
+                .flowOn(Dispatchers.IO)
+                .first() // Bad Smell
+
+            noteEntities.forEach { info ->
+                    if (city == City.ALL && info.city == null) {
+                        info.city = CityUtil.parseAddressToCity(info.address)
+                    } else {
+                        info.city = city
+                    }
                 }
 
             val preKey = if (position == 1) null else position - 1

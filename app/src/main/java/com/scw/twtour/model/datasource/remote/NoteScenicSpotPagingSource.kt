@@ -72,7 +72,7 @@ class NoteScenicSpotPagingSource(
                     )
                     .filter(ODataFilter.ScenicSpot.queryByIdList(ids))
                     .build()
-            ).first()
+            ).first() // Bad Smell
 
             scenicSpotEntities.forEach { scenicSpotItem ->
                 list.add(
