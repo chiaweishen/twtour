@@ -78,19 +78,19 @@ class ScenicSpotRepositoryImpl(
                     add(TitleItem("東台灣"))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
-                            add(CityInfo(City.HUALIEN_COUNTRY, 0))
-                            add(CityInfo(City.TAITUNG_COUNTRY, 0))
+                            add(CityInfo(City.HUALIEN_COUNTRY, R.drawable.hualien_country))
+                            add(CityInfo(City.TAITUNG_COUNTRY, R.drawable.taitung_country))
                         }
                     ))
                     add(TitleItem("離島地區"))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
-                            add(CityInfo(City.PENGHU_COUNTRY, 0))
-                            add(CityInfo(City.KINMEN_COUNTRY, 0))
-                            add(CityInfo(City.LIENCHIANG_COUNTRY, 0))
-                            add(CityInfo(City.LANYU, 0))
-                            add(CityInfo(City.LYUDAO, 0))
-                            add(CityInfo(City.XIAOLIOUCHOU, 0))
+                            add(CityInfo(City.PENGHU_COUNTRY, R.drawable.penghu_country))
+                            add(CityInfo(City.KINMEN_COUNTRY, R.drawable.kinmen_country))
+                            add(CityInfo(City.LIENCHIANG_COUNTRY, R.drawable.lienchiang_country))
+                            add(CityInfo(City.LANYU, R.drawable.lanyu))
+                            add(CityInfo(City.LYUDAO, R.drawable.lyudao))
+                            add(CityInfo(City.XIAOLIOUCHOU, R.drawable.xiaoliochou))
                         }
                     ))
                 }
