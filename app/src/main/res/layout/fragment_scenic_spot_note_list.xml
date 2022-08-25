@@ -7,32 +7,21 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.ScenicSpotNoteListFragment">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/layout_swipe_refresh"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/view_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:fadingEdgeLength="8dp"
+        android:listSelector="@android:color/transparent"
+        android:requiresFadingEdge="vertical"
+        android:scrollbars="vertical"
+        android:smoothScrollbar="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/view_recycler"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:cacheColorHint="@android:color/transparent"
-            android:divider="@null"
-            android:fadingEdgeLength="8dp"
-            android:listSelector="@android:color/transparent"
-            android:requiresFadingEdge="vertical"
-            android:scrollbars="vertical"
-            android:smoothScrollbar="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/linear_progress_indicator"

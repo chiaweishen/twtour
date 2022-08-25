@@ -70,7 +70,6 @@ class ScenicSpotNoteListFragment : Fragment() {
         layoutManager = ScenicSpotPagingLayoutManager(
             viewBinding.viewRecycler,
             viewBinding.fab,
-            viewBinding.layoutSwipeRefresh,
             pagingAdapter
         )
         layoutManager.initView(object : ScenicSpotPagingLayoutManager.AdapterListener {
@@ -86,18 +85,16 @@ class ScenicSpotNoteListFragment : Fragment() {
 
             override fun onStarClick(info: ScenicSpotInfo) {
                 viewModel.clickStar(info)
+                collectData()
             }
 
             override fun onPushPinClick(info: ScenicSpotInfo) {
                 viewModel.clickPushPin(info)
-            }
-
-            override fun onRefresh() {
                 collectData()
             }
         })
 
-        collectDataWorkaround()
+        collectData()
     }
 
     override fun onDestroyView() {
@@ -105,22 +102,10 @@ class ScenicSpotNoteListFragment : Fragment() {
         _viewBinding = null
     }
 
-    /** FIXME: Workaround
-     * 跳轉頁面回來後，再次 collect 會取得先前 page 資料，導致 list view 位置被拉回
-     * **/
-    private var isDataCollected: Boolean = false
-    private fun collectDataWorkaround() {
-        if (!isDataCollected) {
-            isDataCollected = true
-            collectData()
-        }
-    }
-
     private fun collectData() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.getNoteScenicSpotInfoList(noteType).collectLatest { pagingData ->
-                    viewBinding.layoutSwipeRefresh.isRefreshing = false
                     pagingAdapter.submitData(pagingData)
                 }
             }

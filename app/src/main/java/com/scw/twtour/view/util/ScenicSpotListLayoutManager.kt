@@ -2,7 +2,6 @@ package com.scw.twtour.view.util
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.util.ScreenUtil
@@ -11,7 +10,6 @@ import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 class ScenicSpotPagingLayoutManager(
     private val recyclerView: RecyclerView,
     private val fab: FloatingActionButton,
-    private val layoutSwipeRefresh: SwipeRefreshLayout?,
     private val pagingAdapter: ScenicSpotPagingAdapter
 ) {
     private val context = recyclerView.context
@@ -54,10 +52,6 @@ class ScenicSpotPagingLayoutManager(
                 updateFloatingActionButton(dy < 0 && offsetVertical > screenHeight)
             }
         })
-
-        layoutSwipeRefresh?.setOnRefreshListener {
-            listener?.onRefresh()
-        }
     }
 
     private fun initFloatingActionButton() {
@@ -84,6 +78,5 @@ class ScenicSpotPagingLayoutManager(
         fun onItemClick(info: ScenicSpotInfo)
         fun onStarClick(info: ScenicSpotInfo)
         fun onPushPinClick(info: ScenicSpotInfo)
-        fun onRefresh()
     }
 }

@@ -55,7 +55,6 @@ class ScenicSpotListFragment : Fragment() {
         layoutManager = ScenicSpotPagingLayoutManager(
             viewBinding.viewRecycler,
             viewBinding.fab,
-            null,
             pagingAdapter
         )
         layoutManager.initView(object : ScenicSpotPagingLayoutManager.AdapterListener {
@@ -73,8 +72,6 @@ class ScenicSpotListFragment : Fragment() {
             override fun onPushPinClick(info: ScenicSpotInfo) {
                 viewModel.clickPushPin(info)
             }
-
-            override fun onRefresh() {}
         })
 
         initSearchView()
