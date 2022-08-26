@@ -1,14 +1,11 @@
 package com.scw.twtour.view.fragment
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
-import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -38,8 +35,6 @@ class ScenicSpotListFragment : Fragment() {
 
     private lateinit var layoutManager: ScenicSpotPagingLayoutManager
     private val pagingAdapter = ScenicSpotPagingAdapter()
-    private val handler = Handler(Looper.getMainLooper())
-    private var queryTextChangeRunnable: Runnable? = null
     private var lastQuery: String = ""
 
     override fun onCreateView(
@@ -106,14 +101,9 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     private fun collectFilterData(query: String) {
-        queryTextChangeRunnable?.also { r ->
-            handler.removeCallbacks(r)
-        }
-        queryTextChangeRunnable = handler.postDelayed(500) {
-            if (lastQuery != query) {
-                lastQuery = query
-                collectData(query)
-            }
+        if (lastQuery != query) {
+            lastQuery = query
+            collectData(query)
         }
     }
 
@@ -154,7 +144,8 @@ class ScenicSpotListFragment : Fragment() {
     private fun updateLoadingState(loadStates: CombinedLoadStates) {
         if (loadStates.source.refresh is LoadState.NotLoading &&
             loadStates.append.endOfPaginationReached &&
-            pagingAdapter.itemCount < 1) {
+            pagingAdapter.itemCount < 1
+        ) {
             viewBinding.textEmpty.visibility = View.VISIBLE
         } else {
             viewBinding.textEmpty.visibility = View.GONE

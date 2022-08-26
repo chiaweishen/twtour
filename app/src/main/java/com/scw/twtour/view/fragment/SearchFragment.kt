@@ -1,11 +1,8 @@
 package com.scw.twtour.view.fragment
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.*
 import androidx.appcompat.widget.SearchView
-import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,9 +12,9 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.R
+import com.scw.twtour.constant.City
 import com.scw.twtour.databinding.FragmentSearchBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.constant.City
 import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
@@ -37,8 +34,6 @@ class SearchFragment : Fragment() {
     private val viewBinding get() = _viewBinding!!
 
     private val pagingAdapter = ScenicSpotPagingAdapter()
-    private val handler = Handler(Looper.getMainLooper())
-    private var queryTextChangeRunnable: Runnable? = null
     private var lastQuery: String = ""
     private var city: City = City.ALL
     private var lastCity: City = city
@@ -174,15 +169,10 @@ class SearchFragment : Fragment() {
     private fun query(query: String, city: City) {
         Timber.i("query: $query")
         if (query.isNotBlank()) {
-            queryTextChangeRunnable?.also { r ->
-                handler.removeCallbacks(r)
-            }
-            queryTextChangeRunnable = handler.postDelayed(500) {
-                if (lastQuery != query || lastCity != city) {
-                    lastQuery = query
-                    lastCity = city
-                    collectData(query, city)
-                }
+            if (lastQuery != query || lastCity != city) {
+                lastQuery = query
+                lastCity = city
+                collectData(query, city)
             }
         } else {
             viewBinding.textEmpty.text = "請輸入景點名稱關鍵字進行搜尋"
