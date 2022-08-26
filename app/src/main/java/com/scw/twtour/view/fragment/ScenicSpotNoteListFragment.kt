@@ -68,10 +68,22 @@ class ScenicSpotNoteListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+        collectData()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _viewBinding = null
+    }
+
+    private fun initView() {
         layoutManager = ScenicSpotPagingLayoutManager(
             viewBinding.viewRecycler,
             viewBinding.fab,
-            pagingAdapter
+            pagingAdapter,
+            viewBinding.textEmpty,
+            viewBinding.linearProgressIndicator
         )
         layoutManager.initView(object : ScenicSpotPagingLayoutManager.AdapterListener {
             override fun onItemClick(info: ScenicSpotInfo) {
@@ -95,19 +107,16 @@ class ScenicSpotNoteListFragment : Fragment() {
             }
         })
 
+        updateEmptyView()
+    }
+
+    private fun updateEmptyView() {
         viewBinding.textEmpty.text =
             if (noteType == NoteType.PUSH_PIN) {
                 "目前沒有釘選資料"
             } else {
                 "目前沒有星號資料"
             }
-
-        collectData()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _viewBinding = null
     }
 
     private fun collectData() {
@@ -121,36 +130,12 @@ class ScenicSpotNoteListFragment : Fragment() {
             launch {
                 viewLifecycleOwner.lifecycleScope.launch {
                     pagingAdapter.loadStateFlow.collectLatest { loadStates ->
-                        Timber.i("Paging load states: $loadStates")
-                        updateLoadingState(loadStates)
+                        layoutManager.updateLoadingState(loadStates)
                     }
                 }
             }
         }
     }
 
-    private fun updateLoadingState(loadStates: CombinedLoadStates) {
-        if (loadStates.source.refresh is LoadState.NotLoading &&
-            loadStates.append.endOfPaginationReached &&
-            pagingAdapter.itemCount < 1
-        ) {
-            viewBinding.textEmpty.visibility = View.VISIBLE
-        } else {
-            viewBinding.textEmpty.visibility = View.GONE
-        }
-
-        viewBinding.linearProgressIndicator.visibility =
-            if (loadStates.append is LoadState.Loading) View.VISIBLE else View.GONE
-
-        val errorState = when {
-            loadStates.append is LoadState.Error -> loadStates.append as LoadState.Error
-            loadStates.refresh is LoadState.Error -> loadStates.refresh as LoadState.Error
-            loadStates.prepend is LoadState.Error -> loadStates.prepend as LoadState.Error
-            else -> null
-        }
-        errorState?.also {
-            Timber.e(Log.getStackTraceString(it.error))
-        }
-    }
 }
 

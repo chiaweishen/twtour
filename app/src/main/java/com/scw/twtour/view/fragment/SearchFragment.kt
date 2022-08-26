@@ -6,18 +6,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
 import androidx.paging.PagingData
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.R
 import com.scw.twtour.constant.City
 import com.scw.twtour.databinding.FragmentSearchBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
-import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
+import com.scw.twtour.view.util.ScenicSpotPagingLayoutManager
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
@@ -33,7 +29,9 @@ class SearchFragment : Fragment() {
     private var _viewBinding: FragmentSearchBinding? = null
     private val viewBinding get() = _viewBinding!!
 
+    private lateinit var layoutManager: ScenicSpotPagingLayoutManager
     private val pagingAdapter = ScenicSpotPagingAdapter()
+
     private var lastQuery: String = ""
     private var city: City = City.ALL
     private var lastCity: City = city
@@ -50,9 +48,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        initRecyclerView()
-        initSearchView()
-        initFloatingActionButton()
     }
 
     override fun onDestroyView() {
@@ -104,27 +99,14 @@ class SearchFragment : Fragment() {
     }
 
     private fun initView() {
-        registerForContextMenu(viewBinding.btnCity)
-        viewBinding.btnCity.setOnClickListener { view ->
-            view.showContextMenu()
-        }
-        updateCityView()
-    }
-
-    private fun updateCityView() {
-        viewBinding.btnCity.text = city.value
-    }
-
-    private fun initRecyclerView() {
-        viewBinding.viewRecycler.adapter = pagingAdapter
-
-        pagingAdapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-        viewBinding.viewRecycler.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-
-        pagingAdapter.setAdapterListener(object : ScenicSpotPagingAdapter.AdapterListener {
+        layoutManager = ScenicSpotPagingLayoutManager(
+            viewBinding.viewRecycler,
+            viewBinding.fab,
+            pagingAdapter,
+            viewBinding.textEmpty,
+            viewBinding.linearProgressIndicator
+        )
+        layoutManager.initView(object : ScenicSpotPagingLayoutManager.AdapterListener {
             override fun onItemClick(info: ScenicSpotInfo) {
                 findNavController().navigate(
                     SearchFragmentDirections
@@ -141,14 +123,29 @@ class SearchFragment : Fragment() {
             }
         })
 
-        viewBinding.viewRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val offsetVertical = recyclerView.computeVerticalScrollOffset()
-                val screenHeight = ScreenUtil.getScreenHeight(requireContext())
-                updateFloatingActionButton(dy < 0 && offsetVertical > screenHeight)
-            }
-        })
+        updateCityView()
+        updateEmptyView()
+        initContextMenu()
+        initSearchView()
+    }
+
+    private fun updateCityView() {
+        viewBinding.btnCity.text = city.value
+    }
+
+    private fun updateEmptyView() {
+        if (lastQuery.isNotBlank()) {
+            viewBinding.textEmpty.visibility = View.GONE
+        } else {
+            viewBinding.textEmpty.visibility = View.VISIBLE
+        }
+    }
+
+    private fun initContextMenu() {
+        registerForContextMenu(viewBinding.btnCity)
+        viewBinding.btnCity.setOnClickListener { view ->
+            view.showContextMenu()
+        }
     }
 
     private fun initSearchView() {
@@ -175,29 +172,8 @@ class SearchFragment : Fragment() {
                 collectData(query, city)
             }
         } else {
-            viewBinding.textEmpty.text = "請輸入景點名稱關鍵字進行搜尋"
             viewBinding.textEmpty.visibility = View.VISIBLE
             clearData()
-        }
-    }
-
-    private fun initFloatingActionButton() {
-        viewBinding.fab.setOnClickListener {
-            val offsetVertical = viewBinding.viewRecycler.computeVerticalScrollOffset()
-            val screenHeight = ScreenUtil.getScreenHeight(requireContext())
-            if (offsetVertical > screenHeight * 5) {
-                viewBinding.viewRecycler.scrollToPosition(0)
-            } else {
-                viewBinding.viewRecycler.smoothScrollToPosition(0)
-            }
-        }
-    }
-
-    private fun updateFloatingActionButton(show: Boolean) {
-        if (show) {
-            viewBinding.fab.show()
-        } else {
-            viewBinding.fab.hide()
         }
     }
 
@@ -221,41 +197,12 @@ class SearchFragment : Fragment() {
             launch {
                 viewLifecycleOwner.lifecycleScope.launch {
                     pagingAdapter.loadStateFlow.collectLatest { loadStates ->
-                        Timber.i("Paging load states: $loadStates")
-                        updateLoadingState(loadStates)
+                        layoutManager.updateLoadingState(loadStates)
                     }
                 }
             }
         }
     }
 
-    private fun updateLoadingState(loadStates: CombinedLoadStates) {
-        if (loadStates.source.refresh is LoadState.NotLoading &&
-            loadStates.append.endOfPaginationReached &&
-            pagingAdapter.itemCount < 1
-        ) {
-            if (viewBinding.searchView.query.isNotBlank()) {
-                viewBinding.textEmpty.text = "目前景點關鍵字\n沒有搜尋到資料"
-            } else {
-                viewBinding.textEmpty.text = "請輸入景點名稱關鍵字進行搜尋"
-            }
-            viewBinding.textEmpty.visibility = View.VISIBLE
-        } else {
-            viewBinding.textEmpty.visibility = View.GONE
-        }
-
-        viewBinding.linearProgressIndicator.visibility =
-            if (loadStates.append is LoadState.Loading) View.VISIBLE else View.GONE
-
-        val errorState = when {
-            loadStates.append is LoadState.Error -> loadStates.append as LoadState.Error
-            loadStates.refresh is LoadState.Error -> loadStates.refresh as LoadState.Error
-            loadStates.prepend is LoadState.Error -> loadStates.prepend as LoadState.Error
-            else -> null
-        }
-        errorState?.also {
-            // TODO
-        }
-    }
 }
 
