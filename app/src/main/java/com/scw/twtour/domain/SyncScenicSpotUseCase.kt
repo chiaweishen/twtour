@@ -1,7 +1,7 @@
 package com.scw.twtour.domain
 
 import com.scw.twtour.model.repository.ScenicSpotSyncingRepository
-import com.scw.twtour.constant.SyncState
+import com.scw.twtour.model.data.SyncState
 import kotlinx.coroutines.flow.StateFlow
 
 interface SyncScenicSpotUseCase {

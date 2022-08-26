@@ -3,6 +3,7 @@ package com.scw.twtour.view.fragment
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -151,6 +152,14 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     private fun updateLoadingState(loadStates: CombinedLoadStates) {
+        if (loadStates.source.refresh is LoadState.NotLoading &&
+            loadStates.append.endOfPaginationReached &&
+            pagingAdapter.itemCount < 1) {
+            viewBinding.textEmpty.visibility = View.VISIBLE
+        } else {
+            viewBinding.textEmpty.visibility = View.GONE
+        }
+
         viewBinding.linearProgressIndicator.visibility =
             if (loadStates.append is LoadState.Loading) View.VISIBLE else View.GONE
 
@@ -161,7 +170,7 @@ class ScenicSpotListFragment : Fragment() {
             else -> null
         }
         errorState?.also {
-            // TODO
+            Timber.e(Log.getStackTraceString(it.error))
         }
     }
 }

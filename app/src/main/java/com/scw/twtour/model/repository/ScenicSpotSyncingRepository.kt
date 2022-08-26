@@ -1,12 +1,12 @@
 package com.scw.twtour.model.repository
 
-import com.scw.twtour.constant.*
+import com.scw.twtour.constant.City
+import com.scw.twtour.model.data.*
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.datasource.local.ScenicSpotPreferencesDataSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.network.util.ODataSelect
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import timber.log.Timber
 
@@ -55,7 +55,6 @@ class ScenicSpotSyncingRepositoryImpl(
             .onEach {
                 migrateScenicSpotCity(it, city)
             }
-            .flowOn(Dispatchers.IO)
             .catch { e ->
                 _syncState.emit(SyncError(Exception(e)))
             }

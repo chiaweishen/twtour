@@ -2,6 +2,7 @@ package com.scw.twtour.model.datasource.remote
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.scw.twtour.constant.City
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
@@ -9,11 +10,8 @@ import com.scw.twtour.network.api.TourismApi
 import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.constant.City
 import com.scw.twtour.util.CityUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
@@ -83,16 +81,15 @@ class ScenicSpotPagingSource(
                     }
                     list
                 }
-                .flowOn(Dispatchers.IO)
                 .first() // Bad Smell
 
             noteEntities.forEach { info ->
-                    if (city == City.ALL && info.city == null) {
-                        info.city = CityUtil.parseAddressToCity(info.address)
-                    } else {
-                        info.city = city
-                    }
+                if (city == City.ALL && info.city == null) {
+                    info.city = CityUtil.parseAddressToCity(info.address)
+                } else {
+                    info.city = city
                 }
+            }
 
             val preKey = if (position == 1) null else position - 1
             val nextKey = if (list.size < PAGE_SIZE) null else position + 1

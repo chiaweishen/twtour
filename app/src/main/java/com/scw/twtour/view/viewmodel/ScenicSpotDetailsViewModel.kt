@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.scw.twtour.domain.NoteScenicSpotUseCase
 import com.scw.twtour.domain.ScenicSpotUseCase
+import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
 import kotlinx.coroutines.launch
 
@@ -14,14 +15,14 @@ class ScenicSpotDetailsViewModel(
     private val noteScenicSpotUseCase: NoteScenicSpotUseCase
 ) : ViewModel() {
 
-    private val _scenicSpotInfo: MutableLiveData<ScenicSpotInfo> = MutableLiveData(ScenicSpotInfo())
-    val scenicSpotInfo: LiveData<ScenicSpotInfo> get() = _scenicSpotInfo
+    private val _scenicSpotInfo: MutableLiveData<Result<ScenicSpotInfo>> = MutableLiveData(Result.Loading)
+    val scenicSpotInfo: LiveData<Result<ScenicSpotInfo>> get() = _scenicSpotInfo
 
     fun fetchScenicSpotItems(id: String) {
         viewModelScope.launch {
             scenicSpotUseCase.fetchScenicDetails(id)
                 .collect { info ->
-                    _scenicSpotInfo.value = info
+                    _scenicSpotInfo.value = Result.Success(info)
                 }
         }
     }

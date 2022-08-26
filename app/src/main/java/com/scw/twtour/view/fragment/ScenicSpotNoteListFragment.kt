@@ -1,6 +1,7 @@
 package com.scw.twtour.view.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,6 +95,13 @@ class ScenicSpotNoteListFragment : Fragment() {
             }
         })
 
+        viewBinding.textEmpty.text =
+            if (noteType == NoteType.PUSH_PIN) {
+                "目前沒有釘選資料"
+            } else {
+                "目前沒有星號資料"
+            }
+
         collectData()
     }
 
@@ -122,6 +130,15 @@ class ScenicSpotNoteListFragment : Fragment() {
     }
 
     private fun updateLoadingState(loadStates: CombinedLoadStates) {
+        if (loadStates.source.refresh is LoadState.NotLoading &&
+            loadStates.append.endOfPaginationReached &&
+            pagingAdapter.itemCount < 1
+        ) {
+            viewBinding.textEmpty.visibility = View.VISIBLE
+        } else {
+            viewBinding.textEmpty.visibility = View.GONE
+        }
+
         viewBinding.linearProgressIndicator.visibility =
             if (loadStates.append is LoadState.Loading) View.VISIBLE else View.GONE
 
@@ -132,7 +149,7 @@ class ScenicSpotNoteListFragment : Fragment() {
             else -> null
         }
         errorState?.also {
-            // TODO
+            Timber.e(Log.getStackTraceString(it.error))
         }
     }
 }

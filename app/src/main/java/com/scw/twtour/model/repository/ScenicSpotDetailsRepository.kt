@@ -4,10 +4,8 @@ import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
 import com.scw.twtour.model.entity.NoteEntity
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.zip
 
 interface ScenicSpotDetailsRepository {
@@ -36,6 +34,5 @@ class ScenicSpotDetailsRepositoryImpl(
 
     private fun fetchNote(id: String): Flow<NoteEntity?> {
         return localDataSource.queryNote(id)
-            .flowOn(Dispatchers.IO)
     }
 }

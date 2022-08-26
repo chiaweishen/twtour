@@ -1,4 +1,6 @@
-package com.scw.twtour.constant
+package com.scw.twtour.model.data
+
+import com.scw.twtour.constant.City
 
 sealed class SyncState
 

@@ -57,8 +57,7 @@ class BodyCallAdapter<T>(private val responseType: Type) : CallAdapter<T, Flow<T
                                 try {
                                     continuation.resume(response.body()!!)
                                 } catch (e: Exception) {
-                                    // FIXME
-//                                    continuation.resumeWithException(e)
+                                    continuation.resumeWithException(e)
                                 }
                             }
                         })

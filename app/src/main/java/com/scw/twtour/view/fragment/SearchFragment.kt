@@ -185,6 +185,8 @@ class SearchFragment : Fragment() {
                 }
             }
         } else {
+            viewBinding.textEmpty.text = "請輸入景點名稱關鍵字進行搜尋"
+            viewBinding.textEmpty.visibility = View.VISIBLE
             clearData()
         }
     }
@@ -238,6 +240,20 @@ class SearchFragment : Fragment() {
     }
 
     private fun updateLoadingState(loadStates: CombinedLoadStates) {
+        if (loadStates.source.refresh is LoadState.NotLoading &&
+            loadStates.append.endOfPaginationReached &&
+            pagingAdapter.itemCount < 1
+        ) {
+            if (viewBinding.searchView.query.isNotBlank()) {
+                viewBinding.textEmpty.text = "目前景點關鍵字\n沒有搜尋到資料"
+            } else {
+                viewBinding.textEmpty.text = "請輸入景點名稱關鍵字進行搜尋"
+            }
+            viewBinding.textEmpty.visibility = View.VISIBLE
+        } else {
+            viewBinding.textEmpty.visibility = View.GONE
+        }
+
         viewBinding.linearProgressIndicator.visibility =
             if (loadStates.append is LoadState.Loading) View.VISIBLE else View.GONE
 

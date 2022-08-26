@@ -6,6 +6,7 @@ import android.Manifest
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -18,9 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.R
 import com.scw.twtour.constant.City
-import com.scw.twtour.constant.SyncComplete
+import com.scw.twtour.model.data.SyncComplete
 import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.ext.launchAndCollect
+import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.AdapterListener
@@ -30,6 +32,7 @@ import com.scw.twtour.view.viewmodel.MainViewModel
 import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.EasyPermissions
+import timber.log.Timber
 
 class HomeFragment : Fragment() {
 
@@ -139,19 +142,29 @@ class HomeFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.syncState.launchAndCollect { state ->
                     if (state == SyncComplete) {
-                        if (viewModel.listItems.value?.isEmpty() == true) {
-                            viewModel.fetchScenicSpotItems()
-                        } else {
-                            homeListAdapter.submitList(viewModel.listItems.value)
-                        }
+                        viewModel.fetchScenicSpotItems()
                     }
                 }
             }
         }
 
-        viewModel.listItems.observe(viewLifecycleOwner) { items ->
-            viewBinding.layoutSwipeRefresh.isRefreshing = false
-            homeListAdapter.submitList(items)
+        viewModel.listItems.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Result.Loading -> {
+                    viewBinding.linearProgressIndicator.visibility = View.VISIBLE
+                }
+                is Result.Success -> {
+                    viewBinding.linearProgressIndicator.visibility = View.GONE
+                    viewBinding.layoutSwipeRefresh.isRefreshing = false
+                    homeListAdapter.submitList(result.value)
+                }
+                is Result.Error -> {
+                    viewBinding.linearProgressIndicator.visibility = View.GONE
+                    viewBinding.layoutSwipeRefresh.isRefreshing = false
+                    Timber.e(Log.getStackTraceString(result.e))
+                }
+            }
+
         }
     }
 

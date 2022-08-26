@@ -146,5 +146,15 @@
             app:layout_constraintTop_toBottomOf="@+id/text_remark"
             tools:text="現今的孔廟雖以宣揚儒學為主，但對其他學說亦兼容並蓄，而有先儒先賢之陪祀。來到臺中孔廟，可了解孔廟緣起、孔廟建築群、祭孔大典儀節、大成樂章、孔廟文物、孔廟聖賢事略、禮運篇大同章、八佾舞動畫等介紹。孔廟也是舉辦大型藝文活動、拍攝影片或講習會的最佳場所。建築型式本有典籍可循，惟為審慎再三斟酌，除參考曲阜縣誌及闕里文獻等外，尚廣徵學者專家意見，且為了與相鄰的忠烈祠（清代宮殿式建築與彩繪）做區分，最後決定採用宋代宮殿式建築，以取其渾厚、雍穆、樸實而壯觀，而平面配置係參照曲阜孔廟佈置規模縮小而成。孔廟建地總面積為23,653.20平方公尺，建築物總面積為2,363.88平方公尺。因是古典建築，是臺灣少有的宋式型式，結構複雜多變，裝飾繁疊細緻，在施工上如混凝土之澆灌，由模板組立至鋼筋排紮，每一細部皆精確校正，外表粉飾裝修，尤須棈工細琢。孔廟各殿宇彩繪亦全部採用宋式，以捲草花卉為主，用顏色的深淺來描繪造型，施工相當細膩且繁複，可說是全臺少有的建築典範，值得民眾研究與欣賞。孔廟整體建築群包括下列建築元素：牌坊（道貫古今、德侔天地兩座）、照壁、櫺星門、泮池前院、觀德門、毓粹門、燎亭、瘞所、大成門、大成殿、東廡、西廡、崇聖祠等，可說是全臺最為完備的孔廟之一。除了平面圖仿曲阜外，同時引用曲阜建築語彙名詞與元素，例如觀德門、毓粹門，有別於閩南式建築的禮門、義路等，雖是鋼筋混凝土的新建建築，但孔廟建築復古精神與整體形象表達，堪稱是中國古典式樣新建築的先驅。" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/linear_progress_indicator"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

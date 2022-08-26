@@ -3,16 +3,18 @@ package com.scw.twtour.model.repository
 import android.Manifest
 import android.content.Context
 import com.scw.twtour.R
+import com.scw.twtour.constant.City
 import com.scw.twtour.model.data.*
 import com.scw.twtour.model.datasource.local.LocationLocalDataSource
 import com.scw.twtour.model.datasource.local.ScenicSpotLocalDataSource
 import com.scw.twtour.model.datasource.remote.ScenicSpotRemoteDataSource
 import com.scw.twtour.model.entity.ScenicSpotEntityItem
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.constant.City
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import pub.devrel.easypermissions.EasyPermissions
 
 interface ScenicSpotRepository {
@@ -87,7 +89,12 @@ class ScenicSpotRepositoryImpl(
                         mutableListOf<CityInfo>().apply {
                             add(CityInfo(City.PENGHU_COUNTRY, R.drawable.penghu_country))
                             add(CityInfo(City.KINMEN_COUNTRY, R.drawable.kinmen_country))
-                            add(CityInfo(City.LIENCHIANG_COUNTRY, R.drawable.lienchiang_country))
+                            add(
+                                CityInfo(
+                                    City.LIENCHIANG_COUNTRY,
+                                    R.drawable.lienchiang_country
+                                )
+                            )
                             add(CityInfo(City.LANYU, R.drawable.lanyu))
                             add(CityInfo(City.LYUDAO, R.drawable.lyudao))
                             add(CityInfo(City.XIAOLIOUCHOU, R.drawable.xiaoliochou))
@@ -113,7 +120,7 @@ class ScenicSpotRepositoryImpl(
                         it.latitude,
                         it.longitude,
                         NEARBY_SCENIC_SPOT_LIMIT
-                    ).flowOn(Dispatchers.IO)
+                    )
                 } ?: run {
                     flowOf(emptyList())
                 }
@@ -138,7 +145,7 @@ class ScenicSpotRepositoryImpl(
                         }
                         sortBy { it.distanceMeter }
                     }
-                }.flowOn(Dispatchers.IO)
+                }
             }
             .flatMapConcat { nearbyInfo ->
                 localDataSource.clearInvalidNote()
@@ -152,7 +159,7 @@ class ScenicSpotRepositoryImpl(
                         mutableListOf<HomeListItem>().apply {
                             add(NearbyItems(nearbyInfo))
                         }
-                    }.flowOn(Dispatchers.IO)
+                    }
             }
     }
 

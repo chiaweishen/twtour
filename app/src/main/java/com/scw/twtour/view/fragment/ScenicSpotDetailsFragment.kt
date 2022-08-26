@@ -12,10 +12,12 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.scw.twtour.MainActivity
 import com.scw.twtour.databinding.FragmentScenicSpotDetailsBinding
+import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.view.viewmodel.ScenicSpotDetailsViewModel
 import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 @FlowPreview
 class ScenicSpotDetailsFragment : Fragment() {
@@ -52,8 +54,20 @@ class ScenicSpotDetailsFragment : Fragment() {
     }
 
     private fun collectData() {
-        viewModel.scenicSpotInfo.observe(viewLifecycleOwner) {
-            updateView(it)
+        viewModel.scenicSpotInfo.observe(viewLifecycleOwner) { result ->
+            when(result) {
+                is Result.Success -> {
+                    viewBinding.linearProgressIndicator.visibility = View.GONE
+                    updateView(result.value)
+                }
+                is Result.Loading -> {
+                    viewBinding.linearProgressIndicator.visibility = View.VISIBLE
+                }
+                is Result.Error -> {
+                    viewBinding.linearProgressIndicator.visibility = View.GONE
+                    Timber.e(result.e)
+                }
+            }
         }
     }
 

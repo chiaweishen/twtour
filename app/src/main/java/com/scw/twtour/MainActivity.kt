@@ -13,9 +13,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.scw.twtour.constant.*
 import com.scw.twtour.databinding.ActivityMainBinding
 import com.scw.twtour.domain.AuthUseCase
+import com.scw.twtour.model.data.*
 import com.scw.twtour.view.viewmodel.MainViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
