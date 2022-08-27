@@ -13,7 +13,7 @@ interface ScenicSpotDao {
     @Query(
         "SELECT *, (ABS(:positionLat) - ABS(position_lat)) * (ABS(:positionLat) - ABS(position_lat)) " +
                 "+ (ABS(:positionLon) - ABS(position_lon)) * (ABS(:positionLon) - ABS(position_lon)) as Distance " +
-                "FROM scenic_spot_table WHERE Distance > 0 ORDER BY Distance ASC LIMIT :limit"
+                "FROM scenic_spot_table ORDER BY Distance ASC LIMIT :limit"
     )
     fun queryNearbyScenicSpots(
         positionLat: Double,
