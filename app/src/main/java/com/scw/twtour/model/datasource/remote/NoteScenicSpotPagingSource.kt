@@ -43,7 +43,7 @@ class NoteScenicSpotPagingSource(
                 noteType,
                 PAGE_SIZE,
                 (position - 1).coerceAtLeast(0) * PAGE_SIZE
-            ).first()
+            ).first() // Bad Smell
 
             val ids = mutableListOf<String>().apply {
                 notes.forEach {
@@ -76,17 +76,17 @@ class NoteScenicSpotPagingSource(
                 ).first() // Bad Smell
 
                 scenicSpotEntities.forEach { scenicSpotItem ->
-                    list.add(
-                        (if (noteType == NoteType.STAR) {
-                            ScenicSpotInfo(star = true)
-                        } else {
-                            ScenicSpotInfo(pin = true)
-                        }).update(scenicSpotItem).apply {
-                            if (city == null) {
-                                city = CityUtil.parseAddressToCity(address)
-                            }
+                    notes.filter { it.id == scenicSpotItem.scenicSpotID }.also { noteEntities ->
+                        noteEntities.firstOrNull()?.also { noteEntity ->
+                            list.add(ScenicSpotInfo()
+                                .update(noteEntity)
+                                .update(scenicSpotItem).apply {
+                                    if (city == null) {
+                                        city = CityUtil.parseAddressToCity(address)
+                                    }
+                                })
                         }
-                    )
+                    }
                 }
 
                 val preKey = if (position == 1) null else position - 1

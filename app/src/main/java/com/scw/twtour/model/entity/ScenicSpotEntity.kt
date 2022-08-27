@@ -87,7 +87,7 @@ data class ScenicSpotEntityItem(
 
     @SerializedName("City")
     @Ignore
-    var city: City? = null
+    var city: String? = null
 )
 
 data class Picture(

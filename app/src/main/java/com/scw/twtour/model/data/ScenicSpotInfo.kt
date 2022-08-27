@@ -62,7 +62,9 @@ data class ScenicSpotInfo(
             entity.class2?.also { add(it) }
             entity.class3?.also { add(it) }
         }.removeDuplicateValue()
-        city = entity.city
+        entity.city?.also {
+            city = City.fromValue(it)
+        }
         return this
     }
 

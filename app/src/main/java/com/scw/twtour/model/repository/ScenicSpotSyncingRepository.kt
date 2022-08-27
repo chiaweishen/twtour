@@ -100,7 +100,7 @@ class ScenicSpotSyncingRepositoryImpl(
         items: List<ScenicSpotEntityItem>,
         city: City
     ) {
-        items.forEach { it.city = city }
+        items.forEach { it.city = city.value }
     }
 
     private fun saveLastSyncTime() {

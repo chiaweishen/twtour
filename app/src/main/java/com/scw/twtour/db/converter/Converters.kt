@@ -8,7 +8,7 @@ class Converters {
 
     @TypeConverter
     fun fromString(name: String?): City? {
-        return name?.let { City.valueOf(name)}
+        return name?.let { City.valueOf(name) }
     }
 
     @TypeConverter

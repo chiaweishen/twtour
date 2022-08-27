@@ -1,5 +1,8 @@
 package com.scw.twtour.constant
 
+import android.util.Log
+import timber.log.Timber
+
 enum class City(val value: String) {
     ALL("全部地區"),
     TAIPEI("臺北市"),
@@ -24,8 +27,20 @@ enum class City(val value: String) {
     KINMEN_COUNTRY("金門縣"),
     PENGHU_COUNTRY("澎湖縣"),
     LIENCHIANG_COUNTRY("連江縣"),
+
     // 區域
     LANYU("蘭嶼"),
     LYUDAO("綠島"),
-    XIAOLIOUCHOU("小琉球")
+    XIAOLIOUCHOU("小琉球");
+
+    companion object {
+        fun fromValue(value: String): City? {
+            return try {
+                values().first { it.value == value }
+            } catch (e: Exception) {
+                Timber.e(Log.getStackTraceString(e))
+                null
+            }
+        }
+    }
 }
