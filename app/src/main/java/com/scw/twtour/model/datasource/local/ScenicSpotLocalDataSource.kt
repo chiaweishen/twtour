@@ -19,7 +19,9 @@ interface ScenicSpotLocalDataSource {
     fun queryNearbyScenicSpots(
         locationLat: Double,
         locationLon: Double,
-        limit: Int
+        maxDistanceMeter: Int,
+        min: Int,
+        max: Int
     ): Flow<List<ScenicSpotInfo>>
 
     fun queryNotes(scenicSpotIds: Array<String>): Flow<List<NoteEntity>>
@@ -49,9 +51,11 @@ class ScenicSpotLocalDataSourceImpl(
     override fun queryNearbyScenicSpots(
         locationLat: Double,
         locationLon: Double,
-        limit: Int
+        maxDistanceMeter: Int,
+        min: Int,
+        max: Int
     ): Flow<List<ScenicSpotInfo>> {
-        return scenicSpotDao.queryNearbyScenicSpots(locationLat, locationLon, limit).map { items ->
+        return scenicSpotDao.queryNearbyScenicSpots(locationLat, locationLon, max).map { items ->
             mutableListOf<ScenicSpotInfo>().apply {
                 items.forEach { item ->
                     val floatArr = FloatArray(1)
@@ -62,7 +66,10 @@ class ScenicSpotLocalDataSourceImpl(
                         locationLon,
                         floatArr
                     )
-                    add(ScenicSpotInfo(distanceMeter = floatArr[0].toInt()).update(item))
+                    val distanceMeter = floatArr[0].toInt()
+                    if (distanceMeter < maxDistanceMeter || items.size < min) {
+                        add(ScenicSpotInfo(distanceMeter = distanceMeter).update(item))
+                    }
                 }
             }
         }

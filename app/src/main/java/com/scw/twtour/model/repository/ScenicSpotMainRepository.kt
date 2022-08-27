@@ -30,7 +30,9 @@ class ScenicSpotRepositoryImpl(
 ) : ScenicSpotRepository {
 
     companion object {
-        private const val NEARBY_SCENIC_SPOT_LIMIT = 20
+        private const val NEARBY_MAX_DISTANCE_METER = 2000
+        private const val NEARBY_MIN_COUNT = 10
+        private const val NEARBY_MAX_COUNT = 30
     }
 
     override fun fetchItems(): Flow<List<HomeListItem>> {
@@ -119,7 +121,9 @@ class ScenicSpotRepositoryImpl(
                     localDataSource.queryNearbyScenicSpots(
                         it.latitude,
                         it.longitude,
-                        NEARBY_SCENIC_SPOT_LIMIT
+                        NEARBY_MAX_DISTANCE_METER,
+                        NEARBY_MIN_COUNT,
+                        NEARBY_MAX_COUNT
                     )
                 } ?: run {
                     flowOf(emptyList())
