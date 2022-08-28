@@ -3,17 +3,22 @@ package com.scw.twtour.view.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import coil.load
+import com.scw.twtour.R
+import com.scw.twtour.constant.City
 import com.scw.twtour.databinding.ListItemCityBinding
 import com.scw.twtour.databinding.ListItemDiscoverNearbyBinding
 import com.scw.twtour.databinding.ListItemNearbyBinding
 import com.scw.twtour.databinding.ListItemTitleBinding
 import com.scw.twtour.model.data.*
-import com.scw.twtour.constant.City
+import java.text.DecimalFormat
 
 class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 
@@ -109,7 +114,6 @@ class CityViewHolder(
 
     init {
         viewBinding.viewRecycler.adapter = adapter
-
         viewBinding.viewRecycler.layoutManager = LinearLayoutManager(
             itemView.context, RecyclerView.HORIZONTAL, false
         )
@@ -141,28 +145,10 @@ class CityViewHolder(
 }
 
 class NearbyViewHolder(
-    viewBinding: ListItemNearbyBinding
+    private val viewBinding: ListItemNearbyBinding
 ) : ViewHolder(viewBinding.root) {
 
-    private val adapter = HomeNearbyHorizontalListAdapter()
     private var listener: AdapterListener? = null
-
-    init {
-        viewBinding.viewRecycler.adapter = adapter
-
-        viewBinding.viewRecycler.layoutManager = LinearLayoutManager(
-            itemView.context, RecyclerView.HORIZONTAL, false
-        )
-
-        adapter.stateRestorationPolicy =
-            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-
-        adapter.setListener(object : HomeNearbyHorizontalListAdapter.AdapterListener {
-            override fun onScenicSpotItemClick(scenicSpotInfo: ScenicSpotInfo) {
-                listener?.onScenicSpotItemClick(scenicSpotInfo)
-            }
-        })
-    }
 
     companion object {
         fun newInstance(parent: ViewGroup): NearbyViewHolder {
@@ -176,7 +162,37 @@ class NearbyViewHolder(
 
     fun bindData(item: NearbyItems, listener: AdapterListener?) {
         this.listener = listener
-        adapter.submitList(item.scenicSpots)
+
+        viewBinding.carouselView.apply {
+            size = item.scenicSpots.size
+            hideIndicator(false)
+            setCarouselViewListener { view, position ->
+                val imageView = view.findViewById<ImageView>(R.id.view_picture)
+                val textTitle = view.findViewById<TextView>(R.id.text_title)
+                val textDistance = view.findViewById<TextView>(R.id.text_distance)
+
+                item.scenicSpots[position].apply {
+                    view.setOnClickListener {
+                        listener?.onScenicSpotItemClick(this)
+                    }
+                    imageView.load(pictures.firstOrNull())
+                    textTitle.text = name
+                    textDistance.text = convertDistanceUnit(distanceMeter)
+                }
+            }
+            show()
+        }
+    }
+
+    private fun convertDistanceUnit(distanceMeter: Int): String {
+        return if (distanceMeter >= 1000) {
+            DecimalFormat("##0.00").run {
+                "${format(distanceMeter / 1000.0)}km"
+            }
+
+        } else {
+            "${distanceMeter}m"
+        }
     }
 }
 

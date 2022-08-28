@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         tools:context=".view.fragment.ScenicSpotDetailsFragment">
 
-        <!-- Should use a carousal view -->
         <ImageView
             android:id="@+id/view_image"
             android:layout_width="240dp"

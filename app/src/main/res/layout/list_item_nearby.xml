@@ -1,24 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.jama.carouselview.CarouselView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/carousel_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".view.fragment.HomeFragment">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/view_recycler"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@null"
-        android:fadingEdgeLength="8dp"
-        android:listSelector="@android:color/transparent"
-        android:requiresFadingEdge="horizontal"
-        android:scrollbars="none"
-        android:smoothScrollbar="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    app:carouselOffset="center"
+    app:indicatorAnimationType="thinWorm"
+    app:indicatorSelectedColor="@color/colorPrimary"
+    app:indicatorUnselectedColor="@color/colorOnPrimary"
+    app:resource="@layout/list_item_nearby_horizontal"
+    app:scaleOnScroll="true"
+    app:setAutoPlay="false" />

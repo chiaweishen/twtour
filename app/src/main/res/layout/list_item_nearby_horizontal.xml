@@ -3,20 +3,21 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="240dp"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/view_picture"
-            android:layout_width="160dp"
-            android:layout_height="120dp"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="20dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,53 +27,30 @@
             android:id="@+id/text_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="2"
             android:lines="2"
+            android:maxLines="2"
             android:padding="8dp"
             android:textSize="14sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/text_distance"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/view_picture"
             app:layout_constraintTop_toBottomOf="@+id/view_picture"
-            tools:text="101大樓 _101大樓101大樓" />
+            tools:text="101大樓" />
 
         <TextView
             android:id="@+id/text_distance"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="48dp"
-            android:ellipsize="end"
-            android:gravity="center"
             android:maxLines="1"
-            android:padding="8dp"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="200m" />
-
-        <ImageView
-            android:id="@+id/view_star"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/selector_stars_24"
-            app:layout_constraintBottom_toTopOf="@+id/text_distance"
-            app:layout_constraintEnd_toEndOf="@+id/text_distance"
-            app:layout_constraintStart_toEndOf="@+id/view_push_pin"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            />
-
-        <ImageView
-            android:id="@+id/view_push_pin"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:src="@drawable/selector_pin_push_24"
-            app:layout_constraintBottom_toTopOf="@+id/text_distance"
-            app:layout_constraintEnd_toStartOf="@+id/view_star"
-            app:layout_constraintStart_toStartOf="@+id/text_distance"
-            />
-
+            app:layout_constraintBottom_toBottomOf="@id/text_title"
+            app:layout_constraintEnd_toEndOf="@+id/view_picture"
+            app:layout_constraintTop_toTopOf="@+id/text_title"
+            tools:text="2.88km" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
