@@ -13,4 +13,5 @@ val repositoryModule = module {
     single<ScenicSpotListRepository> { ScenicSpotListRepositoryImpl() }
     single<ScenicSpotDetailsRepository> { ScenicSpotDetailsRepositoryImpl(get(), get()) }
     single<NoteScenicSpotRepository> { NoteScenicSpotRepositoryImpl(get()) }
+    single<NetworkRepository> { NetworkRepositoryImpl(androidContext()) }
 }

@@ -2,7 +2,8 @@ package com.scw.twtour
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
+import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Lifecycle
@@ -13,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.scw.twtour.databinding.ActivityMainBinding
 import com.scw.twtour.domain.AuthUseCase
 import com.scw.twtour.model.data.*
@@ -30,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var navController: NavController
     private lateinit var viewBinding: ActivityMainBinding
+    private var syncingDialog: BottomSheetDialog? = null
 
     private val viewModel by viewModel<MainViewModel> {
         parametersOf(get<AuthUseCase> {
@@ -89,19 +92,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun showBottomSheetSyncDialog() {
+        syncingDialog = BottomSheetDialog(this).apply {
+            setContentView(R.layout.layout_syncing)
+            setCancelable(false)
+            setCanceledOnTouchOutside(false)
+            show()
+        }
+    }
+
+    private fun hideBottomSheetSyncDialog() {
+        syncingDialog?.hide()
+    }
+
     private fun updateSyncingState(state: SyncState) {
         when (state) {
             SyncStart -> {
-                viewBinding.progressBar.visibility = View.VISIBLE
-                viewBinding.syncMessage.text = ""
+                showBottomSheetSyncDialog()
             }
             SyncComplete, SyncNone, is SyncError -> {
-                viewBinding.progressBar.visibility = View.GONE
-                viewBinding.syncMessage.text = ""
+                hideBottomSheetSyncDialog()
             }
             is SyncProgress -> {
-                viewBinding.progressBar.progress = (state.progress * 10).toInt()
-                viewBinding.syncMessage.text = "更新景點資料 - ${state.city.value}"
+                syncingDialog?.findViewById<ProgressBar>(R.id.progress_bar)?.apply {
+                    progress = (state.progress * 10).toInt()
+                }
+                syncingDialog?.findViewById<TextView>(R.id.sync_message)?.apply {
+                    text = "更新景點資料 - ${state.city.value}"
+                }
             }
         }
     }
