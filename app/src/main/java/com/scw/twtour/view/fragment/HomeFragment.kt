@@ -19,11 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.scw.twtour.R
 import com.scw.twtour.constant.City
-import com.scw.twtour.model.data.SyncComplete
 import com.scw.twtour.databinding.FragmentHomeBinding
 import com.scw.twtour.ext.launchAndCollect
 import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.model.data.SyncComplete
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
