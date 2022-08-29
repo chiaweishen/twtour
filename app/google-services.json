@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1062169909612",
+    "project_id": "taiwanscenicspot",
+    "storage_bucket": "taiwanscenicspot.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062169909612:android:73a45b54dd6698fb8efb49",
+        "android_client_info": {
+          "package_name": "com.scw.twtour"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1062169909612-dumig6qj3v8crr1gtdkpackfsdohjfuc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2ASYq0cCz0ucRuNtltjwG789OyXrynWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062169909612-dumig6qj3v8crr1gtdkpackfsdohjfuc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

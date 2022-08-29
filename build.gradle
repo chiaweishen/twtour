@@ -6,6 +6,9 @@ buildscript {
     dependencies {
         def nav_version = "2.5.1"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+
+        def google_service_version = "4.3.13"
+        classpath "com.google.gms:google-services:$google_service_version"
     }
 }
 
@@ -38,6 +41,7 @@ ext {
     livedataVersion = '2.5.1'
     viewmodelVersion = '2.5.1'
     koinVersion = '3.2.0'
+    firebaseBomVersion = '30.3.2'
     timberVersion = '5.0.1'
     coinVersion = '2.1.0'
     swipeRefreshLayoutVersion = '1.1.0'
