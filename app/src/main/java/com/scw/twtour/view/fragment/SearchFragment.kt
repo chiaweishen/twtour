@@ -17,7 +17,6 @@ import com.scw.twtour.view.util.ScenicSpotPagingLayoutManager
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -65,34 +64,7 @@ class SearchFragment : Fragment() {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        city = when (item.itemId) {
-            R.id.city_taipei -> City.TAIPEI
-            R.id.city_new_taipei -> City.NEW_TAIPEI
-            R.id.city_taoyuan -> City.TAOYUAN
-            R.id.city_taichung -> City.TAICHUNG
-            R.id.city_tainan -> City.TAINAN
-            R.id.city_kaoshiung -> City.KAOHSIUNG
-            R.id.city_keelung -> City.KEELUNG
-            R.id.city_hsinchu -> City.HSINCHU
-            R.id.city_hsinchu_country -> City.HSINCHU_COUNTRY
-            R.id.city_miaoli_country -> City.MIAOLI_COUNTRY
-            R.id.city_changhua_country -> City.CHANGHUA_COUNTRY
-            R.id.city_nantou_country -> City.NANTOU_COUNTRY
-            R.id.city_yunlin_country -> City.YUNLIN_COUNTRY
-            R.id.city_chiayi -> City.CHIAYI
-            R.id.city_chiayi_country -> City.CHIAYI_COUNTRY
-            R.id.city_pingtung_country -> City.PINGTUNG_COUNTRY
-            R.id.city_yilan_country -> City.YILAN_COUNTRY
-            R.id.city_hualien_country -> City.HUALIEN_COUNTRY
-            R.id.city_taitung_country -> City.TAITUNG_COUNTRY
-            R.id.city_kimen_country -> City.KINMEN_COUNTRY
-            R.id.city_penghu_country -> City.PENGHU_COUNTRY
-            R.id.city_lienchiang_country -> City.LIENCHIANG_COUNTRY
-            R.id.city_lanyu -> City.LANYU
-            R.id.city_lyudao -> City.LYUDAO
-            R.id.city_xiaoliouchou -> City.XIAOLIOUCHOU
-            else -> City.ALL
-        }
+        city = City.fromValue(item.title.toString()) ?: City.ALL
         updateCityView()
         query(lastQuery, city)
         return super.onContextItemSelected(item)
@@ -184,22 +156,18 @@ class SearchFragment : Fragment() {
 
     private fun collectData(query: String, city: City) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
-                viewModel.getScenicSpotInfoList(
-                    city,
-                    ZipCodeUtil.getOutlingIslandsZipCode(city),
-                    query
-                ).collectLatest { pagingData ->
-                    pagingAdapter.submitData(pagingData)
-                }
+            viewModel.getScenicSpotInfoList(
+                city,
+                ZipCodeUtil.getOutlingIslandsZipCode(city),
+                query
+            ).collectLatest { pagingData ->
+                pagingAdapter.submitData(pagingData)
             }
+        }
 
-            launch {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    pagingAdapter.loadStateFlow.collectLatest { loadStates ->
-                        layoutManager.updateLoadingState(loadStates)
-                    }
-                }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            pagingAdapter.loadStateFlow.collectLatest { loadStates ->
+                layoutManager.updateLoadingState(loadStates)
             }
         }
     }

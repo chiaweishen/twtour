@@ -1,7 +1,6 @@
 package com.scw.twtour.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
 import com.scw.twtour.MainActivity
 import com.scw.twtour.databinding.FragmentScenicSpotListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
@@ -126,22 +123,18 @@ class ScenicSpotListFragment : Fragment() {
 
     private fun collectData(query: String = "") {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            launch {
-                viewModel.getScenicSpotInfoList(
-                    args.city,
-                    args.zipCode,
-                    query
-                ).collectLatest { pagingData ->
-                    pagingAdapter.submitData(pagingData)
-                }
+            viewModel.getScenicSpotInfoList(
+                args.city,
+                args.zipCode,
+                query
+            ).collectLatest { pagingData ->
+                pagingAdapter.submitData(pagingData)
             }
+        }
 
-            launch {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    pagingAdapter.loadStateFlow.collectLatest { loadStates ->
-                        layoutManager.updateLoadingState(loadStates)
-                    }
-                }
+        viewLifecycleOwner.lifecycleScope.launch {
+            pagingAdapter.loadStateFlow.collectLatest { loadStates ->
+                layoutManager.updateLoadingState(loadStates)
             }
         }
     }
