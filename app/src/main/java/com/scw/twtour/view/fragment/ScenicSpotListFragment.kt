@@ -111,7 +111,8 @@ class ScenicSpotListFragment : Fragment() {
     }
 
     /** FIXME: Workaround
-     * 跳轉頁面回來後，再次 collect 會取得先前 page 資料，導致 list view 位置被拉回
+     * 跳轉頁面回來後，再次 collect 會取得初始 page 資料，導致 list view 位置被拉回
+     * 但此解法會造成下一頁共用資料變更，無法在返回後同步取得
      * **/
     private var isDataCollected: Boolean = false
     private fun collectDataWorkaround() {
