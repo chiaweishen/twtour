@@ -165,7 +165,7 @@ class NearbyViewHolder(
 
         viewBinding.carouselView.apply {
             size = item.scenicSpots.size
-            hideIndicator(false)
+            hideIndicator(true)
             setCarouselViewListener { view, position ->
                 val imageView = view.findViewById<ImageView>(R.id.view_picture)
                 val textTitle = view.findViewById<TextView>(R.id.text_title)

@@ -56,7 +56,6 @@ ext {
     viewPager2Version = '1.0.0'
     easyPermissionVersion = '3.0.0'
     carouseViewVersion = '1.2.2'
-    pagingIndicatorViewVersion = '1.0.3'
     testJunitVersion = '1.1.3'
     testEspressoVersion = '3.4.0'
 }
