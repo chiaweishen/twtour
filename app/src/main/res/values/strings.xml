@@ -1,3 +1,9 @@
-<resources>
-    <string name="app_name">去吧！台灣景點 | 無論熱門、冷門與不像景點的景點通通推薦給您</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">去吧！台灣景點</string>
+    <string name="filter_empty">目前景點關鍵字\n沒有篩選到資料</string>
+    <string name="search_hint">景點名稱</string>
+    <string name="all_city">全部地區</string>
+    <string name="search_empty">目前沒有搜尋到景點資料</string>
+    <string name="discover_nearby">嘗試探索附近景點</string>
+    <string name="nearby_title">探索附近景點</string>
 </resources>

@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.jama.carouselview.CarouselView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/carousel_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:carouselOffset="center"
-    app:indicatorAnimationType="thinWorm"
-    app:indicatorSelectedColor="@color/colorPrimary"
-    app:indicatorUnselectedColor="@color/colorOnPrimary"
-    app:resource="@layout/list_item_nearby_horizontal"
-    app:scaleOnScroll="true"
-    app:setAutoPlay="false" />
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/text_title"
+        style="@style/TitleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:paddingHorizontal="16dp"
+        android:text="@string/nearby_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.jama.carouselview.CarouselView
+        android:id="@+id/carousel_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:carouselOffset="center"
+        app:indicatorAnimationType="thinWorm"
+        app:indicatorSelectedColor="@color/colorPrimary"
+        app:indicatorUnselectedColor="@color/colorOnPrimary"
+        app:layout_constraintTop_toBottomOf="@+id/text_title"
+        app:resource="@layout/list_item_nearby_horizontal"
+        app:scaleOnScroll="true"
+        app:setAutoPlay="false" />
+</androidx.constraintlayout.widget.ConstraintLayout>

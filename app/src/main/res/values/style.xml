@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BasicTextStyle">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="BasicTitleStyle" parent="BasicTextStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/text</item>
+    </style>
+
+    <style name="BasicLabelStyle" parent="BasicTextStyle">
+        <item name="android:textColor">@color/sub_text</item>
+    </style>
+
+    <style name="BasicBodyStyle" parent="BasicTextStyle">
+
+    </style>
+
+    <style name="TitleLarge" parent="BasicTitleStyle">
+        <item name="android:textSize">@dimen/title_large_text_size</item>
+        <item name="android:minHeight">@dimen/title_large_min_height</item>
+    </style>
+
+    <style name="TitleMedium" parent="BasicTitleStyle">
+        <item name="android:textSize">@dimen/title_medium_text_size</item>
+        <item name="android:minHeight">@dimen/title_medium_min_height</item>
+    </style>
+
+    <style name="TitleSmall" parent="BasicTitleStyle">
+        <item name="android:textSize">@dimen/title_small_text_size</item>
+        <item name="android:minHeight">@dimen/title_small_min_height</item>
+    </style>
+
+    <style name="LabelExtraLarge" parent="BasicLabelStyle">
+        <item name="android:textSize">@dimen/label_extra_large_text_size</item>
+        <item name="android:minHeight">@dimen/label_extra_large_min_height</item>
+    </style>
+
+    <style name="LabelLarge" parent="BasicLabelStyle">
+        <item name="android:textSize">@dimen/label_large_text_size</item>
+        <item name="android:minHeight">@dimen/label_large_min_height</item>
+    </style>
+
+    <style name="LabelMedium" parent="BasicLabelStyle">
+        <item name="android:textSize">@dimen/label_medium_text_size</item>
+        <item name="android:minHeight">@dimen/label_medium_min_height</item>
+    </style>
+
+    <style name="LabelSmall" parent="BasicTextStyle">
+        <item name="android:textSize">@dimen/label_small_text_size</item>
+        <item name="android:minHeight">@dimen/label_small_min_height</item>
+    </style>
+
+    <style name="BodyLarge" parent="BasicBodyStyle">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/body_large_text_size</item>
+        <item name="android:textColor">@color/text</item>
+        <item name="android:minHeight">@dimen/body_large_min_height</item>
+    </style>
+
+    <style name="BodyMedium" parent="BasicBodyStyle">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/body_medium_text_size</item>
+        <item name="android:textColor">@color/sub_text</item>
+        <item name="android:minHeight">@dimen/body_medium_min_height</item>
+    </style>
+
+    <style name="BodySmall" parent="BasicBodyStyle">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">@dimen/body_small_text_size</item>
+        <item name="android:textColor">@color/sub_text</item>
+        <item name="android:minHeight">@dimen/body_small_min_height</item>
+    </style>
+
+</resources>

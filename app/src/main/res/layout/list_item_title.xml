@@ -5,23 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/text_title"
-        app:layout_constraintStart_toEndOf="@+id/text_title"
-        app:layout_constraintTop_toTopOf="@+id/text_title"
-        app:srcCompat="@drawable/ic_baseline_arrow_right_24" />
-
     <TextView
         android:id="@+id/text_title"
+        style="@style/TitleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:paddingHorizontal="16dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="北台灣" />

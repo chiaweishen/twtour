@@ -3,10 +3,25 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryVariant">#00796b</color>
     <color name="colorOnPrimary">#80cbc4</color>
+
     <color name="colorSecondary">#f5eedd</color>
     <color name="colorSecondaryVariant">#90722a</color>
     <color name="colorOnSecondary">#3a2e11</color>
+
+    <color name="text">#232323</color>
+    <color name="sub_text">#A0A0A0</color>
+    <color name="separator_line">#EBEBEB</color>
+    <color name="default_image_background">#EBEBEB</color>
+    <color name="gray_icon">#CDCDCD</color>
+    <color name="capsule">#CDCDCD</color>
+
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="orange">#ff9800</color>
+    <color name="yellow_A70">#B3FFC107</color>
+    <color name="gray">#A0A0A0</color>
+    <color name="gray_A70">#B3CDCDCD</color>
+    <color name="red_location">#EA4335</color>
+    <color name="blue_parking">#1E90FF</color>
+    <color name="black_phone">#232323</color>
 </resources>
