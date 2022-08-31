@@ -36,7 +36,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
         return when (viewType) {
             ViewType.NEARBY.ordinal -> NearbyViewHolder.newInstance(parent)
             ViewType.TITLE.ordinal -> TitleViewHolder.newInstance(parent)
-            ViewType.CITY.ordinal -> CityViewHolder.newInstance(parent)
+            ViewType.CITY.ordinal -> CityContentViewHolder.newInstance(parent)
             ViewType.DISCOVER_NEARBY.ordinal -> DiscoverNearbyViewHolder.newInstance(parent)
             else -> throw IllegalArgumentException("Unknown view type")
         }
@@ -46,7 +46,7 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
         when (holder) {
             is NearbyViewHolder -> holder.bindData(getItem(position) as NearbyItems, listener)
             is TitleViewHolder -> holder.bindData(getItem(position) as TitleItem)
-            is CityViewHolder -> holder.bindData(getItem(position) as CityItems, listener)
+            is CityContentViewHolder -> holder.bindData(getItem(position) as CityItems, listener)
             is DiscoverNearbyViewHolder -> holder.bindData {
                 listener?.onLocationPermissionClick()
             }
@@ -105,7 +105,7 @@ class TitleViewHolder(
     }
 }
 
-class CityViewHolder(
+class CityContentViewHolder(
     viewBinding: ListItemCityBinding
 ) : ViewHolder(viewBinding.root) {
 
@@ -129,8 +129,8 @@ class CityViewHolder(
     }
 
     companion object {
-        fun newInstance(parent: ViewGroup): CityViewHolder {
-            return CityViewHolder(
+        fun newInstance(parent: ViewGroup): CityContentViewHolder {
+            return CityContentViewHolder(
                 ListItemCityBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )

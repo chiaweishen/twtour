@@ -1,5 +1,3 @@
-@file:OptIn(FlowPreview::class)
-
 package com.scw.twtour.view.fragment
 
 import android.Manifest
@@ -29,7 +27,6 @@ import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
 import com.scw.twtour.view.viewmodel.HomeViewModel
 import com.scw.twtour.view.viewmodel.MainViewModel
-import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber

@@ -20,11 +20,11 @@ class HomeCityHorizontalListAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ContentViewHolder.newInstance(parent)
+        return CityViewHolder.newInstance(parent)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ContentViewHolder) {
+        if (holder is CityViewHolder) {
             holder.bindData(getItem(position)) { city ->
                 listener?.onCityItemClick(city)
             }
@@ -42,12 +42,12 @@ class HomeCityHorizontalListAdapter :
         }
     }
 
-    class ContentViewHolder(private val viewBinging: ListItemCityHorizontalBinding) :
+    class CityViewHolder(private val viewBinging: ListItemCityHorizontalBinding) :
         RecyclerView.ViewHolder(viewBinging.root) {
 
         companion object {
-            fun newInstance(parent: ViewGroup): ContentViewHolder {
-                return ContentViewHolder(
+            fun newInstance(parent: ViewGroup): CityViewHolder {
+                return CityViewHolder(
                     ListItemCityHorizontalBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
