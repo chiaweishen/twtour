@@ -99,9 +99,6 @@ dependencies {
     // EASY Permission
     implementation "pub.devrel:easypermissions:$easyPermissionVersion"
 
-    // CarouseView
-    implementation "com.github.jama5262:CarouselView:$carouseViewVersion"
-
     testImplementation 'junit:junit:4.13.2'
     testImplementation "io.insert-koin:koin-test:$koinVersion"
     testImplementation "io.insert-koin:koin-test-junit4:$koinVersion"

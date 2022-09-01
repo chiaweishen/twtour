@@ -17,13 +17,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.jama.carouselview.CarouselView
-        android:id="@+id/carousel_view"
-        android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:carouselOffset="center"
-        app:layout_constraintTop_toBottomOf="@+id/text_title"
-        app:resource="@layout/list_item_nearby_horizontal"
-        app:scaleOnScroll="true"
-        app:setAutoPlay="false" />
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:fadingEdgeLength="8dp"
+        android:listSelector="@android:color/transparent"
+        android:orientation="horizontal"
+        android:requiresFadingEdge="horizontal"
+        android:scrollbars="none"
+        android:smoothScrollbar="true"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_title" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,7 +55,6 @@ ext {
     serviceLocationVersion = '20.0.0'
     viewPager2Version = '1.0.0'
     easyPermissionVersion = '3.0.0'
-    carouseViewVersion = '1.2.2'
     testJunitVersion = '1.1.3'
     testEspressoVersion = '3.4.0'
 }

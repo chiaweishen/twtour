@@ -1,62 +1,85 @@
 package com.scw.twtour.view.viewholder
 
+import android.util.SparseIntArray
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.scw.twtour.R
 import com.scw.twtour.databinding.ListItemNearbyBinding
 import com.scw.twtour.model.data.NearbyItems
+import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.view.adapter.AdapterListener
-import java.text.DecimalFormat
+import com.scw.twtour.view.adapter.HomeNearbyListAdapter
 
 class NearbyViewHolder(
     private val viewBinding: ListItemNearbyBinding,
+    private val lastPositionMap: SparseIntArray,
+    private val lastOffsetMap: SparseIntArray,
     private val listener: AdapterListener?
 ) : RecyclerView.ViewHolder(viewBinding.root) {
 
+    private val homeNearbyAdapter = HomeNearbyListAdapter()
+    private var itemPosition: Int = 0
+
+    init {
+        viewBinding.recyclerView.apply {
+            this.adapter = homeNearbyAdapter
+            layoutManager = LinearLayoutManager(
+                itemView.context, RecyclerView.HORIZONTAL, false
+            )
+
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    (layoutManager as? LinearLayoutManager)?.also { manager ->
+                        val firstItemPosition = manager.findFirstVisibleItemPosition()
+                        val firstChildView = manager.findViewByPosition(firstItemPosition)
+                        firstChildView?.apply {
+                            lastPositionMap.put(itemPosition, firstItemPosition)
+                            lastOffsetMap.put(
+                                itemPosition,
+                                firstChildView.x.toInt() - recyclerView.paddingRight
+                            )
+                        }
+                    }
+                }
+            })
+        }
+
+        homeNearbyAdapter.stateRestorationPolicy =
+            RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+
+        homeNearbyAdapter.setListener(object : HomeNearbyListAdapter.AdapterListener {
+            override fun onScenicSpotItemClick(scenicSpot: ScenicSpotInfo) {
+                listener?.onScenicSpotItemClick(scenicSpot)
+            }
+        })
+    }
+
     companion object {
-        fun newInstance(parent: ViewGroup, listener: AdapterListener?): NearbyViewHolder {
+        fun newInstance(
+            parent: ViewGroup,
+            lastPositionMap: SparseIntArray,
+            lastOffsetMap: SparseIntArray,
+            listener: AdapterListener?
+        ): NearbyViewHolder {
             return NearbyViewHolder(
                 ListItemNearbyBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
-                ), listener
+                ), lastPositionMap, lastOffsetMap, listener
             )
         }
     }
 
     fun bindData(item: NearbyItems) {
-        viewBinding.carouselView.apply {
-            size = item.scenicSpots.size
-            hideIndicator(true)
-            setCarouselViewListener { view, position ->
-                val imageView = view.findViewById<ImageView>(R.id.view_picture)
-                val textTitle = view.findViewById<TextView>(R.id.text_title)
-                val textDistance = view.findViewById<TextView>(R.id.text_distance)
+        itemPosition = bindingAdapterPosition
+        homeNearbyAdapter.submitList(item.scenicSpots)
 
-                item.scenicSpots[position].apply {
-                    view.setOnClickListener {
-                        listener?.onScenicSpotItemClick(this)
-                    }
-                    imageView.load(pictures.firstOrNull())
-                    textTitle.text = name
-                    textDistance.text = convertDistanceUnit(distanceMeter)
-                }
-            }
-            show()
+        (viewBinding.recyclerView.layoutManager as? LinearLayoutManager)?.also { manager ->
+            manager.scrollToPositionWithOffset(
+                lastPositionMap.get(itemPosition),
+                lastOffsetMap.get(itemPosition)
+            )
         }
     }
 
-    private fun convertDistanceUnit(distanceMeter: Int): String {
-        return if (distanceMeter >= 1000) {
-            DecimalFormat("##0.00").run {
-                "${format(distanceMeter / 1000.0)}km"
-            }
-
-        } else {
-            "${distanceMeter}m"
-        }
-    }
 }

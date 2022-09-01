@@ -6,12 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.scw.twtour.databinding.ListItemCityHorizontalBinding
-import com.scw.twtour.model.data.CityInfo
 import com.scw.twtour.constant.City
+import com.scw.twtour.databinding.ListItemCityContentBinding
+import com.scw.twtour.model.data.CityInfo
 
-class HomeCityHorizontalListAdapter :
-    ListAdapter<CityInfo, RecyclerView.ViewHolder>(DiffCallback()) {
+class HomeCityListAdapter : ListAdapter<CityInfo, RecyclerView.ViewHolder>(DiffCallback()) {
 
     private var listener: AdapterListener? = null
 
@@ -42,13 +41,13 @@ class HomeCityHorizontalListAdapter :
         }
     }
 
-    class CityViewHolder(private val viewBinging: ListItemCityHorizontalBinding) :
+    class CityViewHolder(private val viewBinging: ListItemCityContentBinding) :
         RecyclerView.ViewHolder(viewBinging.root) {
 
         companion object {
             fun newInstance(parent: ViewGroup): CityViewHolder {
                 return CityViewHolder(
-                    ListItemCityHorizontalBinding.inflate(
+                    ListItemCityContentBinding.inflate(
                         LayoutInflater.from(parent.context), parent, false
                     )
                 )

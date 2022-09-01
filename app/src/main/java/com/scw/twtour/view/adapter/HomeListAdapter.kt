@@ -28,7 +28,12 @@ class HomeListAdapter : ListAdapter<HomeListItem, ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return when (viewType) {
-            ViewType.NEARBY.ordinal -> NearbyViewHolder.newInstance(parent, listener)
+            ViewType.NEARBY.ordinal -> NearbyViewHolder.newInstance(
+                parent,
+                lastPositionMap,
+                lastOffsetMap,
+                listener
+            )
             ViewType.TITLE.ordinal -> TitleViewHolder.newInstance(parent)
             ViewType.CITY.ordinal -> CityContentViewHolder.newInstance(
                 parent,

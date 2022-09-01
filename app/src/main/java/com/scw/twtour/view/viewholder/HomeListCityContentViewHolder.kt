@@ -9,7 +9,7 @@ import com.scw.twtour.constant.City
 import com.scw.twtour.databinding.ListItemCityBinding
 import com.scw.twtour.model.data.CityItems
 import com.scw.twtour.view.adapter.AdapterListener
-import com.scw.twtour.view.adapter.HomeCityHorizontalListAdapter
+import com.scw.twtour.view.adapter.HomeCityListAdapter
 
 class CityContentViewHolder(
     private val viewBinding: ListItemCityBinding,
@@ -18,7 +18,7 @@ class CityContentViewHolder(
     listener: AdapterListener?
 ) : RecyclerView.ViewHolder(viewBinding.root) {
 
-    private val homeCityAdapter = HomeCityHorizontalListAdapter()
+    private val homeCityAdapter = HomeCityListAdapter()
     private var itemPosition: Int = 0
 
     init {
@@ -48,7 +48,7 @@ class CityContentViewHolder(
         homeCityAdapter.stateRestorationPolicy =
             RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
 
-        homeCityAdapter.setListener(object : HomeCityHorizontalListAdapter.AdapterListener {
+        homeCityAdapter.setListener(object : HomeCityListAdapter.AdapterListener {
             override fun onCityItemClick(city: City) {
                 listener?.onCityItemClick(city)
             }
