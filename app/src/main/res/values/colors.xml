@@ -8,6 +8,7 @@
     <color name="colorSecondaryVariant">#90722a</color>
     <color name="colorOnSecondary">#3a2e11</color>
 
+    <color name="background">#FFFFFF</color>
     <color name="text">#323232</color>
     <color name="sub_text">#646464</color>
     <color name="separator_line">#EBEBEB</color>

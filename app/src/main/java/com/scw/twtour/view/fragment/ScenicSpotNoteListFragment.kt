@@ -65,7 +65,7 @@ class ScenicSpotNoteListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        collectPagingData()
+        collectPagingDataWorkaround()
         collectNoteState()
     }
 
@@ -110,12 +110,26 @@ class ScenicSpotNoteListFragment : Fragment() {
     }
 
     private fun updateEmptyView() {
-        viewBinding.textEmpty.text =
-            if (noteType == NoteType.PUSH_PIN) {
-                "目前沒有釘選資料"
-            } else {
-                "目前沒有星號資料"
-            }
+        if (pagingAdapter.itemCount == 0) {
+            viewBinding.textEmpty.text =
+                if (noteType == NoteType.PUSH_PIN) {
+                    "目前沒有釘選資料"
+                } else {
+                    "目前沒有星號資料"
+                }
+        }
+    }
+
+    /** FIXME: Workaround
+     * 跳轉頁面回來後，再次 collect 會取得初始 page 資料，導致 list view 位置被拉回
+     * 但此解法會造成下一頁共用資料變更，無法在返回後同步取得
+     * **/
+    private var isDataCollected: Boolean = false
+    private fun collectPagingDataWorkaround() {
+        if (!isDataCollected) {
+            isDataCollected = true
+            collectPagingData()
+        }
     }
 
     private fun collectPagingData() {
