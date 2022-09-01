@@ -17,6 +17,7 @@ import com.scw.twtour.view.util.ScenicSpotPagingLayoutManager
 import com.scw.twtour.view.viewmodel.ScenicSpotListViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
@@ -47,6 +48,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        collectNoteState()
     }
 
     override fun onDestroyView() {
@@ -141,7 +143,7 @@ class SearchFragment : Fragment() {
             if (lastQuery != query || lastCity != city) {
                 lastQuery = query
                 lastCity = city
-                collectData(query, city)
+                collectPagingData(query, city)
             }
         } else {
             viewBinding.textEmpty.visibility = View.VISIBLE
@@ -154,7 +156,7 @@ class SearchFragment : Fragment() {
         pagingAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
     }
 
-    private fun collectData(query: String, city: City) {
+    private fun collectPagingData(query: String, city: City) {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getScenicSpotInfoList(
                 city,
@@ -168,6 +170,14 @@ class SearchFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             pagingAdapter.loadStateFlow.collectLatest { loadStates ->
                 layoutManager.updateLoadingState(loadStates)
+            }
+        }
+    }
+
+    private fun collectNoteState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.noteStateChanged.collectLatest {
+                pagingAdapter.updateNoteState(it)
             }
         }
     }

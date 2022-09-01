@@ -1,15 +1,12 @@
 package com.scw.twtour.view.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
 import com.scw.twtour.constant.NoteType
 import com.scw.twtour.databinding.FragmentScenicSpotNoteListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
@@ -20,7 +17,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 @FlowPreview
 class ScenicSpotNoteListFragment : Fragment() {
@@ -69,7 +65,8 @@ class ScenicSpotNoteListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        collectData()
+        collectPagingData()
+        collectNoteState()
     }
 
     override fun onDestroyView() {
@@ -98,16 +95,18 @@ class ScenicSpotNoteListFragment : Fragment() {
 
             override fun onStarClick(info: ScenicSpotInfo) {
                 viewModel.clickStar(info)
-                collectData()
             }
 
             override fun onPushPinClick(info: ScenicSpotInfo) {
                 viewModel.clickPushPin(info)
-                collectData()
             }
         })
 
         updateEmptyView()
+
+        viewBinding.layoutSwipeRefresh.setOnRefreshListener {
+            collectPagingData()
+        }
     }
 
     private fun updateEmptyView() {
@@ -119,10 +118,11 @@ class ScenicSpotNoteListFragment : Fragment() {
             }
     }
 
-    private fun collectData() {
+    private fun collectPagingData() {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             launch {
                 viewModel.getNoteScenicSpotInfoList(noteType).collectLatest { pagingData ->
+                    viewBinding.layoutSwipeRefresh.isRefreshing = false
                     pagingAdapter.submitData(pagingData)
                 }
             }
@@ -133,6 +133,14 @@ class ScenicSpotNoteListFragment : Fragment() {
                         layoutManager.updateLoadingState(loadStates)
                     }
                 }
+            }
+        }
+    }
+
+    private fun collectNoteState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.noteStateChanged.collectLatest {
+                pagingAdapter.updateNoteState(it)
             }
         }
     }

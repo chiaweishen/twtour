@@ -16,6 +16,8 @@ class ScenicSpotNoteListViewModel(
     private val noteScenicSpotUseCase: NoteScenicSpotUseCase
 ) : ViewModel() {
 
+    val noteStateChanged = noteScenicSpotUseCase.scenicSpotChangedNoteState()
+
     fun getNoteScenicSpotInfoList(noteType: NoteType): Flow<PagingData<ScenicSpotInfo>> {
         return scenicSpotNoteListUseCase
             .getNoteScenicSpotInfoList(noteType)
