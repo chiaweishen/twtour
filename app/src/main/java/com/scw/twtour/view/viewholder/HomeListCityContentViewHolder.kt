@@ -10,6 +10,7 @@ import com.scw.twtour.databinding.ListItemCityBinding
 import com.scw.twtour.model.data.CityItems
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeCityListAdapter
+import com.scw.twtour.view.util.StartSnapHelper
 
 class CityContentViewHolder(
     private val viewBinding: ListItemCityBinding,
@@ -20,6 +21,7 @@ class CityContentViewHolder(
 
     private val homeCityAdapter = HomeCityListAdapter()
     private var itemPosition: Int = 0
+    private val snapHelper = StartSnapHelper()
 
     init {
         viewBinding.viewRecycler.apply {
@@ -27,6 +29,7 @@ class CityContentViewHolder(
             layoutManager = LinearLayoutManager(
                 itemView.context, RecyclerView.HORIZONTAL, false
             )
+            snapHelper.attachToRecyclerView(this)
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {

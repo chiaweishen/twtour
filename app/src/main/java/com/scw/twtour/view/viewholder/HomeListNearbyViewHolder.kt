@@ -10,6 +10,7 @@ import com.scw.twtour.model.data.NearbyItems
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeNearbyListAdapter
+import com.scw.twtour.view.util.StartSnapHelper
 
 class NearbyViewHolder(
     private val viewBinding: ListItemNearbyBinding,
@@ -20,6 +21,7 @@ class NearbyViewHolder(
 
     private val homeNearbyAdapter = HomeNearbyListAdapter()
     private var itemPosition: Int = 0
+    private val snapHelper = StartSnapHelper()
 
     init {
         viewBinding.recyclerView.apply {
@@ -27,6 +29,7 @@ class NearbyViewHolder(
             layoutManager = LinearLayoutManager(
                 itemView.context, RecyclerView.HORIZONTAL, false
             )
+            snapHelper.attachToRecyclerView(this)
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
