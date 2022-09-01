@@ -8,13 +8,15 @@ import com.scw.twtour.domain.NoteScenicSpotUseCase
 import com.scw.twtour.domain.ScenicSpotListUseCase
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.constant.City
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class ScenicSpotListViewModel(
     private val scenicSpotListUseCase: ScenicSpotListUseCase,
     private val noteScenicSpotUseCase: NoteScenicSpotUseCase
 ) : ViewModel() {
+
+    val noteStateChanged = noteScenicSpotUseCase.scenicSpotChangedNoteState()
 
     fun getScenicSpotInfoList(
         city: City,

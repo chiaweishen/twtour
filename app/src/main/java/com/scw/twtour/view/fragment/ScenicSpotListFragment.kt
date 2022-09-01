@@ -46,7 +46,8 @@ class ScenicSpotListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        collectDataWorkaround()
+        collectPagingDataWorkaround()
+        collectNoteState()
     }
 
     override fun onStart() {
@@ -106,7 +107,7 @@ class ScenicSpotListFragment : Fragment() {
     private fun collectFilterData(query: String) {
         if (lastQuery != query) {
             lastQuery = query
-            collectData(query)
+            collectPagingData(query)
         }
     }
 
@@ -115,14 +116,14 @@ class ScenicSpotListFragment : Fragment() {
      * 但此解法會造成下一頁共用資料變更，無法在返回後同步取得
      * **/
     private var isDataCollected: Boolean = false
-    private fun collectDataWorkaround() {
+    private fun collectPagingDataWorkaround() {
         if (!isDataCollected) {
             isDataCollected = true
-            collectData()
+            collectPagingData()
         }
     }
 
-    private fun collectData(query: String = "") {
+    private fun collectPagingData(query: String = "") {
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getScenicSpotInfoList(
                 args.city,
@@ -136,6 +137,14 @@ class ScenicSpotListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             pagingAdapter.loadStateFlow.collectLatest { loadStates ->
                 layoutManager.updateLoadingState(loadStates)
+            }
+        }
+    }
+
+    private fun collectNoteState() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.noteStateChanged.collectLatest {
+                pagingAdapter.updateNoteState(it)
             }
         }
     }

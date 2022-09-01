@@ -23,6 +23,23 @@ class ScenicSpotPagingAdapter(private val noteViewSource: NoteViewSource = NoteV
         this.listener = listener
     }
 
+    /**
+     * https://jermainedilao.medium.com/android-paging-3-library-how-to-update-an-item-in-the-list-52f00d9c99b2
+     * FIXME: workaround for updating the item in the paging3 list
+     * **/
+    fun updateNoteState(scenicSpotInfo: ScenicSpotInfo) {
+        for (i in 0 until itemCount) {
+            getItem(i)?.also { item ->
+                if (item.id == scenicSpotInfo.id) {
+                    item.star = scenicSpotInfo.star
+                    item.pin = scenicSpotInfo.pin
+                    notifyItemChanged(i)
+                    return
+                }
+            }
+        }
+    }
+
     override fun onBindViewHolder(holder: ScenicSpotViewHolder, position: Int) {
         holder.bindData(getItem(position), listener, noteViewSource)
     }
