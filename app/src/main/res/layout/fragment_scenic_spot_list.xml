@@ -14,6 +14,7 @@
 
         <TextView
             android:id="@+id/text_empty"
+            style="@style/BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -34,7 +35,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll|enterAlways|snap"
-            app:queryHint="景點名稱"
+            app:queryHint="@string/filter_hint"
             app:searchIcon="@drawable/ic_baseline_filter_alt_24" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -60,7 +61,7 @@
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="gone"
-            app:indicatorColor="#80cbc4"
+            app:indicatorColor="@color/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -88,7 +89,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="32dp"
         android:visibility="gone"
-        app:backgroundTint="#ff9800"
+        app:backgroundTint="@color/orange"
         app:elevation="8dp"
         app:srcCompat="@drawable/ic_baseline_arrow_upward_24"
         app:tint="@android:color/white" />

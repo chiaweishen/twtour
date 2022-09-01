@@ -169,7 +169,7 @@ class HomeFragment : Fragment() {
         if (!hasAccessFineLocationPermission()) {
             EasyPermissions.requestPermissions(
                 this@HomeFragment,
-                "請允許「位置權限」\n用以支援完整景點功能",
+                getString(R.string.nearby_location_permission),
                 222,
                 Manifest.permission.ACCESS_FINE_LOCATION
             )

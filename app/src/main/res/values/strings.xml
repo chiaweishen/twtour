@@ -2,8 +2,10 @@
     <string name="app_name">去吧！台灣景點</string>
     <string name="filter_empty">目前景點關鍵字\n沒有篩選到資料</string>
     <string name="search_hint">景點名稱</string>
+    <string name="filter_hint">景點名稱</string>
     <string name="all_city">全部地區</string>
     <string name="search_empty">目前沒有搜尋到景點資料</string>
     <string name="discover_nearby">嘗試探索附近景點</string>
     <string name="nearby_title">探索附近景點</string>
+    <string name="nearby_location_permission">請允許「位置權限」\n用以支援完整景點功能</string>
 </resources>

@@ -8,12 +8,12 @@
     <color name="colorSecondaryVariant">#90722a</color>
     <color name="colorOnSecondary">#3a2e11</color>
 
-    <color name="text">#232323</color>
-    <color name="sub_text">#A0A0A0</color>
+    <color name="text">#323232</color>
+    <color name="sub_text">#646464</color>
     <color name="separator_line">#EBEBEB</color>
-    <color name="default_image_background">#EBEBEB</color>
-    <color name="gray_icon">#CDCDCD</color>
-    <color name="capsule">#CDCDCD</color>
+    <color name="default_image_background">#F5F5F5</color>
+    <color name="gray_icon">#B4B4B4</color>
+    <color name="capsule">#A0A0A0</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
