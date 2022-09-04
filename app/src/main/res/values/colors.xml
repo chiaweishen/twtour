@@ -16,9 +16,9 @@
     <color name="icon">@color/gray</color>
     <color name="capsule">#A0A0A0</color>
     <color name="label">@color/colorOnPrimary</color>
-    <color name="note_pin_icon">#ffddd3</color>
+    <color name="note_pin_icon">@color/gray_light</color>
     <color name="note_pin_icon_active">#FF5722</color>
-    <color name="note_star_icon">#fff3cd</color>
+    <color name="note_star_icon">@color/gray_light</color>
     <color name="note_star_icon_active">#FFC107</color>
     <color name="open_new_icon">@color/gray</color>
 
@@ -26,6 +26,7 @@
     <color name="white">#FFFFFF</color>
     <color name="orange">#ff9800</color>
     <color name="gray">#A0A0A0</color>
+    <color name="gray_light">#e2e2e2</color>
     <color name="red_location">#EA4335</color>
     <color name="blue_parking">#1E90FF</color>
     <color name="black_phone">#232323</color>
