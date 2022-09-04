@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryVariant">#00796b</color>
-    <color name="colorOnPrimary">#80cbc4</color>
+    <color name="colorOnPrimary">#51b8ae</color>
 
     <color name="colorSecondary">#f5eedd</color>
     <color name="colorSecondaryVariant">#90722a</color>
@@ -13,15 +13,19 @@
     <color name="sub_text">#646464</color>
     <color name="separator_line">#EBEBEB</color>
     <color name="default_image_background">#F5F5F5</color>
-    <color name="gray_icon">#B4B4B4</color>
+    <color name="icon">@color/gray</color>
     <color name="capsule">#A0A0A0</color>
+    <color name="label">@color/colorOnPrimary</color>
+    <color name="note_pin_icon">#ffddd3</color>
+    <color name="note_pin_icon_active">#FF5722</color>
+    <color name="note_star_icon">#fff3cd</color>
+    <color name="note_star_icon_active">#FFC107</color>
+    <color name="open_new_icon">@color/gray</color>
 
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
     <color name="orange">#ff9800</color>
-    <color name="yellow_A70">#B3FFC107</color>
     <color name="gray">#A0A0A0</color>
-    <color name="gray_A70">#B3CDCDCD</color>
     <color name="red_location">#EA4335</color>
     <color name="blue_parking">#1E90FF</color>
     <color name="black_phone">#232323</color>

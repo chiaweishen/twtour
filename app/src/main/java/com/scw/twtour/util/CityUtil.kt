@@ -3,7 +3,7 @@ package com.scw.twtour.util
 import com.scw.twtour.constant.City
 
 object CityUtil {
-    fun parseAddressToCity(address: String?): City? {
+    fun parseCityByAddress(address: String?): City? {
         return address?.let {
             if (it.startsWith("臺北市")) {
                 City.TAIPEI

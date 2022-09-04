@@ -54,10 +54,8 @@ class ScenicSpotPagingSource(
                             add(ScenicSpotEntityItem::class1.name)
                             add(ScenicSpotEntityItem::class2.name)
                             add(ScenicSpotEntityItem::class3.name)
-                            if (city == City.ALL) {
-                                add(ScenicSpotEntityItem::address.name)
-                                add(ScenicSpotEntityItem::city.name)
-                            }
+                            add(ScenicSpotEntityItem::address.name)
+                            add(ScenicSpotEntityItem::city.name)
                         }.build()
                     )
                     .filter(getODataFilter())
@@ -72,7 +70,7 @@ class ScenicSpotPagingSource(
             }
 
             localDataSource.clearInvalidNote()
-            val noteEntities = localDataSource.queryNotes(ids.toTypedArray())
+            localDataSource.queryNotes(ids.toTypedArray())
                 .map { noteEntities ->
                     noteEntities.forEach { noteEntity ->
                         list.filter { it.id == noteEntity.id }.also {
@@ -82,14 +80,6 @@ class ScenicSpotPagingSource(
                     list
                 }
                 .first() // Bad Smell
-
-            noteEntities.forEach { info ->
-                if (city == City.ALL && info.city == null) {
-                    info.city = CityUtil.parseAddressToCity(info.address)
-                } else {
-                    info.city = city
-                }
-            }
 
             val preKey = if (position == 1) null else position - 1
             val nextKey = if (list.size < PAGE_SIZE) null else position + 1

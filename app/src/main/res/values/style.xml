@@ -10,7 +10,7 @@
 
     <style name="BasicTitleStyle" parent="BasicTextStyle">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/text</item>
+        <item name="android:textColor">@color/colorPrimaryVariant</item>
     </style>
 
     <style name="BasicLabelStyle" parent="BasicTextStyle">
@@ -34,6 +34,7 @@
     <style name="TitleSmall" parent="BasicTitleStyle">
         <item name="android:textSize">@dimen/title_small_text_size</item>
         <item name="android:minHeight">@dimen/title_small_min_height</item>
+        <item name="android:textColor">@color/text</item>
     </style>
 
     <style name="LabelExtraLarge" parent="BasicLabelStyle">

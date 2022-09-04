@@ -10,7 +10,6 @@ import com.scw.twtour.network.api.TourismApi
 import com.scw.twtour.network.util.ODataFilter
 import com.scw.twtour.network.util.ODataParams
 import com.scw.twtour.network.util.ODataSelect
-import com.scw.twtour.util.CityUtil
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 
@@ -78,13 +77,11 @@ class NoteScenicSpotPagingSource(
                 scenicSpotEntities.forEach { scenicSpotItem ->
                     notes.filter { it.id == scenicSpotItem.scenicSpotID }.also { noteEntities ->
                         noteEntities.firstOrNull()?.also { noteEntity ->
-                            list.add(ScenicSpotInfo()
-                                .update(noteEntity)
-                                .update(scenicSpotItem).apply {
-                                    if (city == null) {
-                                        city = CityUtil.parseAddressToCity(address)
-                                    }
-                                })
+                            list.add(
+                                ScenicSpotInfo()
+                                    .update(noteEntity)
+                                    .update(scenicSpotItem)
+                            )
                         }
                     }
                 }

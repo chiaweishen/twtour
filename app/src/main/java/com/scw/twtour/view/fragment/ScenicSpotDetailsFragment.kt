@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.scw.twtour.MainActivity
+import com.scw.twtour.R
 import com.scw.twtour.databinding.FragmentScenicSpotDetailsBinding
 import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
@@ -55,7 +57,7 @@ class ScenicSpotDetailsFragment : Fragment() {
 
     private fun collectData() {
         viewModel.scenicSpotInfo.observe(viewLifecycleOwner) { result ->
-            when(result) {
+            when (result) {
                 is Result.Success -> {
                     viewBinding.linearProgressIndicator.visibility = View.GONE
                     updateView(result.value)
@@ -74,14 +76,52 @@ class ScenicSpotDetailsFragment : Fragment() {
     private fun updateView(info: ScenicSpotInfo) {
         with(viewBinding) {
             viewImage.load(info.pictures.firstOrNull())
-            textTitle.text = info.name
+            displayTitleView(textTitle, info.name, info.websiteUrl.isNullOrBlank().not()) {
+                intentWeb(info.websiteUrl!!)
+            }
 
-            displayTextView(textAddress, info.address)
-            displayTextView(textTel, info.phone)
-            displayTextView(textOpenTime, info.openTime, "開放時間:\n")
-            displayTextView(textRemark, info.remarks, "注意事項:\n")
-            displayTextView(textParking, info.parkingInfo)
-            displayTextView(textTravelInfo, info.travelInfo, "旅遊資訊:\n")
+            val hasAddressPosition = info.position?.lon != null && info.position?.lat != null
+            displayTitleView(
+                textAddress,
+                info.address ?: if (hasAddressPosition) getString(R.string.map) else "",
+                hasAddressPosition
+            ) {
+                intentMap(info.name, info.position!!.lat!!, info.position!!.lon!!)
+            }
+            displayTitleView(textTel, info.phone, info.phone.isNullOrBlank().not()) {
+                intentPhoneDial(info.phone!!)
+            }
+
+            val hasParkingPosition =
+                info.parkingPosition?.lat != null && info.parkingPosition?.lon != null
+            displayTitleView(
+                textParking,
+                info.parkingInfo
+                    ?: if (hasParkingPosition) getString(R.string.parking_info) else "",
+                hasParkingPosition
+            ) {
+                intentMap("", info.parkingPosition!!.lat!!, info.parkingPosition!!.lon!!)
+            }
+
+            displayTextView(
+                textOpenTime,
+                info.openTime,
+                textOpenTimeTitle,
+                getString(R.string.open_time)
+            )
+            displayTextView(textRemark, info.remarks, textRemarkTitle, getString(R.string.remark))
+            displayTextView(
+                textTravelInfo,
+                info.travelInfo,
+                textTravelInfoTitle,
+                getString(R.string.travel_info)
+            )
+            displayTextView(
+                textDescription,
+                info.descriptionDetail ?: info.description,
+                textDescriptionTitle,
+                getString(R.string.travel_description)
+            )
 
             viewStar.setOnClickListener { view ->
                 info.star = !info.star
@@ -93,56 +133,28 @@ class ScenicSpotDetailsFragment : Fragment() {
                 view.isActivated = !view.isActivated
                 viewModel.clickPushPin(info)
             }
-
             viewStar.isActivated = info.star
             viewPushPin.isActivated = info.pin
 
-            info.position?.also { position ->
-                position.lat?.also { lat ->
-                    position.lon?.also { lon ->
-                        textAddress.setOnClickListener {
-                            intentMap(info.name, lat, lon)
-                        }
-
-                        if (info.address.isNullOrBlank()) {
-                            textAddress.visibility = View.VISIBLE
-                            textAddress.text = "地圖"
-                        }
-                    }
+            textCity.visibility =
+                if (info.city?.value.isNullOrBlank()) {
+                    View.GONE
+                } else {
+                    textCity.text = info.city!!.value
+                    View.VISIBLE
                 }
-            }
-
-            info.phone?.also { phone ->
-                textTel.setOnClickListener {
-                    intentPhoneDial(phone)
+            textZipcode.visibility =
+                if (info.zipCodeName.isNullOrBlank()) {
+                    View.GONE
+                } else {
+                    textZipcode.text = info.zipCodeName
+                    View.VISIBLE
                 }
-            }
-
-            info.parkingPosition?.also { position ->
-                position.lat?.also { lat ->
-                    position.lon?.also { lon ->
-                        textParking.setOnClickListener {
-                            intentMap("", lat, lon)
-                        }
-
-                        if (info.parkingInfo.isNullOrBlank()) {
-                            textParking.visibility = View.VISIBLE
-                            textParking.text = "停車資訊"
-                        }
-                    }
-                }
-            }
-
-            if (info.descriptionDetail?.isNotBlank() == true) {
-                textDescription.text = info.descriptionDetail
-                textDescription.visibility = View.VISIBLE
-            } else if (info.description?.isNotBlank() == true) {
-                textDescription.text = info.description
-                textDescription.visibility = View.VISIBLE
-            } else {
-                textDescription.visibility = View.GONE
-            }
         }
+    }
+
+    private fun intentWeb(uri: String) {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
     }
 
     private fun intentPhoneDial(phone: String) {
@@ -156,12 +168,52 @@ class ScenicSpotDetailsFragment : Fragment() {
         startActivity(mapIntent)
     }
 
-    private fun displayTextView(view: TextView, text: String?, prefix: String = "") {
+    private fun displayTitleView(
+        view: TextView,
+        text: String?,
+        hasActionInfo: Boolean,
+        actionEvent: (() -> Unit)? = null
+    ) {
         if (text?.isNotBlank() == true) {
-            view.text = prefix + text
+            view.text = text
             view.visibility = View.VISIBLE
         } else {
             view.visibility = View.GONE
+        }
+
+        view.compoundDrawables.also { drawables ->
+            view.setCompoundDrawablesWithIntrinsicBounds(
+                drawables[0],
+                drawables[1],
+                if (hasActionInfo) {
+                    view.setOnClickListener { actionEvent?.invoke() }
+                    ResourcesCompat.getDrawable(
+                        resources,
+                        R.drawable.ic_baseline_open_in_new_18,
+                        null
+                    )
+                } else {
+                    null
+                },
+                drawables[3]
+            )
+        }
+    }
+
+    private fun displayTextView(
+        view: TextView,
+        text: String?,
+        titleView: TextView? = null,
+        titleText: String = ""
+    ) {
+        if (text?.isNotBlank() == true) {
+            view.text = text
+            view.visibility = View.VISIBLE
+            titleView?.text = titleText
+            titleView?.visibility = View.VISIBLE
+        } else {
+            view.visibility = View.GONE
+            titleView?.visibility = View.GONE
         }
     }
 }

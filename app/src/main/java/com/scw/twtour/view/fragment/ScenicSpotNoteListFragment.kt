@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.scw.twtour.R
 import com.scw.twtour.constant.NoteType
 import com.scw.twtour.databinding.FragmentScenicSpotNoteListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
@@ -113,9 +114,9 @@ class ScenicSpotNoteListFragment : Fragment() {
         if (pagingAdapter.itemCount == 0) {
             viewBinding.textEmpty.text =
                 if (noteType == NoteType.PUSH_PIN) {
-                    "目前沒有釘選資料"
+                    getString(R.string.note_push_pin_empty)
                 } else {
-                    "目前沒有星號資料"
+                    getString(R.string.note_star_empty)
                 }
         }
     }

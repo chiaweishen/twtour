@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">去吧！台灣景點</string>
     <string name="filter_empty">目前景點關鍵字\n沒有篩選到資料</string>
     <string name="search_hint">景點名稱</string>
@@ -7,5 +7,13 @@
     <string name="search_empty">目前沒有搜尋到景點資料</string>
     <string name="discover_nearby">嘗試探索附近景點</string>
     <string name="nearby_title">探索附近景點</string>
-    <string name="nearby_location_permission">請允許「位置權限」\n用以支援完整景點功能</string>
+    <string name="nearby_location_permission">請允許系統「位置權限」\n用以支援「探索附近景點」功能</string>
+    <string name="map">地圖</string>
+    <string name="parking_info">停車資訊</string>
+    <string name="open_time">開放時間</string>
+    <string name="remark">備註</string>
+    <string name="travel_info">交通資訊</string>
+    <string name="travel_description">景點說明</string>
+    <string name="note_push_pin_empty">目前沒有釘選資料</string>
+    <string name="note_star_empty">目前沒有星號資料</string>
 </resources>

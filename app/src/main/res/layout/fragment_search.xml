@@ -36,7 +36,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:queryHint="@string/search_hint"
-            app:searchIcon="@drawable/ic_baseline_search_24" />
+            app:searchIcon="@drawable/ic_baseline_search_24_gray" />
 
         <TextView
             android:id="@+id/text_empty"
