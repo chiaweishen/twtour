@@ -28,12 +28,12 @@ class SyncScenicSpotUseCaseImpl(
     }
 
     private fun needSyncing(): Boolean {
-        if (!networkRepository.isWifiConnected()) {
-            return false
-        }
-
         val syncCycleTime = scenicSpotSyncingRepository.getSyncCycleDays() * 24 * 60 * 60 * 1000
         val lastSyncTime = scenicSpotSyncingRepository.getLastSyncScenicSpotTime()
+
+        if (!networkRepository.isWifiConnected() && lastSyncTime != 0L) {
+            return false
+        }
         return lastSyncTime <= 0 || System.currentTimeMillis() - lastSyncTime >= syncCycleTime
     }
 }
