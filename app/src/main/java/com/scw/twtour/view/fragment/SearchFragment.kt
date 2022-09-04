@@ -11,6 +11,7 @@ import com.scw.twtour.R
 import com.scw.twtour.constant.City
 import com.scw.twtour.databinding.FragmentSearchBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.util.VibrateUtil
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 import com.scw.twtour.view.util.ScenicSpotPagingLayoutManager
@@ -90,10 +91,12 @@ class SearchFragment : Fragment() {
 
             override fun onStarClick(info: ScenicSpotInfo) {
                 viewModel.clickStar(info)
+                VibrateUtil.tick(requireContext())
             }
 
             override fun onPushPinClick(info: ScenicSpotInfo) {
                 viewModel.clickPushPin(info)
+                VibrateUtil.tick(requireContext())
             }
         })
 

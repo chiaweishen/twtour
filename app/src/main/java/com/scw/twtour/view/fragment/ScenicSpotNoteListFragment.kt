@@ -11,6 +11,7 @@ import com.scw.twtour.R
 import com.scw.twtour.constant.NoteType
 import com.scw.twtour.databinding.FragmentScenicSpotNoteListBinding
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.util.VibrateUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
 import com.scw.twtour.view.util.ScenicSpotPagingLayoutManager
 import com.scw.twtour.view.viewmodel.ScenicSpotNoteListViewModel
@@ -96,10 +97,12 @@ class ScenicSpotNoteListFragment : Fragment() {
 
             override fun onStarClick(info: ScenicSpotInfo) {
                 viewModel.clickStar(info)
+                VibrateUtil.tick(requireContext())
             }
 
             override fun onPushPinClick(info: ScenicSpotInfo) {
                 viewModel.clickPushPin(info)
+                VibrateUtil.tick(requireContext())
             }
         })
 

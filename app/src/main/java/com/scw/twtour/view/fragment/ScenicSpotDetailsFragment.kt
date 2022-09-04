@@ -17,6 +17,7 @@ import com.scw.twtour.databinding.FragmentScenicSpotDetailsBinding
 import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.util.ErrorUtil
+import com.scw.twtour.util.VibrateUtil
 import com.scw.twtour.view.viewmodel.ScenicSpotDetailsViewModel
 import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -127,11 +128,13 @@ class ScenicSpotDetailsFragment : Fragment() {
                 info.star = !info.star
                 view.isActivated = !view.isActivated
                 viewModel.clickStar(info)
+                VibrateUtil.tick(requireContext())
             }
             viewPushPin.setOnClickListener { view ->
                 info.pin = !info.pin
                 view.isActivated = !view.isActivated
                 viewModel.clickPushPin(info)
+                VibrateUtil.tick(requireContext())
             }
             viewStar.isActivated = info.star
             viewPushPin.isActivated = info.pin
