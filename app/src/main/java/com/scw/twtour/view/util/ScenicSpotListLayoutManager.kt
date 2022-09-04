@@ -87,13 +87,10 @@ class ScenicSpotPagingLayoutManager(
 
     fun updateLoadingState(loadStates: CombinedLoadStates) {
         Timber.i("Paging load states: $loadStates")
-        if (loadStates.source.refresh is LoadState.NotLoading &&
-            loadStates.append.endOfPaginationReached &&
-            pagingAdapter.itemCount < 1
-        ) {
-            textEmpty.visibility = View.VISIBLE
-        } else {
+        if (loadStates.source.refresh is LoadState.Loading) {
             textEmpty.visibility = View.GONE
+        } else {
+            textEmpty.visibility = if (pagingAdapter.itemCount == 0) View.VISIBLE else View.GONE
         }
 
         progressIndicator.visibility =

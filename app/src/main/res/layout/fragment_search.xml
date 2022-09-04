@@ -14,6 +14,7 @@
 
         <TextView
             android:id="@+id/btn_city"
+            style="@style/BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -40,10 +41,10 @@
 
         <TextView
             android:id="@+id/text_empty"
+            style="@style/BodyMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:visibility="visible"
             android:text="@string/search_empty"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +55,6 @@
             android:id="@+id/view_recycler"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/background"
             android:layout_marginTop="8dp"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"

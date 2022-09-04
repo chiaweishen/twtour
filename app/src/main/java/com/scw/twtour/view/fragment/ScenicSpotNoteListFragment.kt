@@ -111,14 +111,14 @@ class ScenicSpotNoteListFragment : Fragment() {
     }
 
     private fun updateEmptyView() {
-        if (pagingAdapter.itemCount == 0) {
-            viewBinding.textEmpty.text =
-                if (noteType == NoteType.PUSH_PIN) {
-                    getString(R.string.note_push_pin_empty)
-                } else {
-                    getString(R.string.note_star_empty)
-                }
-        }
+        viewBinding.textEmpty.visibility =
+            if (pagingAdapter.itemCount == 0) View.VISIBLE else View.GONE
+        viewBinding.textEmpty.text =
+            if (noteType == NoteType.PUSH_PIN) {
+                getString(R.string.note_push_pin_empty)
+            } else {
+                getString(R.string.note_star_empty)
+            }
     }
 
     /** FIXME: Workaround
