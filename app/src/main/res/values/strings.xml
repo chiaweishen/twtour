@@ -16,4 +16,5 @@
     <string name="travel_description">景點說明</string>
     <string name="note_push_pin_empty">目前沒有釘選資料</string>
     <string name="note_star_empty">目前沒有星號資料</string>
+    <string name="network_error">網路發生錯誤，請稍候重新嘗試</string>
 </resources>

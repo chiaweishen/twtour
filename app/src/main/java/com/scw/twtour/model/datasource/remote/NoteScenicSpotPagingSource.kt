@@ -92,7 +92,6 @@ class NoteScenicSpotPagingSource(
                 LoadResult.Page(list, preKey, nextKey)
             }
         } catch (e: Exception) {
-            Timber.e("load error: ${e.message}")
             LoadResult.Error(e)
         }
     }

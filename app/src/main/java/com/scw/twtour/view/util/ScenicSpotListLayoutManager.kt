@@ -1,6 +1,5 @@
 package com.scw.twtour.view.util
 
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.paging.CombinedLoadStates
@@ -10,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.util.ErrorUtil
 import com.scw.twtour.util.ScreenUtil
 import com.scw.twtour.view.adapter.ScenicSpotPagingAdapter
+import kotlinx.coroutines.FlowPreview
 import timber.log.Timber
 
+@FlowPreview
 class ScenicSpotPagingLayoutManager(
     private val recyclerView: RecyclerView,
     private val fab: FloatingActionButton,
@@ -104,7 +106,7 @@ class ScenicSpotPagingLayoutManager(
             else -> null
         }
         errorState?.also {
-            Timber.e(Log.getStackTraceString(it.error))
+            ErrorUtil.networkError(it.error)
         }
     }
 

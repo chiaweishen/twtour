@@ -4,7 +4,6 @@ import android.Manifest
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -22,15 +21,17 @@ import com.scw.twtour.ext.launchAndCollect
 import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.model.data.SyncComplete
+import com.scw.twtour.util.ErrorUtil
 import com.scw.twtour.util.ZipCodeUtil
 import com.scw.twtour.view.adapter.AdapterListener
 import com.scw.twtour.view.adapter.HomeListAdapter
 import com.scw.twtour.view.viewmodel.HomeViewModel
 import com.scw.twtour.view.viewmodel.MainViewModel
+import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import pub.devrel.easypermissions.EasyPermissions
-import timber.log.Timber
 
+@FlowPreview
 class HomeFragment : Fragment() {
 
     private val mainViewModel by viewModel<MainViewModel>()
@@ -158,7 +159,7 @@ class HomeFragment : Fragment() {
                 is Result.Error -> {
                     viewBinding.linearProgressIndicator.visibility = View.GONE
                     viewBinding.layoutSwipeRefresh.isRefreshing = false
-                    Timber.e(Log.getStackTraceString(result.e))
+                    ErrorUtil.networkError(result.e)
                 }
             }
 

@@ -8,8 +8,12 @@ import com.scw.twtour.domain.NoteScenicSpotUseCase
 import com.scw.twtour.domain.ScenicSpotUseCase
 import com.scw.twtour.model.data.Result
 import com.scw.twtour.model.data.ScenicSpotInfo
+import com.scw.twtour.util.ErrorUtil
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
+@FlowPreview
 class ScenicSpotDetailsViewModel(
     private val scenicSpotUseCase: ScenicSpotUseCase,
     private val noteScenicSpotUseCase: NoteScenicSpotUseCase
@@ -21,6 +25,9 @@ class ScenicSpotDetailsViewModel(
     fun fetchScenicSpotItems(id: String) {
         viewModelScope.launch {
             scenicSpotUseCase.fetchScenicDetails(id)
+                .catch { e ->
+                    ErrorUtil.networkError(e)
+                }
                 .collect { info ->
                     _scenicSpotInfo.value = Result.Success(info)
                 }
