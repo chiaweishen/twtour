@@ -47,7 +47,7 @@ class ScenicSpotRepositoryImpl(
         }
             .map { list ->
                 list.apply {
-                    add(TitleItem("北台灣"))
+                    add(TitleItem(context.getString(R.string.taiwan_north)))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
                             add(CityInfo(City.TAIPEI, R.drawable.taipei))
@@ -59,7 +59,7 @@ class ScenicSpotRepositoryImpl(
                             add(CityInfo(City.HSINCHU, R.drawable.hsinchu))
                         }
                     ))
-                    add(TitleItem("中台灣"))
+                    add(TitleItem(context.getString(R.string.taiwan_center)))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
                             add(CityInfo(City.MIAOLI_COUNTRY, R.drawable.miaoli_country))
@@ -69,7 +69,7 @@ class ScenicSpotRepositoryImpl(
                             add(CityInfo(City.YUNLIN_COUNTRY, R.drawable.yunlin_country))
                         }
                     ))
-                    add(TitleItem("南台灣"))
+                    add(TitleItem(context.getString(R.string.taiwan_south)))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
                             add(CityInfo(City.CHIAYI_COUNTRY, R.drawable.chiayi_country))
@@ -79,14 +79,14 @@ class ScenicSpotRepositoryImpl(
                             add(CityInfo(City.PINGTUNG_COUNTRY, R.drawable.pingtung_country))
                         }
                     ))
-                    add(TitleItem("東台灣"))
+                    add(TitleItem(context.getString(R.string.taiwan_east)))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
                             add(CityInfo(City.HUALIEN_COUNTRY, R.drawable.hualien_country))
                             add(CityInfo(City.TAITUNG_COUNTRY, R.drawable.taitung_country))
                         }
                     ))
-                    add(TitleItem("離島地區"))
+                    add(TitleItem(context.getString(R.string.taiwan_outing_island)))
                     add(CityItems(
                         mutableListOf<CityInfo>().apply {
                             add(CityInfo(City.PENGHU_COUNTRY, R.drawable.penghu_country))
