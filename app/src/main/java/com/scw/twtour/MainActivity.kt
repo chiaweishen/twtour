@@ -118,7 +118,10 @@ class MainActivity : AppCompatActivity() {
                     progress = (state.progress * 10).toInt()
                 }
                 syncingDialog?.findViewById<TextView>(R.id.sync_message)?.apply {
-                    text = "更新景點資料 - ${state.city.value}"
+                    text = String.format(
+                        getString(R.string.update_scenic_spot_progress),
+                        state.city.value
+                    )
                 }
             }
         }

@@ -17,4 +17,5 @@
     <string name="note_push_pin_empty">目前沒有釘選資料</string>
     <string name="note_star_empty">目前沒有星號資料</string>
     <string name="network_error">網路發生錯誤，請稍候重新嘗試</string>
+    <string name="update_scenic_spot_progress">更新景點資料 - %s</string>
 </resources>
