@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun hideBottomSheetSyncDialog() {
-        syncingDialog?.hide()
+        syncingDialog?.cancel()
     }
 
     private fun updateSyncingState(state: SyncState) {
