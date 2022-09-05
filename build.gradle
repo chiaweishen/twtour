@@ -1,4 +1,23 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        google()
+    }
+    dependencies {
+        def nav_version = "2.5.1"
+        def google_service_version = "4.3.13"
+        def firebase_crashlytics_version = "2.9.1"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath "com.google.gms:google-services:$google_service_version"
+        classpath "com.google.firebase:firebase-crashlytics-gradle:$firebase_crashlytics_version"
+
+        // Firebase Performance Monitoring
+        classpath 'com.android.tools.build:gradle:3.4.3'
+        classpath 'com.google.gms:google-services:4.3.13'
+        classpath 'com.google.firebase:perf-plugin:1.4.1'
+    }
+}
+
 plugins {
     id 'com.android.application' version '7.2.1' apply false
     id 'com.android.library' version '7.2.1' apply false
@@ -14,7 +33,7 @@ ext {
     compileSdkVersion = 32
     minSdkVersion = 21
     targetSdkVersion = 32
-    supportLibVersion = '1.4.2'
+    supportLibVersion = '1.5.0'
     coreVersion = '1.8.0'
     recyclerViewVersion = '1.2.1'
     constraintLayoutVersion = '2.1.4'
@@ -28,8 +47,14 @@ ext {
     livedataVersion = '2.5.1'
     viewmodelVersion = '2.5.1'
     koinVersion = '3.2.0'
+    firebaseBomVersion = '30.3.2'
     timberVersion = '5.0.1'
+    coinVersion = '2.1.0'
     swipeRefreshLayoutVersion = '1.1.0'
+    navigationVersion = '2.5.1'
+    serviceLocationVersion = '20.0.0'
+    viewPager2Version = '1.0.0'
+    easyPermissionVersion = '3.0.0'
     testJunitVersion = '1.1.3'
     testEspressoVersion = '3.4.0'
 }

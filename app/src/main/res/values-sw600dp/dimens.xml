@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="title_large_text_size">25sp</dimen>
+    <dimen name="title_large_min_height">32dp</dimen>
+    <dimen name="title_medium_text_size">18sp</dimen>
+    <dimen name="title_medium_min_height">28dp</dimen>
+    <dimen name="title_small_text_size">16sp</dimen>
+    <dimen name="title_small_min_height">23dp</dimen>
+
+    <dimen name="label_extra_large_text_size">18sp</dimen>
+    <dimen name="label_extra_large_min_height">28dp</dimen>
+    <dimen name="label_large_text_size">16sp</dimen>
+    <dimen name="label_large_min_height">23dp</dimen>
+    <dimen name="label_medium_text_size">14sp</dimen>
+    <dimen name="label_medium_min_height">18dp</dimen>
+    <dimen name="label_small_text_size">13sp</dimen>
+    <dimen name="label_small_min_height">18dp</dimen>
+
+    <dimen name="body_large_text_size">18sp</dimen>
+    <dimen name="body_large_min_height">28dp</dimen>
+    <dimen name="body_medium_text_size">16sp</dimen>
+    <dimen name="body_medium_min_height">23dp</dimen>
+    <dimen name="body_small_text_size">14sp</dimen>
+    <dimen name="body_small_min_height">18dp</dimen>
+
+    <dimen name="snap_help_start_padding">30dp</dimen>
+    <dimen name="home_content_title_padding_horizontal">40dp</dimen>
+
+</resources>

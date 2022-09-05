@@ -55,7 +55,7 @@ class BodyCallAdapter<T>(private val responseType: Type) : CallAdapter<T, Flow<T
 
                             override fun onResponse(call: Call<T>, response: Response<T>) {
                                 try {
-                                    continuation.resume(response.body()!!)
+                                    response.body()?.also { continuation.resume(it) }
                                 } catch (e: Exception) {
                                     continuation.resumeWithException(e)
                                 }

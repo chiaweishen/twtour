@@ -1,10 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimaryVariant">#00796b</color>
+    <color name="colorOnPrimary">#51b8ae</color>
+
+    <color name="colorSecondary">#f5eedd</color>
+    <color name="colorSecondaryVariant">#90722a</color>
+    <color name="colorOnSecondary">#3a2e11</color>
+
+    <color name="background">#FFFFFF</color>
+    <color name="text">#323232</color>
+    <color name="sub_text">#646464</color>
+    <color name="separator_line">#EBEBEB</color>
+    <color name="default_image_background">#F5F5F5</color>
+    <color name="icon">@color/gray</color>
+    <color name="capsule">#A0A0A0</color>
+    <color name="label">@color/colorOnPrimary</color>
+    <color name="note_pin_icon">@color/gray_light</color>
+    <color name="note_pin_icon_active">#FF5722</color>
+    <color name="note_star_icon">@color/gray_light</color>
+    <color name="note_star_icon_active">#FFC107</color>
+    <color name="open_new_icon">@color/gray</color>
+
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="orange">#ff9800</color>
+    <color name="gray">#A0A0A0</color>
+    <color name="gray_light">#e2e2e2</color>
+    <color name="red_location">#EA4335</color>
+    <color name="blue_parking">#1E90FF</color>
+    <color name="black_phone">#232323</color>
 </resources>

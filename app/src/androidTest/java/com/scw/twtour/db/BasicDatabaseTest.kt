@@ -1,12 +1,13 @@
 package com.scw.twtour.db
 
+import com.scw.twtour.db.dao.NoteDao
 import com.scw.twtour.db.dao.ScenicSpotDao
-import com.scw.twtour.db.util.ScenicSpotUtil
+import com.scw.twtour.model.entity.NoteEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
-import org.junit.Assert.assertTrue
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.koin.java.KoinJavaComponent.get
@@ -16,11 +17,13 @@ class BasicDatabaseTest {
 
     private lateinit var database: BasicDatabase
     private lateinit var scenicSpotDao: ScenicSpotDao
+    private lateinit var noteDao: NoteDao
 
     @Before
     fun setUp() {
         database = get(BasicDatabase::class.java)
         scenicSpotDao = database.scenicSpotDao()
+        noteDao = database.noteDao()
     }
 
     @After
@@ -29,24 +32,13 @@ class BasicDatabaseTest {
     }
 
     @Test
-    fun test() = runTest {
-        val scenicSpot = ScenicSpotUtil.getScenicSpot()
-        scenicSpotDao.deleteAll()
-        scenicSpotDao.insertScenicSpot(scenicSpot)
+    fun testNote() = runTest {
+        noteDao.deleteAll()
+        noteDao.insert(NoteEntity("test0001", true, false))
+        noteDao.insert(NoteEntity("test0002", false, true))
+        noteDao.insert(NoteEntity("test0003", true, true))
 
-        scenicSpotDao.queryScenicSpots().first().let { scenicSpots ->
-            assertTrue(scenicSpots.size == 1)
-            scenicSpots[0].apply {
-                assertTrue(scenicSpotID == scenicSpot.scenicSpotID)
-                assertTrue(scenicSpotName == scenicSpot.scenicSpotName)
-                assertTrue(zipCode == scenicSpot.zipCode)
-                assertTrue(city == scenicSpot.city)
-            }
-        }
-
-        scenicSpotDao.deleteAll()
-        scenicSpotDao.queryScenicSpots().first().let { scenicSpots ->
-            assertTrue(scenicSpots.isEmpty())
-        }
+        val size = noteDao.queryAllNoteScenicSpots().first().size
+        Assert.assertTrue(size == 3)
     }
 }

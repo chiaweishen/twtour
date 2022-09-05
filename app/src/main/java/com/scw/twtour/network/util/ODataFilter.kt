@@ -1,25 +1,34 @@
 package com.scw.twtour.network.util
 
-import com.scw.twtour.network.data.City
+import com.scw.twtour.constant.City
 
 object ODataFilter {
     object ScenicSpot {
-        fun byCity(city: City): String {
+
+        fun queryByNameKeyword(query: String): String {
+            return "contains(ScenicSpotName, '$query')"
+        }
+
+        fun queryByCityAndNameKeyword(city: City, query: String = ""): String {
             return city.value.let {
-                "City eq '$it' or startswith(Address, '$it')"
+                "(City eq '$it' or startswith(Address, '$it')) AND contains(ScenicSpotName, '$query')"
             }
         }
 
-        fun byId(id: String): String {
+        fun queryByZipCodeAndNameKeyword(zipCode: Int, query: String = ""): String {
+            return "(ZipCode eq '$zipCode') AND contains(ScenicSpotName, '$query')"
+        }
+
+        fun queryById(id: String): String {
             return "ScenicSpotID eq '$id'"
         }
 
-        fun outlyingIslands(): String {
-            return "${byCity(City.PENGHU_COUNTRY)} " +
-                    "or ${byCity(City.KINMEN_COUNTRY)} " +
-                    "or ZipCode eq '951' " + // 綠島
-                    "or ZipCode eq '952' " + // 蘭嶼
-                    "or ZipCode eq '929'" // 小琉球
+        fun queryByIdList(ids: List<String>): String {
+            val list = mutableListOf<String>()
+            ids.forEach { id ->
+                list.add(queryById(id))
+            }
+            return list.joinToString(" OR ")
         }
     }
 }

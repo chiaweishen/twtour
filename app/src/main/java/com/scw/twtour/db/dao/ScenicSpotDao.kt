@@ -10,26 +10,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ScenicSpotDao {
 
-    @Query("SELECT * FROM scenic_spot_table LIMIT :limit")
-    fun queryScenicSpots(limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
-
-    @Query("SELECT * FROM scenic_spot_table WHERE scenic_spot_id = :id")
-    fun queryScenicSpotById(id: String): Flow<ScenicSpotEntityItem>
-
-    @Query("SELECT * FROM scenic_spot_table WHERE city = :city LIMIT :limit")
-    fun queryScenicSpotsByCity(city: String, limit: Int = -1): Flow<List<ScenicSpotEntityItem>>
-
-    @Query("SELECT * FROM scenic_spot_table WHERE scenic_spot_name LIKE '%' || :keyword || '%' LIMIT :limit")
-    fun queryScenicSpotsByName(
-        keyword: String,
+    @Query(
+        "SELECT *, (ABS(:positionLat) - ABS(position_lat)) * (ABS(:positionLat) - ABS(position_lat)) " +
+                "+ (ABS(:positionLon) - ABS(position_lon)) * (ABS(:positionLon) - ABS(position_lon)) as Distance " +
+                "FROM scenic_spot_table ORDER BY Distance ASC LIMIT :limit"
+    )
+    fun queryNearbyScenicSpots(
+        positionLat: Double,
+        positionLon: Double,
         limit: Int = -1
     ): Flow<List<ScenicSpotEntityItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertScenicSpot(scenicSpot: ScenicSpotEntityItem)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertScenicSpots(scenicSpots: List<ScenicSpotEntityItem>)
+    suspend fun insertAll(scenicSpots: List<ScenicSpotEntityItem>)
 
     @Query("DELETE FROM scenic_spot_table")
     suspend fun deleteAll()

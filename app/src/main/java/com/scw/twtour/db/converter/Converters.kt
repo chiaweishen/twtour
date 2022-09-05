@@ -1,14 +1,14 @@
 package com.scw.twtour.db.converter
 
 import androidx.room.TypeConverter
-import com.scw.twtour.network.data.City
+import com.scw.twtour.constant.City
 import java.util.*
 
 class Converters {
 
     @TypeConverter
     fun fromString(name: String?): City? {
-        return name?.let { City.valueOf(name)}
+        return name?.let { City.valueOf(name) }
     }
 
     @TypeConverter
