@@ -15,6 +15,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.messaging.FirebaseMessaging
 import com.scw.twtour.databinding.ActivityMainBinding
 import com.scw.twtour.domain.AuthUseCase
 import com.scw.twtour.model.data.*
@@ -25,6 +26,7 @@ import org.koin.android.ext.android.get
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import pub.devrel.easypermissions.EasyPermissions
+import timber.log.Timber
 
 @FlowPreview
 class MainActivity : AppCompatActivity() {
@@ -49,6 +51,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         setupActionBar(viewBinding.toolbar)
         collectData()
+
+        FirebaseMessaging.getInstance().subscribeToTopic("Topic")
+        FirebaseMessaging.getInstance().token.addOnCompleteListener {
+            if (it.isSuccessful) {
+                Timber.tag("fcm").i("OnComplete token: ${it.result}")
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

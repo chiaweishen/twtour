@@ -61,6 +61,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'
     implementation 'com.google.firebase:firebase-perf-ktx'
+    implementation "com.google.firebase:firebase-messaging:$firebaseMessageVersion"
+    implementation 'com.google.firebase:firebase-inappmessaging-display'
 
     // architecture components
     implementation "androidx.core:core-ktx:$coreVersion"
