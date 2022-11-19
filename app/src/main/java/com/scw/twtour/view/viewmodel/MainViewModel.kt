@@ -8,7 +8,9 @@ import com.scw.twtour.network.util.HeadersProvider
 import com.scw.twtour.util.ErrorUtil
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 @FlowPreview
 class MainViewModel(
@@ -19,23 +21,19 @@ class MainViewModel(
     val syncState = syncScenicSpotUseCase.syncState
 
     fun init() {
-        viewModelScope.launch {
-            initAuthToken()
-            syncScenicSpotData()
-        }
+        syncScenicSpotData()
     }
 
-    private suspend fun initAuthToken() {
+    private fun syncScenicSpotData() {
         authUseCase.getAuthToken()
+            .onEach {
+                HeadersProvider.setAccessToken(it.accessToken)
+            }.map {
+                syncScenicSpotUseCase.syncScenicSpotData()
+            }
             .catch { e ->
                 ErrorUtil.networkError(e)
             }
-            .collect {
-                HeadersProvider.setAccessToken(it.accessToken)
-            }
-    }
-
-    private suspend fun syncScenicSpotData() {
-        syncScenicSpotUseCase.syncScenicSpotData()
+            .launchIn(viewModelScope)
     }
 }

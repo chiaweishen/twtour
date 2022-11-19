@@ -11,6 +11,8 @@ import com.scw.twtour.model.data.ScenicSpotInfo
 import com.scw.twtour.util.ErrorUtil
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 @FlowPreview
@@ -19,19 +21,19 @@ class ScenicSpotDetailsViewModel(
     private val noteScenicSpotUseCase: NoteScenicSpotUseCase
 ) : ViewModel() {
 
-    private val _scenicSpotInfo: MutableLiveData<Result<ScenicSpotInfo>> = MutableLiveData(Result.Loading)
+    private val _scenicSpotInfo: MutableLiveData<Result<ScenicSpotInfo>> =
+        MutableLiveData(Result.Loading)
     val scenicSpotInfo: LiveData<Result<ScenicSpotInfo>> get() = _scenicSpotInfo
 
     fun fetchScenicSpotItems(id: String) {
-        viewModelScope.launch {
-            scenicSpotUseCase.fetchScenicDetails(id)
-                .catch { e ->
-                    ErrorUtil.networkError(e)
-                }
-                .collect { info ->
-                    _scenicSpotInfo.value = Result.Success(info)
-                }
-        }
+        scenicSpotUseCase.fetchScenicDetails(id)
+            .onEach { info ->
+                _scenicSpotInfo.value = Result.Success(info)
+            }
+            .catch { e ->
+                ErrorUtil.networkError(e)
+            }
+            .launchIn(viewModelScope)
     }
 
     fun clickStar(info: ScenicSpotInfo) {
