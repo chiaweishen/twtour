@@ -11,7 +11,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.firebase.firebase-perf'
 
 android {
-    compileSdk 32
+    compileSdk rootProject.compileSdkVersion
 
     buildFeatures {
         viewBinding true
@@ -21,8 +21,8 @@ android {
         applicationId "com.scw.twtour"
         minSdk rootProject.minSdkVersion
         targetSdk rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
